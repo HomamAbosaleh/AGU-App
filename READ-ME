@@ -7,15 +7,34 @@ Commit -> Save your files in Git
 Push -> Upload Git commits to a remote repository, like Github
 Pull -> Download changes from remote repository to your local machine!
 
+Cloning:
+  To clone, write "git clone <the link from github>"
 Commiting:
   To commit, write "git commit -m <what did you do>". optional -> "-m <discription>"
-
+Adding:
+  To add, write "git add <name of the file>" or "." for all files
+Pushing:
+  To push the git file to github, write "git push <name of file>". If there is more than one branch
+  you need to define the pushing stream for the new branch by using "git push -u origin <name of branch>".
+Pulling:
+  To pull the github file to git, write "git pull". If the pushing stream is not define, then write "git pull origin <name of branch>".
+  
 Branch -> to show which branch are you working on
+Branch -d -> to delete the branch
 Checkout -> to move between branches
 Checkout -b <name> -> to make a branch
 Diff -> to show the difference between branches
 Merge -> to merge two branches together 
 
 Common pattern for merging:
-  push the new brach to github using "push".
-  
+  push the new branch to github using "push".
+    - you need to define the pushing stream for the new branch by using "git push -u origin <name of branch>"
+  go to github and merge from there.
+  pull the file again
+  delete the branch
+ 
+Undoing:
+  To undo add, use "git reset" optional -> "<name of the file>".
+  To undo commit, use "git reset HEAD~1".
+Shortcuts:
+# If the file is modified, you can add and commit in one line using "git commit -am "<what did you do>". optional -> "-m <discription>"
