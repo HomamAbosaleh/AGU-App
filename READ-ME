@@ -1,4 +1,5 @@
-All comands are in small letters
+# All comands are in small letters
+# Write git before the command
 
 Clone -> Bring a repository that is hosted somewhere like Github into a folder on your local machine
 Add -> Track your files and changes in Git
@@ -6,4 +7,15 @@ Commit -> Save your files in Git
 Push -> Upload Git commits to a remote repository, like Github
 Pull -> Download changes from remote repository to your local machine!
 
-write git before the command
+Commiting:
+  To commit, write "git commit -m <what did you do>". optional -> "-m <discription>"
+
+Branch -> to show which branch are you working on
+Checkout -> to move between branches
+Checkout -b <name> -> to make a branch
+Diff -> to show the difference between branches
+Merge -> to merge two branches together 
+
+Common pattern for merging:
+  push the new brach to github using "push".
+  
