@@ -36,5 +36,10 @@ Common pattern for merging:
 Undoing:
   To undo add, use "git reset" optional -> "<name of the file>".
   To undo commit, use "git reset HEAD~1".
+  
+Accessing another branch:
+  use "git fetch origin <name of branch>".
+  user "git checkout <name of branch>".
+
 Shortcuts:
 # If the file is modified, you can add and commit in one line using "git commit -am "<what did you do>". optional -> "-m <discription>"
