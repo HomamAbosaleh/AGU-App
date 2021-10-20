@@ -14,7 +14,7 @@ class MasterScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('DaddyChill'),
+        title: Text('Amr Ghrbal'),
       ),
       body: Center(
         child: Column(
