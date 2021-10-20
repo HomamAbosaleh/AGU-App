@@ -16,6 +16,11 @@ class MasterScaffold extends StatelessWidget {
       appBar: AppBar(
         title: Text('DaddyChill'),
       ),
+      body: Center(
+        child: Column(
+          children: [Text('no u')],
+        ),
+      ),
     );
   }
 }
