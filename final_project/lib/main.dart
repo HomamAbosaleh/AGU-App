@@ -59,6 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
               'DD was here :)',
               style: Theme.of(context).textTheme.headline4,
             ),
+            Text(
+              'ur mom :)',
+              style: Theme.of(context).textTheme.headline4,
+            ),
           ],
         ),
       ),
