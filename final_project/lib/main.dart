@@ -1,79 +1,54 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Colors.white ,
+        primaryColor: Colors.white,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
-          children: const <Widget>[
-            Image(
-              image: NetworkImage('http://www.agu.edu.tr/site/tpl/microsites/agu/images/logo.png',
-                scale:1,
-              ),
-            ),
-
-          ],
-        ),
         toolbarHeight: 85,
-
-
+        backgroundColor: Colors.white,
+        title: Row(),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-
-
+          children: const <Widget>[
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-
         iconSize: 30,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.red, size: 40),
+        selectedIconTheme: const IconThemeData(color: Colors.red, size: 40),
         selectedItemColor: Colors.red,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        unselectedIconTheme: IconThemeData(
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedIconTheme: const IconThemeData(
           color: Colors.blue,
         ),
         unselectedItemColor: Colors.blue,
@@ -95,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               label: 'Academic\nRecord'
           ),
-
         ],
       ),
     );
