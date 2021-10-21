@@ -33,7 +33,25 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         toolbarHeight: 85,
         backgroundColor: Colors.white,
-        title: Row(),
+        title: Row(
+
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SizedBox(
+              height: 78,
+                width: 78,
+                child: Image.asset("images/logo.jpg")
+
+            ),
+            SizedBox(
+              height: 250,
+                width: 250,
+                child: Image.asset("images/name.jpg")
+            ),
+
+
+          ],
+        ),
       ),
       body: Center(
         child: Column(
