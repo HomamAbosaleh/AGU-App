@@ -26,6 +26,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _currIndex=1;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(
-              height: 78,
-                width: 78,
+              height: 60,
+                width: 60 ,
                 child: Image.asset("images/logo.jpg")
 
             ),
@@ -61,34 +62,48 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currIndex,
         iconSize: 30,
-        selectedFontSize: 20,
+        selectedFontSize: 15,
         selectedIconTheme: const IconThemeData(color: Colors.red, size: 40),
         selectedItemColor: Colors.red,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedIconTheme: const IconThemeData(
-          color: Colors.blue,
+          color: Colors.black,
         ),
-        unselectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.black,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.fastfood,
-              color: Colors.red,
             ),
             label: 'food',
           ),
           BottomNavigationBarItem(
-
-              icon: Icon(Icons.business,
+              icon: Icon(Icons.location_on,
               ),
-              label: 'classroom/\nbuildings'
+              label: 'classroom/\nbuildings',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.school,
               ),
               label: 'Academic\nRecord'
           ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.people_rounded,
+              ),
+              label: 'Professors'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings,
+              ),
+              label: 'Settings'
+          ),
         ],
+        onTap: (index){
+          setState(() {
+            _currIndex=index;
+          });
+        },
       ),
     );
   }
