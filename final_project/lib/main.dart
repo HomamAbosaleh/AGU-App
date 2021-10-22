@@ -1,25 +1,91 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MaterialApp(
+import 'faculties_and_departments.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Agu App',
-      home: MasterScaffold()));
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primaryColor: Colors.white,
+      ),
+      home: const MyHomePage(),
+    );
+  }
 }
 
-class MasterScaffold extends StatelessWidget {
-  const MasterScaffold({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('DaddyChill'),
+        toolbarHeight: 85,
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SizedBox(
+                height: 78, width: 78, child: Image.asset("images/logo.jpg")),
+            SizedBox(
+                height: 250, width: 250, child: Image.asset("images/name.jpg")),
+          ],
+        ),
       ),
       body: Center(
         child: Column(
-          children: [Text('no u')],
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => FacultiesPage()));
+                },
+                child: Text('ys'))
+          ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        iconSize: 30,
+        selectedFontSize: 20,
+        selectedIconTheme: const IconThemeData(color: Colors.red, size: 40),
+        selectedItemColor: Colors.red,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedIconTheme: const IconThemeData(
+          color: Colors.blue,
+        ),
+        unselectedItemColor: Colors.blue,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.fastfood,
+              color: Colors.red,
+            ),
+            label: 'food',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.business,
+              ),
+              label: 'classroom/\nbuildings'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.school,
+              ),
+              label: 'Academic\nRecord'),
+        ],
       ),
     );
   }
