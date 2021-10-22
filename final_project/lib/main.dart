@@ -26,7 +26,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _currIndex=1;
+  int _currIndex=0;
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _currIndex,
         iconSize: 30,
         selectedFontSize: 15,
-        selectedIconTheme: const IconThemeData(color: Colors.red, size: 40),
         selectedItemColor: Colors.red,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         unselectedIconTheme: const IconThemeData(
           color: Colors.black,
         ),
@@ -87,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.school,
               ),
               label: 'Academic\nRecord'
+
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.people_rounded,
