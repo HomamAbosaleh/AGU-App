@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Colors.white ,
+        primaryColor: Colors.white,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -46,28 +46,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Row(
           children: const <Widget>[
             Image(
-              image: NetworkImage('http://www.agu.edu.tr/site/tpl/microsites/agu/images/logo.png',
-                scale:0.75 ,
+              image: NetworkImage(
+                'http://www.agu.edu.tr/site/tpl/microsites/agu/images/logo.png',
+                scale: 0.75,
               ),
             ),
-
           ],
         ),
         toolbarHeight: 85,
-
-
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-
-
-          ],
+          children: <Widget>[],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-
         iconSize: 30,
         selectedFontSize: 20,
         selectedIconTheme: IconThemeData(color: Colors.red, size: 40),
@@ -79,23 +73,22 @@ class _MyHomePageState extends State<MyHomePage> {
         unselectedItemColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood,
+            icon: Icon(
+              Icons.fastfood,
               color: Colors.red,
             ),
             label: 'food',
           ),
           BottomNavigationBarItem(
-
-              icon: Icon(Icons.business,
+              icon: Icon(
+                Icons.business,
               ),
-              label: 'classroom/\nbuildings'
-          ),
+              label: 'classroom/\nbuildings'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.school,
+              icon: Icon(
+                Icons.school,
               ),
-              label: 'Academic\nRecord'
-          ),
-
+              label: 'Academic\nRecord'),
         ],
       ),
     );
