@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'sign.dart';
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -58,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: const <Widget>[
+            Navigator.push(context, route);
           ],
         ),
       ),
