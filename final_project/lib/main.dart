@@ -59,8 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[
-            Navigator.push(context, route);
+          children: <Widget>[
+            ElevatedButton(onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+            }, child: const Text("Hello")),
           ],
         ),
       ),
