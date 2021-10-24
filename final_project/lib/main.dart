@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -26,8 +27,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _currIndex=0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,76 +34,79 @@ class _MyHomePageState extends State<MyHomePage> {
         toolbarHeight: 85,
         backgroundColor: Colors.white,
         title: Row(
-
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(
               height: 60,
                 width: 60 ,
                 child: Image.asset("images/logo.jpg")
-
             ),
             SizedBox(
               height: 250,
                 width: 250,
                 child: Image.asset("images/name.jpg")
             ),
-
-
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[
-          ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+       shape: CircularNotchedRectangle(),
+        child: Container(
+          height: 65,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              IconButton(
+                color: Color(0xFFD00001),
+                iconSize: 30,
+                icon: Icon(Icons.fastfood),
+                onPressed: (){
+                },
+              ),
+              IconButton(
+                color: Color(0xFFD00001),
+                iconSize: 30,
+                icon: const Icon(Icons.location_on,
+                    size:35),
+                onPressed: (){
+                },
+              ),
+             const SizedBox(
+                width: 35,
+              ),
+              IconButton(
+                color:  Color(0xFFD00001),
+                iconSize: 30,
+                icon: const Icon(Icons.people_rounded),
+                onPressed: (){
+                },
+              ),
+              IconButton(
+                color: Color(0xFFD00001),
+                iconSize: 30,
+                icon: const Icon(Icons.settings),
+                onPressed: (){
+                },
+              ),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currIndex,
-        iconSize: 30,
-        selectedFontSize: 15,
-        selectedItemColor: Colors.red,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        unselectedIconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        unselectedItemColor: Colors.black,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood,
+      floatingActionButton: Container(
+        height: 65.0,
+        width: 65.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            onPressed: () {},
+            child: Icon(
+              Icons.school,
+              color: Color(0xFFD00001),
             ),
-            label: 'food',
+            // elevation: 5.0,
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.location_on,
-              ),
-              label: 'classroom/\nbuildings',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.school,
-              ),
-              label: 'Academic\nRecord'
-
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people_rounded,
-              ),
-              label: 'Professors'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings,
-              ),
-              label: 'Settings'
-          ),
-        ],
-        onTap: (index){
-          setState(() {
-            _currIndex=index;
-          });
-        },
+        ),
       ),
     );
   }

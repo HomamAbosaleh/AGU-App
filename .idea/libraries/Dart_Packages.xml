@@ -79,13 +79,6 @@
             </list>
           </value>
         </entry>
-        <entry key="flashy_tab_bar">
-          <value>
-            <list>
-              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flashy_tab_bar-0.0.3/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="flutter">
           <value>
             <list>
@@ -233,7 +226,6 @@
       <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.7.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.1.0/lib" />
-      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flashy_tab_bar-0.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
