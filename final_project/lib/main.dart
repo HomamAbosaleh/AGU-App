@@ -11,8 +11,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Colors.white,
+      theme: ThemeData.dark(
+        //primaryColor: Colors.white,
       ),
       home: const MyHomePage(),
     );
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
         width: 65.0,
         child: FittedBox(
           child: FloatingActionButton(
-            backgroundColor: Colors.white,
+            backgroundColor: Color(0xFF7D7777),
             onPressed: () {},
             child: Icon(
               Icons.school,
