@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.dark(
-        //primaryColor: Colors.white,
       ),
       home: const MyHomePage(),
     );
@@ -30,42 +29,44 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF181515),
       appBar: AppBar(
         toolbarHeight: 85,
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0x95000000),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(
               height: 60,
                 width: 60 ,
-                child: Image.asset("images/logo.jpg")
+                child: Image.asset("images/whitelessLogo.png")
             ),
             SizedBox(
               height: 250,
                 width: 250,
-                child: Image.asset("images/name.jpg")
+                child: Image.asset("images/whiteName.png")
             ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
+        color: Color(0xF3000000),
        shape: CircularNotchedRectangle(),
-        child: Container(
+        child: Container(//
           height: 65,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               IconButton(
-                color: Color(0xFFD00001),
+                color: Color(0xFFD7D6D6),
                 iconSize: 30,
                 icon: Icon(Icons.fastfood),
                 onPressed: (){
                 },
               ),
               IconButton(
-                color: Color(0xFFD00001),
+                color: Color(0xFFD7D6D6),
                 iconSize: 30,
                 icon: const Icon(Icons.location_on,
                     size:35),
@@ -76,14 +77,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 35,
               ),
               IconButton(
-                color:  Color(0xFFD00001),
-                iconSize: 30,
+                color:  Color(0xFFD7D6D6),
+                iconSize: 30,//FFBDBBBB
                 icon: const Icon(Icons.people_rounded),
                 onPressed: (){
                 },
               ),
               IconButton(
-                color: Color(0xFFD00001),
+                color: Color(0xFFD7D6D6),
                 iconSize: 30,
                 icon: const Icon(Icons.settings),
                 onPressed: (){
@@ -98,14 +99,113 @@ class _MyHomePageState extends State<MyHomePage> {
         width: 65.0,
         child: FittedBox(
           child: FloatingActionButton(
-            backgroundColor: Color(0xFF7D7777),
+            backgroundColor: Color(0xFFD00001),
             onPressed: () {},
             child: Icon(
               Icons.school,
-              color: Color(0xFFD00001),
+              color: Color(0xFFD7D6D6),
             ),
             // elevation: 5.0,
           ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: double.infinity,
+
+          child: Column(
+
+          children: <Widget>[
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ), Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ),
+            Text("Scroll",
+            ), Text("Scroll",
+            ),
+            Text("test",
+            ),
+
+
+
+
+
+
+
+
+
+          ],
+      ),
         ),
       ),
     );
