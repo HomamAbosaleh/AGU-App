@@ -1,33 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'sign.dart';
-
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(
-      ),
-      home: const MyHomePage(),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,12 +19,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             SizedBox(
-              height: 60,
+                height: 60,
                 width: 60 ,
                 child: Image.asset("images/whitelessLogo.png")
             ),
             SizedBox(
-              height: 250,
+                height: 250,
                 width: 250,
                 child: Image.asset("images/whiteName.png")
             ),
@@ -54,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         color: Color(0xF3000000),
-       shape: CircularNotchedRectangle(),
+        shape: CircularNotchedRectangle(),
         child: Container(//
           height: 65,
           child: Row(
@@ -75,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: (){
                 },
               ),
-             const SizedBox(
+              const SizedBox(
                 width: 35,
               ),
               IconButton(
@@ -103,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: FloatingActionButton(
             backgroundColor: Color(0xFFD00001),
             onPressed: () {},
-            child: Icon(
+            child: const Icon(
               Icons.school,
               color: Color(0xFFD7D6D6),
             ),
@@ -115,15 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
         scrollDirection: Axis.vertical,
         child: Container(
           width: double.infinity,
-
           child: Column(
-
-          children: <Widget>[
-            ElevatedButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
-            }, child: const Text("Hello")),
-          ],
-      ),
+            children: <Widget>[
+            ],
+          ),
         ),
       ),
     );
