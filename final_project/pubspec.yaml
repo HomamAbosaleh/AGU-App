@@ -30,7 +30,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  firebase_core: ^1.7.0
+  #Firebase dependencies
+  firebase_core: ^1.8.0
+  firebase_database: ^8.0.1
+  cloud_firestore: ^2.5.4
+
+  #Authenticaion
+  firebase_auth: ^3.1.4
 
 
 
