@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/Net/flutterfire.dart';
@@ -42,7 +43,8 @@ class _AuthenticationState extends State<Authentication> {
             child: TextField(
               controller: _userName,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Email',
                 hintText: "name.surname",
                 suffixText: domain,
@@ -55,25 +57,29 @@ class _AuthenticationState extends State<Authentication> {
               obscureText: true,
               controller: _password,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'password',
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFD00001))),
+                labelText: 'Password',
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
+                    style:  ElevatedButton.styleFrom(primary: Color(0xFFD00001)),
                     onPressed: () async {
-                      bool shouldNavigate =
-                          await signIn(_userName.text + domain, _password.text);
-                      if (shouldNavigate) {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
-                      }
+                     // bool shouldNavigate =
+                     //      await signIn(_userName.text + domain, _password.text);
+                     //  if (shouldNavigate) {
+                     //
+                     //  }
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false);
                     },
                     child: const Text("Sign In"),
                   ),
@@ -81,25 +87,30 @@ class _AuthenticationState extends State<Authentication> {
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
+                    style:  ElevatedButton.styleFrom(primary: Color(0xFFD00001)),
                     onPressed: () async {
-                      bool shouldNavigate =
-                       await signUp(_userName.text + domain, _password.text);
-                      if (shouldNavigate) {
+                    //  bool shouldNavigate =
+                     //  await signUp(_userName.text + domain, _password.text);
+                      // if (shouldNavigate) {
+                      //
+                      // }
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/signUp',
-                        (route) => false,
+                            (route) => false,
                         arguments: {'username': _userName.text},
                       );
-                      }
                     },
                     child: const Text("Sign Up"),
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: CheckboxListTile(
-                    title: const Text("Remember Me"),
+                    checkColor: Color(0xFFFFFFFF),
+                    activeColor: Color(0xFFD00001),
+                    title: const Text("Remember Me",
+                    textScaleFactor: 0.9,),
                     value: rememberMe,
                     controlAffinity: ListTileControlAffinity.leading,
                     onChanged: (value) {

@@ -6,7 +6,7 @@ import 'authentication.dart';
 import 'home.dart';
 import 'sign_up.dart';
 import 'meal.dart';
-import 'scedule.dart';
+import 'schedule.dart';
 import 'food_menu.dart';
 import 'faculties_page.dart';
 
