@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:final_project/model/student.dart';
+import 'package:final_project/Net/flutterfire.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -88,9 +89,11 @@ class SignUp extends StatelessWidget {
                       surname: _surname.text,
                       gpa: 0.00,
                       id: _id.text,
+                      email: _email.text,
                       faculty: _faculty.text,
                       department: _department.text,
                       semester: int.parse(_semester.text));
+                  addStudent(s);
                 },
                 child: const Text("Submit")),
           ],

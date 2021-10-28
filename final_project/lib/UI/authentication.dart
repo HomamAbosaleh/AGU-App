@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:final_project/Net/flutterfire.dart';
 
@@ -83,14 +84,14 @@ class _AuthenticationState extends State<Authentication> {
                   child: ElevatedButton(
                     onPressed: () async {
                       bool shouldNavigate =
-                       await signUp(_userName.text + domain, _password.text);
+                          await signUp(_userName.text + domain, _password.text);
                       if (shouldNavigate) {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/signUp',
-                        (route) => false,
-                        arguments: {'username': _userName.text},
-                      );
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/signUp',
+                          (route) => false,
+                          arguments: {'username': _userName.text},
+                        );
                       }
                     },
                     child: const Text("Sign Up"),
