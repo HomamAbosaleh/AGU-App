@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
                 height: 60,
                 width: 60 ,
-                child: Image.asset("images/whitelessLogo.png")
+                child: Image.asset("images/whiteLessLogo.png")
             ),
             SizedBox(
                 height: 250,

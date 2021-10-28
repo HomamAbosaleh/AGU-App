@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'sign.dart';
+import 'authentication.dart';
 import 'home.dart';
 
 void main() async{
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
               print("You have an error! ${snapshot.error.toString()}");
               return const Text("Something went wrong!");
             } else if(snapshot.hasData){
-              return SignIn();
+              return Authentication();
             }else{
               return const Center(
                 child: CircularProgressIndicator(),

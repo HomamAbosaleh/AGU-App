@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:final_project/Net/flutterfire.dart';
 import 'home.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class Authentication extends StatefulWidget {
+  const Authentication({Key? key}) : super(key: key);
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Authentication> createState() => _AuthenticationState();
 
 }
 
-class _SignInState extends State<SignIn>{
+class _AuthenticationState extends State<Authentication>{
     final userName = TextEditingController();
     final password = TextEditingController();
     static const String domain = "@agu.edu.tr";
@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn>{
               SizedBox(
                   height: 60,
                   width: 60 ,
-                  child: Image.asset("images/whitelessLogo.png")
+                  child: Image.asset("images/whiteLessLogo.png")
               ),
               SizedBox(
                   height: 250,
@@ -67,6 +67,12 @@ class _SignInState extends State<SignIn>{
                 Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
               }
             }, child: const Text("Sign In")),
+            Checkbox(
+              value: false,
+              onChanged: (value){
+                print(value);
+              }
+           ),
           ],
         ),
       );
