@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:final_project/model/student.dart';
+import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -14,13 +13,13 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     String dropdownValue;
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    final _name = TextEditingController(
+    TextEditingController? _name = TextEditingController(
         text: arguments['username'].toString().split('.')[0]);
-    final _surname = TextEditingController(
+    TextEditingController? _surname = TextEditingController(
         text: arguments['username'].toString().split('.')[1]);
     final _gpa = TextEditingController();
     final _id = TextEditingController();
-    final _email = TextEditingController(
+    TextEditingController? _email = TextEditingController(
         text: arguments['username'].toString() + "@agu.edu.tr");
     final _faculty = TextEditingController();
     final _department = TextEditingController();
@@ -29,6 +28,11 @@ class _SignUpState extends State<SignUp> {
     Student s;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            }),
         title: const Text("Register"),
       ),
       body: SingleChildScrollView(
@@ -94,14 +98,18 @@ class _SignUpState extends State<SignUp> {
                     dropdownValue = newValue!;
                   });
                 },
-                items: <String>['Engineering', 'Pyschology', 'Economy', 'Moleculur Biology and Genetics']
-                    .map<DropdownMenuItem<String>>((String value) {
+                items: <String>[
+                  'Engineering',
+                  'Pyschology',
+                  'Economy',
+                  'Moleculur Biology and Genetics'
+                ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
                   );
                 }).toList(),
-                hint:  Text(
+                hint: Text(
                   "Faculty",
                   style: TextStyle(
                     //color: Color(0xFFD00001),
