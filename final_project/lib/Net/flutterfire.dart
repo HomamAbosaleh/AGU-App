@@ -1,29 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<bool> signIn(String email, String password) async{
-  try{
+import 'package:final_project/model/student.dart';
+
+Future<bool> signIn(String email, String password) async {
+  try {
     await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password:password);
+        .signInWithEmailAndPassword(email: email, password: password);
     return true;
-  } catch(e) {
+  } catch (e) {
     print(e);
     return false;
   }
 }
 
-Future<bool> signUp(String email, String password) async{
-  try{
+Future<bool> signUp(String email, String password) async {
+  try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
     return true;
-  } on FirebaseAuthException catch (e){
-    if(e.code == 'weak-password'){
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'weak-password') {
       print('The password provided is too weak.');
-    }else if(e.code == 'email-already-in-use') {
+    } else if (e.code == 'email-already-in-use') {
       print('The account already exists for that email.');
     }
     return false;
-  } catch (e){
+  } catch (e) {
     print(e.toString());
     return false;
   }

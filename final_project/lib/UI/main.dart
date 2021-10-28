@@ -4,8 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'authentication.dart';
 import 'home.dart';
+import 'sign_up.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
@@ -20,24 +21,23 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         routes: {
           '/home': (context) => const HomePage(),
+          '/signUp': (context) => const SignUp(),
         },
-        theme: ThemeData.dark(
-        ),
+        theme: ThemeData.dark(),
         home: FutureBuilder(
           future: _fbApp,
-          builder: (context, snapshot){
-            if(snapshot.hasError) {
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
               print("You have an error! ${snapshot.error.toString()}");
               return const Text("Something went wrong!");
-            } else if(snapshot.hasData){
+            } else if (snapshot.hasData) {
               return Authentication();
-            }else{
+            } else {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
           },
-        )
-    );
+        ));
   }
 }

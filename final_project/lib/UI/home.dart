@@ -20,14 +20,12 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             SizedBox(
                 height: 60,
-                width: 60 ,
-                child: Image.asset("images/whiteLessLogo.png")
-            ),
+                width: 60,
+                child: Image.asset("images/whiteLessLogo.png")),
             SizedBox(
                 height: 250,
                 width: 250,
-                child: Image.asset("images/whiteName.png")
-            ),
+                child: Image.asset("images/whiteName.png")),
           ],
         ),
       ),
@@ -35,7 +33,8 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomAppBar(
         color: Color(0xF3000000),
         shape: CircularNotchedRectangle(),
-        child: Container(//
+        child: Container(
+          //
           height: 65,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -44,33 +43,28 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0xFFD7D6D6),
                 iconSize: 30,
                 icon: Icon(Icons.fastfood),
-                onPressed: (){
-                },
+                onPressed: () {},
               ),
               IconButton(
                 color: Color(0xFFD7D6D6),
                 iconSize: 30,
-                icon: const Icon(Icons.location_on,
-                    size:35),
-                onPressed: (){
-                },
+                icon: const Icon(Icons.location_on, size: 35),
+                onPressed: () {},
               ),
               const SizedBox(
                 width: 35,
               ),
               IconButton(
-                color:  Color(0xFFD7D6D6),
-                iconSize: 30,//FFBDBBBB
+                color: Color(0xFFD7D6D6),
+                iconSize: 30, //FFBDBBBB
                 icon: const Icon(Icons.people_rounded),
-                onPressed: (){
-                },
+                onPressed: () {},
               ),
               IconButton(
                 color: Color(0xFFD7D6D6),
                 iconSize: 30,
                 icon: const Icon(Icons.settings),
-                onPressed: (){
-                },
+                onPressed: () {},
               ),
             ],
           ),
@@ -96,8 +90,7 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           width: double.infinity,
           child: Column(
-            children: <Widget>[
-            ],
+            children: <Widget>[],
           ),
         ),
       ),
