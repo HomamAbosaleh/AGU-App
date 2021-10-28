@@ -82,16 +82,16 @@ class _AuthenticationState extends State<Authentication> {
                   flex: 2,
                   child: ElevatedButton(
                     onPressed: () async {
-                      //bool shouldNavigate =
-                      //  await signUp(_userName.text + domain, _password.text);
-                      //if (shouldNavigate) {
+                      bool shouldNavigate =
+                       await signUp(_userName.text + domain, _password.text);
+                      if (shouldNavigate) {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/signUp',
                         (route) => false,
                         arguments: {'username': _userName.text},
                       );
-                      //}
+                      }
                     },
                     child: const Text("Sign Up"),
                   ),
