@@ -1,19 +1,25 @@
+import 'package:final_project/model/student.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project/model/student.dart';
-
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
+
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
+    String dropdownValue;
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    final _name = TextEditingController(
+    TextEditingController? _name = TextEditingController(
         text: arguments['username'].toString().split('.')[0]);
-    final _surname = TextEditingController(
+    TextEditingController? _surname = TextEditingController(
         text: arguments['username'].toString().split('.')[1]);
     final _gpa = TextEditingController();
     final _id = TextEditingController();
-    final _email = TextEditingController(
+    TextEditingController? _email = TextEditingController(
         text: arguments['username'].toString() + "@agu.edu.tr");
     final _faculty = TextEditingController();
     final _department = TextEditingController();
@@ -22,6 +28,11 @@ class SignUp extends StatelessWidget {
     Student s;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            }),
         title: const Text("Register"),
       ),
       body: SingleChildScrollView(
@@ -32,7 +43,10 @@ class SignUp extends StatelessWidget {
               enabled: false,
               controller: _name,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Name',
               ),
             ),
@@ -40,7 +54,10 @@ class SignUp extends StatelessWidget {
               enabled: false,
               controller: _surname,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Surname',
               ),
             ),
@@ -48,28 +65,66 @@ class SignUp extends StatelessWidget {
               enabled: false,
               controller: _email,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Email',
               ),
             ),
             TextField(
               controller: _id,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Student ID',
               ),
             ),
-            TextField(
-              controller: _faculty,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Faculty',
+            SizedBox(
+              width: double.infinity,
+              child: DropdownButton<String>(
+                iconSize: 24,
+                elevation: 1,
+                underline: Container(
+                  height: 1,
+                  color: Color(0xFFD00001),
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: <String>[
+                  'Engineering',
+                  'Pyschology',
+                  'Economy',
+                  'Moleculur Biology and Genetics'
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                hint: Text(
+                  "Faculty",
+                  style: TextStyle(
+                    //color: Color(0xFFD00001),
+                    fontSize: 15,
+                  ),
+                ),
               ),
             ),
             TextField(
               controller: _department,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Department',
               ),
             ),
@@ -77,7 +132,10 @@ class SignUp extends StatelessWidget {
               controller: _semester,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFD00001))),
                 labelText: 'Semester',
               ),
             ),

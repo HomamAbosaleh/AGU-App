@@ -43,7 +43,9 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0xFFD7D6D6),
                 iconSize: 30,
                 icon: Icon(Icons.fastfood),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/food_menu');
+                },
               ),
               IconButton(
                 color: Color(0xFFD7D6D6),
@@ -76,7 +78,9 @@ class _HomePageState extends State<HomePage> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: Color(0xFFD00001),
-            onPressed: () {},
+            onPressed: () {
+
+            },
             child: const Icon(
               Icons.school,
               color: Color(0xFFD7D6D6),
