@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "1071975523451",
+    "firebase_url": "https://finalproject-6062d-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "finalproject-6062d",
     "storage_bucket": "finalproject-6062d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1071975523451:android:531bdb269a815b52562ede",
+        "mobilesdk_app_id": "1:1071975523451:android:1d9410830020a3a6562ede",
         "android_client_info": {
           "package_name": "com.example.final_project"
         }
