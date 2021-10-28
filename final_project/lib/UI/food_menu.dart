@@ -4,16 +4,16 @@ import 'scedule.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() => runApp(const food());
+void main() => runApp(const Food());
 
-class food extends StatefulWidget {
-  const food({Key? key}) : super(key: key);
+class Food extends StatefulWidget {
+  const Food({Key? key}) : super(key: key);
 
   @override
   _foodState createState() => _foodState();
 }
 
-class _foodState extends State<food> {
+class _foodState extends State<Food> {
   int currentIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -23,7 +23,7 @@ class _foodState extends State<food> {
 
   final pages = [
     meal(),
-    schedule(),
+    Schedule(),
     payments(),
   ];
 

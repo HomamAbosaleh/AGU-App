@@ -5,6 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'authentication.dart';
 import 'home.dart';
 import 'sign_up.dart';
+import 'meal.dart';
+import 'scedule.dart';
+import 'food_menu.dart';
+import 'faculties_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +26,10 @@ class MyApp extends StatelessWidget {
         routes: {
           '/home': (context) => const HomePage(),
           '/signUp': (context) => const SignUp(),
+          '/faculties_page': (context) => const FacultiesPage(),
+          'food_menu/schedule': (context) => const Schedule(),
+          '/food_menu': (context) => const Food(),
+
         },
         theme: ThemeData.dark(),
         home: FutureBuilder(
