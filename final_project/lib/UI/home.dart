@@ -76,9 +76,9 @@ class _HomePageState extends State<HomePage> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: Color(0xFFD00001),
-            onPressed: () {
+            onPressed: () {/*
               Navigator.pushNamed(context, 'newRouteName', (route) => false);
-            },
+           */ },
             child: const Icon(
               Icons.school,
               color: Color(0xFFD7D6D6),
