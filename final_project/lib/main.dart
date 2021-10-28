@@ -113,10 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
         scrollDirection: Axis.vertical,
         child: Container(
           width: double.infinity,
-
           child: Column(
-
-          children: <Widget>[
+          children: const <Widget>[
             Text("Scroll",
             ),
             Text("Scroll",
@@ -195,15 +193,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text("test",
             ),
-
-
-
-
-
-
-
-
-
           ],
       ),
         ),
