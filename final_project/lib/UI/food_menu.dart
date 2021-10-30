@@ -1,6 +1,6 @@
 import 'meal.dart';
 import 'payments.dart';
-import 'scedule.dart';
+import 'schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

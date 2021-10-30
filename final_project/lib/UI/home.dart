@@ -1,4 +1,11 @@
+import 'package:final_project/UI/main.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:final_project/Net/fireauth.dart';
+import 'package:final_project/design/custom_bottom_bar.dart';
+import 'package:final_project/design/custom_floating_button.dart';
+import 'package:final_project/design/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,92 +19,36 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF181515),
-      appBar: AppBar(
-        toolbarHeight: 85,
-        backgroundColor: Color(0x95000000),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            SizedBox(
-                height: 60,
-                width: 60,
-                child: Image.asset("images/whiteLessLogo.png")),
-            SizedBox(
-                height: 250,
-                width: 250,
-                child: Image.asset("images/whiteName.png")),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xF3000000),
-        shape: CircularNotchedRectangle(),
-        child: Container(
-          //
-          height: 65,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              IconButton(
-                color: Color(0xFFD7D6D6),
-                iconSize: 30,
-                icon: Icon(Icons.fastfood),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/food_menu');
-                },
-              ),
-              IconButton(
-                color: Color(0xFFD7D6D6),
-                iconSize: 30,
-                icon: const Icon(Icons.location_on, size: 35),
-                onPressed: () {},
-              ),
-              const SizedBox(
-                width: 35,
-              ),
-              IconButton(
-                color: Color(0xFFD7D6D6),
-                iconSize: 30, //FFBDBBBB
-                icon: const Icon(Icons.people_rounded),
-                onPressed: () {},
-              ),
-              IconButton(
-                color: Color(0xFFD7D6D6),
-                iconSize: 30,
-                icon: const Icon(Icons.settings),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: Container(
-        height: 65.0,
-        width: 65.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            backgroundColor: Color(0xFFD00001),
-            onPressed: () {
-
-            },
-            child: const Icon(
-              Icons.school,
-              color: Color(0xFFD7D6D6),
-            ),
-            // elevation: 5.0,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
           width: double.infinity,
           child: Column(
-            children: <Widget>[],
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () async {
+                  signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                    (route) => false,
+                  );
+                },
+                child: Text("Sign Out"),
+              ),
+            ],
           ),
         ),
       ),
+      bottomNavigationBar: CustomBottomBar(),
+      floatingActionButton: CustomFloatingButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  Future<void> signOut() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.clear();
   }
 }
