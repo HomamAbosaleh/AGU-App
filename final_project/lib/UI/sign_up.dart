@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import 'package:final_project/Net/fireauth.dart';
 import 'package:final_project/Net/firestore.dart';
 import 'package:final_project/model/student.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  VoidCallback changeSignIn;
+
+  SignUp({Key? key, required this.changeSignIn}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -32,19 +33,13 @@ class _SignUpState extends State<SignUp> {
   bool eye = true;
   Icon eyeIcon = Icon(Icons.remove_red_eye_outlined);
   static const domain = '@agu.edu.tr';
+
   @override
   Widget build(BuildContext context) {
     Student s;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-            }),
-        title: const Text("Register"),
-      ),
-      body: SingleChildScrollView(
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -201,43 +196,50 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             ElevatedButton(
-                onPressed: () async {
-                  if (_name.text.isEmpty ||
-                      _surname.text.isEmpty ||
-                      _id.text.isEmpty ||
-                      _department.text.isEmpty ||
-                      _semester.text.isEmpty ||
-                      _password.text.isEmpty ||
-                      _passwordConfirmation.text.isEmpty) {
-                    print("Please fill in all information");
+              onPressed: () async {
+                if (_name.text.isEmpty ||
+                    _surname.text.isEmpty ||
+                    _id.text.isEmpty ||
+                    _department.text.isEmpty ||
+                    _semester.text.isEmpty ||
+                    _password.text.isEmpty ||
+                    _passwordConfirmation.text.isEmpty) {
+                  print("Please fill in all information");
+                } else {
+                  if (_passwordConfirmation.text != _password.text) {
+                    print("Please check your password");
                   } else {
-                    if (_passwordConfirmation.text != _password.text) {
-                      print("Please check your password");
+                    bool signed = await FireAuth().signUp(
+                      email: _email.text,
+                      password: _password.text,
+                    );
+                    if (signed) {
+                      s = Student(
+                          name: _name.text,
+                          surname: _surname.text,
+                          gpa: 0.00,
+                          id: _id.text,
+                          email: _email.text,
+                          faculty: faculty,
+                          department: _department.text,
+                          semester: int.parse(_semester.text));
+                      FireStore().addStudent(student: s);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false);
                     } else {
-                      bool signed = await FireAuth().signUp(
-                        email: _email.text,
-                        password: _password.text,
-                      );
-                      if (signed) {
-                        s = Student(
-                            name: _name.text,
-                            surname: _surname.text,
-                            gpa: 0.00,
-                            id: _id.text,
-                            email: _email.text,
-                            faculty: faculty,
-                            department: _department.text,
-                            semester: int.parse(_semester.text));
-                        FireStore().addStudent(student: s);
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
-                      } else {
-                        print("Something Went Wrong");
-                      }
+                      print("Something Went Wrong");
                     }
                   }
-                },
-                child: const Text("Submit")),
+                }
+              },
+              child: const Text("Submit"),
+            ),
+            TextButton(
+              onPressed: () {
+                widget.changeSignIn();
+              },
+              child: Text('Go back'),
+            ),
           ],
         ),
       ),
