@@ -1,9 +1,9 @@
-import 'package:final_project/UI/sign_in.dart';
-import 'package:final_project/design/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'sign_up.dart';
+import 'log_in.dart';
+import '../design/custom_app_bar.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({Key? key}) : super(key: key);
@@ -37,7 +37,7 @@ class AuthenticationState extends State<Authentication> {
             child: Column(
               children: [
                 inSignIn
-                    ? SignInCard(
+                    ? LogIn(
                         changeSignIn: changeSignIn,
                       )
                     : SignUp(

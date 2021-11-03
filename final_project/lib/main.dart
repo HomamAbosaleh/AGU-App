@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'authentication.dart';
-import 'faculties_page.dart';
-import 'food_menu.dart';
-import 'home.dart';
-import 'schedule.dart';
+import 'UI/authentication.dart';
+import 'UI/faculties_page.dart';
+import 'UI/food_menu.dart';
+import 'UI/home.dart';
+import 'UI/schedule.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     checkIfExists();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       routes: {
         '/home': (context) => const HomePage(),
         //'/signUp': (context) => const SignUp(),

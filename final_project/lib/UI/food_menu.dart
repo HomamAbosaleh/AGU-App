@@ -1,8 +1,9 @@
-import 'meal.dart';
-import 'payments.dart';
-import 'schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'meal.dart';
+import 'payment.dart';
+import 'schedule.dart';
 
 void main() => runApp(const Food());
 

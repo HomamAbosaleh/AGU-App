@@ -1,20 +1,20 @@
 import 'dart:ui';
-
-import 'package:final_project/Net/fireauth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInCard extends StatefulWidget {
+import '../Net/fireauth.dart';
+
+class LogIn extends StatefulWidget {
   VoidCallback changeSignIn;
 
-  SignInCard({Key? key, required this.changeSignIn}) : super(key: key);
+  LogIn({Key? key, required this.changeSignIn}) : super(key: key);
 
   @override
-  _SignInCardState createState() => _SignInCardState();
+  _LogInState createState() => _LogInState();
 }
 
-class _SignInCardState extends State<SignInCard> {
+class _LogInState extends State<LogIn> {
   final _userName = TextEditingController();
   final _password = TextEditingController();
   bool rememberMe = false;
