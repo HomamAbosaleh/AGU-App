@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class FacultiesPage extends StatefulWidget {
@@ -8,14 +9,34 @@ class FacultiesPage extends StatefulWidget {
 }
 
 class _FacultiesPageState extends State<FacultiesPage> {
+  List<String> testDeps = [];
+
+  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+  Future<void> test() async {
+    var myList = [];
+
+    print('test1');
+    QuerySnapshot qSnapshot =
+        await _firebaseFirestore.collection('departments').get();
+
+    print('test2');
+    print(qSnapshot.docs[1].data());
+
+    //print(qSnapshot.docs);
+    // for (var element in myList) {
+    //   print(element);
+    // }
+  }
+
   String dropdownvalue = 'choice 1';
-  List deps = [
+  List<String> depsC = [
     'Computer Engineering',
     'Civil Engineering',
     'Electrical Engineering'
   ];
-  List deps2 = ['Architecture'];
-  List deps3 = ['Business Administration', 'Economy'];
+  List<String> deps2A = ['Architecture'];
+  List<String> deps3B = ['Business Administration', 'Economy'];
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +49,25 @@ class _FacultiesPageState extends State<FacultiesPage> {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
-              children: const [
-                CustomDropdown(text: 'Faculty of Engineering'),
+              children: [
+                CustomDropdown(
+                  text: 'Faculty of Engineering',
+                  dropdowns: depsC,
+                ),
                 SizedBox(height: 30),
-                CustomDropdown(text: 'Faculty of Architecture'),
-                // SizedBox(height: 30),
-                // CustomDropdown(text: 'Faculty of Managerial Sciences'),
+                CustomDropdown(
+                  text: 'Faculty of Architecture',
+                  dropdowns: deps2A,
+                ),
+                SizedBox(height: 30),
+                CustomDropdown(
+                  text: 'Faculty of Managerial Sciences',
+                  dropdowns: deps3B,
+                ),
+                TextButton(
+                  onPressed: test,
+                  child: Text('test'),
+                ),
                 // SizedBox(height: 30),
                 // CustomDropdown(text: 'test4'),
                 // SizedBox(height: 30),
@@ -47,9 +81,11 @@ class _FacultiesPageState extends State<FacultiesPage> {
 }
 
 class CustomDropdown extends StatefulWidget {
+  List<String> dropdowns;
   final String text;
 
-  const CustomDropdown({Key? key, required this.text}) : super(key: key);
+  CustomDropdown({Key? key, required this.text, required this.dropdowns})
+      : super(key: key);
 
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
@@ -58,7 +94,6 @@ class CustomDropdown extends StatefulWidget {
 class _CustomDropdownState extends State<CustomDropdown> {
   bool isDropdownOpened = false;
   IconData iconDrop = Icons.arrow_drop_down;
-  List<String> dropdowns = ['Tesdast1', 'Te2', 'Testsadaasd3'];
 
   List<DropDownItem> dropdownItems = [];
 
@@ -69,21 +104,21 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 
   void initlizeList() {
-    if (dropdowns.length == 1) {
+    if (widget.dropdowns.length == 1) {
       dropdownItems.add(DropDownItem.only(
-          text: dropdowns[0], iconData: Icons.ac_unit_outlined));
+          text: widget.dropdowns[0], iconData: Icons.school_sharp));
       return;
     }
-    for (int i = 0; i < dropdowns.length; i++) {
+    for (int i = 0; i < widget.dropdowns.length; i++) {
       if (i == 0) {
         dropdownItems.add(DropDownItem.first(
-            text: dropdowns[i], iconData: Icons.ac_unit_outlined));
-      } else if (i == dropdowns.length - 1) {
+            text: widget.dropdowns[i], iconData: Icons.school_sharp));
+      } else if (i == widget.dropdowns.length - 1) {
         dropdownItems.add(DropDownItem.last(
-            text: dropdowns[i], iconData: Icons.ac_unit_outlined));
+            text: widget.dropdowns[i], iconData: Icons.school_sharp));
       } else {
-        dropdownItems.add(
-            DropDownItem(text: dropdowns[i], iconData: Icons.ac_unit_outlined));
+        dropdownItems.add(DropDownItem(
+            text: widget.dropdowns[i], iconData: Icons.school_sharp));
       }
     }
   }

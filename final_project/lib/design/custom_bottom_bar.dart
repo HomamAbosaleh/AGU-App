@@ -25,7 +25,9 @@ class CustomBottomBar extends StatelessWidget {
               color: Color(0xFFD7D6D6),
               iconSize: 30,
               icon: const Icon(Icons.location_on, size: 35),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/faculties_page');
+              },
             ),
             const SizedBox(
               width: 35,

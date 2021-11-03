@@ -1,11 +1,9 @@
 import 'package:final_project/UI/main.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:final_project/Net/fireauth.dart';
+import 'package:final_project/design/custom_app_bar.dart';
 import 'package:final_project/design/custom_bottom_bar.dart';
 import 'package:final_project/design/custom_floating_button.dart';
-import 'package:final_project/design/custom_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

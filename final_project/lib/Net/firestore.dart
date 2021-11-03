@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/model/student.dart';
 
 import 'fireauth.dart';
-import 'package:final_project/model/student.dart';
 
 class FireStore {
   static final FirebaseFirestore _firebaseFirestore =
