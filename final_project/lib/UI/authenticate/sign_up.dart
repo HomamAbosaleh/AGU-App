@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../Net/fireauth.dart';
-import '../Net/firestore.dart';
-import '../model/student.dart';
+import '../../services/fireauth.dart';
+import '../../services/firestore.dart';
+import '../../model/student.dart';
 
 class SignUp extends StatefulWidget {
   VoidCallback changeSignIn;
