@@ -12,6 +12,14 @@ class FireStore {
     return _firebaseFirestore.collection("faculties").get();
   }
 
+  Future getDepartpents(String facultyName, String departmentName) {
+    return _firebaseFirestore
+        .collection("faculties")
+        .doc(facultyName)
+        .collection(departmentName)
+        .get();
+  }
+
   createChatRoom(String? chatRoomId, chatRoomMap) {
     _firebaseFirestore
         .collection("chatRoom")

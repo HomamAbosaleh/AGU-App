@@ -38,9 +38,11 @@ class _SignUpState extends State<SignUp> {
     },
     {
       "label": "Password",
+      "Filter": FilteringTextInputFormatter.deny(RegExp(" "))
     },
     {
       "label": "Confirmation Password",
+      "Filter": FilteringTextInputFormatter.deny(RegExp(" "))
     },
   ];
   final List<TextEditingController> _controller =
@@ -63,80 +65,86 @@ class _SignUpState extends State<SignUp> {
                 elevation: 6.0,
                 child: Form(
                   key: formKey,
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        padding: const EdgeInsets.all(8),
-                        shrinkWrap: true,
-                        itemCount: 6,
-                        itemBuilder: (context, index) {
-                          return TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "This field cannot be empty";
-                              }
-                            },
-                            inputFormatters: properties[index]["filter"] ?? [],
-                            controller: _controller[index],
-                            decoration: InputDecoration(
-                                hintText: properties[index]["hint"] ?? "",
-                                labelText: properties[index]["label"],
-                                enabledBorder: const UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFD00001))),
-                                focusedBorder: const UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFD00001))),
-                                suffixText: properties[index]["suffix"] ?? ""),
-                          );
-                        },
-                      ),
-                      DropdownButton<String>(
-                        value: faculty,
-                        items: snapshot.data.docs
-                            .map<DropdownMenuItem<String>>(
-                              (e) => DropdownMenuItem<String>(
-                                value: e.id,
-                                child: Text(e.id),
-                              ),
-                            )
-                            .toList(),
-                        hint: const Text("Faculty"),
-                        onChanged: (value) {
-                          for (var element in snapshot.data.docs) {
-                            if (element.id == value) {
-                              setState(() {
-                                faculty = value;
-                                departments = element["Departments"];
-                              });
-                              break;
-                            }
-                          }
-                        },
-                      ),
-                      DropdownButton<String>(
-                        value: department,
-                        items: departments
-                            .map<DropdownMenuItem<String>>(
-                              (e) => DropdownMenuItem<String>(
-                                value: e,
-                                child: Text(e),
-                              ),
-                            )
-                            .toList(),
-                        hint: const Text("Department"),
-                        onChanged: (value) {
-                          setState(() {
-                            department = value;
-                          });
-                        },
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            signMeUp();
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 6,
+                          itemBuilder: (context, index) {
+                            return TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "This field cannot be empty";
+                                }
+                              },
+                              inputFormatters: [properties[index]["Filter"]],
+                              controller: _controller[index],
+                              decoration: InputDecoration(
+                                  hintText: properties[index]["hint"] ?? "",
+                                  labelText: properties[index]["label"],
+                                  enabledBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFD00001))),
+                                  focusedBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFD00001))),
+                                  suffixText:
+                                      properties[index]["suffix"] ?? ""),
+                            );
                           },
-                          child: const Text("Submit")),
-                    ],
+                        ),
+                        DropdownButton<String>(
+                          value: faculty,
+                          items: snapshot.data.docs
+                              .map<DropdownMenuItem<String>>(
+                                (e) => DropdownMenuItem<String>(
+                                  value: e.id,
+                                  child: Text(e.id),
+                                ),
+                              )
+                              .toList(),
+                          hint: const Text("Faculty"),
+                          onChanged: (value) {
+                            department = null;
+                            for (var element in snapshot.data.docs) {
+                              if (element.id == value) {
+                                setState(() {
+                                  faculty = value;
+                                  departments = element["Departments"];
+                                });
+                                break;
+                              }
+                            }
+                          },
+                        ),
+                        DropdownButton<String>(
+                          isExpanded: true,
+                          value: department,
+                          items: departments
+                              .map<DropdownMenuItem<String>>(
+                                (e) => DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Text(e),
+                                ),
+                              )
+                              .toList(),
+                          hint: const Text("Department"),
+                          onChanged: (value) {
+                            setState(() {
+                              department = value;
+                            });
+                          },
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              signMeUp();
+                            },
+                            child: const Text("Submit")),
+                      ],
+                    ),
                   ),
                 ),
               ),
