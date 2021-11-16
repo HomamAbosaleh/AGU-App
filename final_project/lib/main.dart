@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/home': (context) => const HomePage(),
-        //'/signUp': (context) => const SignUp(),
         '/faculties_page': (context) => const FacultiesPage(),
         '/food_menu/schedule': (context) => const Schedule(),
         '/food_menu': (context) => const Food(),
