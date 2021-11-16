@@ -1,27 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/services/sharedpreference.dart';
+import 'package:final_project/constants.dart';
 
-import '../model/department.dart';
 import '../model/student.dart';
-import '../model/faculty.dart';
 import 'fireauth.dart';
 
 class FireStore {
   static final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
 
-  List<Faculty> getFaculties() {
-    List<Faculty> f = [];
-    _firebaseFirestore.collection("faculties").get().then((element) {
-      for (var element in element.docs) {
-        Faculty ff = Faculty(
-            name: element.id,
-            departments: List.generate(element["Departments"].length,
-                (index) => Department(name: element["Departments"][index])));
-        f.add(ff);
-      }
-    });
-    return f;
+  Future getFaculties() {
+    return _firebaseFirestore.collection("faculties").get();
   }
 
   createChatRoom(String? chatRoomId, chatRoomMap) {
@@ -62,7 +50,10 @@ class FireStore {
   }
 
   getChatRooms() async {
-    return await _firebaseFirestore.collection("chatRoom").snapshots();
+    return await _firebaseFirestore
+        .collection("chatRoom")
+        .where("users", arrayContains: Constants.myName)
+        .snapshots();
   }
 
   Future<void> addStudent({required Student student}) async {

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../widgets/appbar.dart';
-import '../services/firestore.dart';
+import '../../constants.dart';
+import '../../widgets/appbar.dart';
+import '../../services/firestore.dart';
 import 'conversation.dart';
 
 class Search extends StatefulWidget {

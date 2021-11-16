@@ -1,7 +1,7 @@
 import 'package:final_project/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../services/firestore.dart';
+import '../../services/firestore.dart';
 import 'conversation.dart';
 
 class Chat extends StatefulWidget {

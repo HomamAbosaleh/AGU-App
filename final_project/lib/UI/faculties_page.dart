@@ -11,32 +11,45 @@ class FacultiesPage extends StatefulWidget {
 }
 
 class _FacultiesPageState extends State<FacultiesPage> {
-  final List<Faculty> faculties = FireStore().getFaculties();
+  final Future faculties = FireStore().getFaculties();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Faculties'),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: faculties.length,
-              itemBuilder: (context, index) {
-                return CustomDropdown(
-                  text: faculties[index].name,
-                  dropdowns:
-                      faculties[index].departments.map((e) => e.name).toList(),
-                );
-              },
+    return FutureBuilder(
+      future: faculties,
+      builder: (context, AsyncSnapshot snapShot) {
+        if (snapShot.hasData) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Faculties'),
             ),
-          ),
-        ),
-      ),
+            body: SingleChildScrollView(
+              child: Center(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: snapShot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      return CustomDropdown(
+                        text: snapShot.data.docs[index].id,
+                        dropdowns: snapShot.data.docs[index]["Departments"]
+                            .map<String>((e) => e.toString())
+                            .toList(),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }

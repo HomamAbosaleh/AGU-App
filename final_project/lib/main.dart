@@ -9,8 +9,8 @@ import 'UI/faculties_page.dart';
 import 'UI/canteen/food_menu.dart';
 import 'UI/home.dart';
 import 'UI/schedule.dart';
-import 'UI/chatrooms.dart';
-import 'UI/search.dart';
+import 'UI/chat/chatrooms.dart';
+import 'UI/chat/search.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

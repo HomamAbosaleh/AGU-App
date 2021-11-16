@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../services/firestore.dart';
+import '../../constants.dart';
+import '../../services/firestore.dart';
 
 class Conversation extends StatefulWidget {
   final String chatRoomId;

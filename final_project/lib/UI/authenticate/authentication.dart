@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'sign_up.dart';
+import 'new_sign_up.dart';
 import 'log_in.dart';
 import '../../widgets/appbar.dart';
 

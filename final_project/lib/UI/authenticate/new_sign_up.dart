@@ -15,6 +15,7 @@ class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
   String? faculty;
   String? department;
+  List departments = [];
   final faculties = FireStore().getFaculties();
   final List properties = [
     {
@@ -51,69 +52,108 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Card(
-          elevation: 6.0,
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  shrinkWrap: true,
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    return TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "This field cannot be empty";
-                        }
-                      },
-                      inputFormatters: properties[index]["filter"] ?? [],
-                      controller: _controller[index],
-                      decoration: InputDecoration(
-                          hintText: properties[index]["hint"] ?? "",
-                          labelText: properties[index]["label"],
-                          enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFD00001))),
-                          focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFD00001))),
-                          suffixText: properties[index]["suffix"] ?? ""),
-                    );
-                  },
+    return FutureBuilder(
+      future: faculties,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Card(
+                elevation: 6.0,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        shrinkWrap: true,
+                        itemCount: 6,
+                        itemBuilder: (context, index) {
+                          return TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "This field cannot be empty";
+                              }
+                            },
+                            inputFormatters: properties[index]["filter"] ?? [],
+                            controller: _controller[index],
+                            decoration: InputDecoration(
+                                hintText: properties[index]["hint"] ?? "",
+                                labelText: properties[index]["label"],
+                                enabledBorder: const UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFD00001))),
+                                focusedBorder: const UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFD00001))),
+                                suffixText: properties[index]["suffix"] ?? ""),
+                          );
+                        },
+                      ),
+                      DropdownButton<String>(
+                        value: faculty,
+                        items: snapshot.data.docs
+                            .map<DropdownMenuItem<String>>(
+                              (e) => DropdownMenuItem<String>(
+                                value: e.id,
+                                child: Text(e.id),
+                              ),
+                            )
+                            .toList(),
+                        hint: const Text("Faculty"),
+                        onChanged: (value) {
+                          for (var element in snapshot.data.docs) {
+                            if (element.id == value) {
+                              setState(() {
+                                faculty = value;
+                                departments = element["Departments"];
+                              });
+                              break;
+                            }
+                          }
+                        },
+                      ),
+                      DropdownButton<String>(
+                        value: department,
+                        items: departments
+                            .map<DropdownMenuItem<String>>(
+                              (e) => DropdownMenuItem<String>(
+                                value: e,
+                                child: Text(e),
+                              ),
+                            )
+                            .toList(),
+                        hint: const Text("Department"),
+                        onChanged: (value) {
+                          setState(() {
+                            department = value;
+                          });
+                        },
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            signMeUp();
+                          },
+                          child: const Text("Submit")),
+                    ],
+                  ),
                 ),
-                DropdownButton<String>(
-                  value: faculty,
-                  items: faculties.map(dropDownBuilder).toList(),
-                  hint: const Text("Faculty"),
-                  onChanged: (value) {
-                    setState(() {
-                      faculty = value;
-                    });
-                  },
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      signMeUp();
-                    },
-                    child: const Text("Submit")),
-              ],
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            widget.changeSignIn();
-          },
-          child: const Text('Go back'),
-        ),
-      ],
+              ),
+              TextButton(
+                onPressed: () {
+                  widget.changeSignIn();
+                },
+                child: const Text('Go back'),
+              ),
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
-  }
-
-  DropdownMenuItem<String> dropDownBuilder(var item) {
-    return DropdownMenuItem(value: item.name, child: Text(item.name));
   }
 }
