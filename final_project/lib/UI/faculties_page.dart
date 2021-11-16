@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../services/firestore.dart';
-import '../model/faculty.dart';
 
 class FacultiesPage extends StatefulWidget {
   const FacultiesPage({Key? key}) : super(key: key);
@@ -29,14 +28,16 @@ class _FacultiesPageState extends State<FacultiesPage> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
                     itemCount: snapShot.data.docs.length,
                     itemBuilder: (context, index) {
-                      return CustomDropdown(
-                        text: snapShot.data.docs[index].id,
-                        dropdowns: snapShot.data.docs[index]["Departments"]
-                            .map<String>((e) => e.toString())
-                            .toList(),
+                      return Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomDropdown(
+                          text: snapShot.data.docs[index].id,
+                          dropdowns: snapShot.data.docs[index]["Departments"]
+                              .map<String>((e) => e.toString())
+                              .toList(),
+                        ),
                       );
                     },
                   ),
@@ -55,10 +56,10 @@ class _FacultiesPageState extends State<FacultiesPage> {
 }
 
 class CustomDropdown extends StatefulWidget {
-  final List<String> dropdowns;
-  final String text;
+  List<String> dropdowns;
+  String text;
 
-  const CustomDropdown({Key? key, required this.text, required this.dropdowns})
+  CustomDropdown({Key? key, required this.text, required this.dropdowns})
       : super(key: key);
 
   @override
@@ -70,6 +71,20 @@ class _CustomDropdownState extends State<CustomDropdown> {
   IconData iconDrop = Icons.arrow_drop_down;
 
   List<DropDownItem> dropdownItems = [];
+  Map icons = {
+    "Computer Engineering": Icons.computer,
+    "Electrical & Electronics Engineering": Icons.electrical_services_sharp,
+    "Architecture": Icons.architecture,
+    "Industrial Engineering": Icons.settings_applications_sharp,
+    "Mechanical Engineering": Icons.car_repair,
+    "Civil Engineering": Icons.home,
+    "Political Science & International Relations": Icons.flag,
+    "Psychology": Icons.wheelchair_pickup,
+    "Molecular Biology & Genetic": Icons.clear,
+    "Bioengineering": Icons.accessibility_new,
+    "Business Administration": Icons.business_center_sharp,
+    "Economy": Icons.monetization_on,
+  };
 
   @override
   void initState() {
@@ -80,19 +95,19 @@ class _CustomDropdownState extends State<CustomDropdown> {
   void initlizeList() {
     if (widget.dropdowns.length == 1) {
       dropdownItems.add(DropDownItem.only(
-          text: widget.dropdowns[0], iconData: Icons.school_sharp));
+          text: widget.dropdowns[0], iconData: icons[widget.dropdowns[0]]));
       return;
     }
     for (int i = 0; i < widget.dropdowns.length; i++) {
       if (i == 0) {
         dropdownItems.add(DropDownItem.first(
-            text: widget.dropdowns[i], iconData: Icons.school_sharp));
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
       } else if (i == widget.dropdowns.length - 1) {
         dropdownItems.add(DropDownItem.last(
-            text: widget.dropdowns[i], iconData: Icons.school_sharp));
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
       } else {
         dropdownItems.add(DropDownItem(
-            text: widget.dropdowns[i], iconData: Icons.school_sharp));
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
       }
     }
   }
@@ -157,7 +172,7 @@ class DropDown extends StatelessWidget {
     return Column(
       children: <Widget>[
         const SizedBox(
-          height: 15,
+          height: 5,
         ),
         Container(
           decoration: BoxDecoration(
