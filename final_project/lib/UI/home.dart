@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
-import '../design/custom_app_bar.dart';
-import '../design/custom_bottom_bar.dart';
-import '../design/custom_floating_button.dart';
+import '../../services/sharedpreference.dart';
+import '../constants.dart';
+import '../widgets/appbar.dart';
+import '../widgets/bottombar.dart';
+import '../widgets/floatingbutton.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,37 +17,42 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF181515),
-      appBar: CustomAppBar(),
+      backgroundColor: const Color(0xFF181515),
+      appBar: customAppBar(context),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           child: Column(
             children: <Widget>[
               ElevatedButton(
                 onPressed: () async {
-                  signOut();
-                  Navigator.pushAndRemoveUntil(
+                  await SharedPreference.signOut();
+                  Constants.rememberMe = false;
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
+                    '/',
                     (route) => false,
                   );
                 },
-                child: Text("Sign Out"),
+                child: const Text("Sign Out"),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.pushNamed(
+                    context,
+                    "/chat",
+                  );
+                },
+                child: const Text("Chat out"),
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
-      floatingActionButton: CustomFloatingButton(),
+      bottomNavigationBar: customBottomBar(context),
+      floatingActionButton: customFloatingButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
-  }
-
-  Future<void> signOut() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.clear();
   }
 }

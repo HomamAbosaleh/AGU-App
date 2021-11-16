@@ -1,31 +1,39 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'UI/authentication.dart';
+import 'constants.dart';
+import 'services/sharedpreference.dart';
+import 'UI/authenticate/authentication.dart';
 import 'UI/faculties_page.dart';
-import 'UI/food_menu.dart';
+import 'UI/canteen/food_menu.dart';
 import 'UI/home.dart';
 import 'UI/schedule.dart';
+import 'UI/chatrooms.dart';
+import 'UI/search.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Constants.myName = await SharedPreference.getUserName();
+  Constants.email = await SharedPreference.getUserName();
+  Constants.uid = await SharedPreference.getUserId();
+  Constants.rememberMe = await SharedPreference.getUserLoggedIn();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
-  String? uid;
+
   MyApp({Key? key}) : super(key: key);
+
   Widget build(BuildContext context) {
-    checkIfExists();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
         '/home': (context) => const HomePage(),
-        //'/signUp': (context) => const SignUp(),
         '/faculties_page': (context) => const FacultiesPage(),
+        '/chat': (context) => const Chat(),
+        '/search': (context) => const Search(),
         '/food_menu/schedule': (context) => const Schedule(),
         '/food_menu': (context) => const Food(),
       },
@@ -37,10 +45,10 @@ class MyApp extends StatelessWidget {
             print("You have an error! ${snapshot.error.toString()}");
             return const Text("Something went wrong!");
           } else if (snapshot.hasData) {
-            if (uid != null) {
-              return HomePage();
+            if (Constants.rememberMe == true) {
+              return const HomePage();
             } else {
-              return Authentication();
+              return const Authentication();
             }
           } else {
             return const Center(
@@ -50,10 +58,5 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void checkIfExists() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    uid = pref.getString('uid');
   }
 }
