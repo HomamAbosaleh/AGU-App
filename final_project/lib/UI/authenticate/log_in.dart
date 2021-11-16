@@ -1,9 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Net/fireauth.dart';
+import '../../constants.dart';
+import '../../services/sharedpreference.dart';
+import '../../services/fireauth.dart';
 
 class LogIn extends StatefulWidget {
   VoidCallback changeSignIn;
@@ -19,7 +20,7 @@ class _LogInState extends State<LogIn> {
   final _password = TextEditingController();
   bool rememberMe = false;
   bool eye = true;
-  Icon eyeIcon = Icon(Icons.remove_red_eye_outlined);
+  Icon eyeIcon = const Icon(Icons.remove_red_eye_outlined);
   static const String domain = "@agu.edu.tr";
 
   @override
@@ -93,8 +94,11 @@ class _LogInState extends State<LogIn> {
                         password: _password.text,
                       );
                       if (rememberMe) {
-                        rememMe(FireAuth().currentUserID);
+                        await SharedPreference.saveLoggingIn(true);
+                      } else {
+                        await SharedPreference.saveLoggingIn(false);
                       }
+                      await setUpDate();
                       if (shouldNavigate) {
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/home', (route) => false);
@@ -149,8 +153,13 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-  Future<void> rememMe(uid) async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString('uid', uid);
+  Future<void> setUpDate() async {
+    await SharedPreference.saveUserName(_userName.text.split(".")[0]);
+    await SharedPreference.saveUserId(FireAuth().currentUserID);
+    await SharedPreference.saveUserEmail(_userName.text + domain);
+    Constants.myName = await SharedPreference.getUserName();
+    Constants.email = await SharedPreference.getUserName();
+    Constants.uid = await SharedPreference.getUserId();
+    Constants.rememberMe = await SharedPreference.getUserLoggedIn();
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'sign_up.dart';
+import 'new_sign_up.dart';
 import 'log_in.dart';
-import '../design/custom_app_bar.dart';
+import '../../widgets/appbar.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({Key? key}) : super(key: key);
@@ -29,11 +29,11 @@ class AuthenticationState extends State<Authentication> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: customAppBar(context),
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            margin: new EdgeInsets.all(30),
+            margin: const EdgeInsets.all(30),
             child: Column(
               children: [
                 inSignIn

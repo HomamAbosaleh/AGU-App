@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'meal.dart';
 import 'payment.dart';
-import 'schedule.dart';
+import '../schedule.dart';
 
 void main() => runApp(const Food());
 

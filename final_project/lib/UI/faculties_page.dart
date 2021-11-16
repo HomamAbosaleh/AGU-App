@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../services/firestore.dart';
+import '../model/faculty.dart';
 
 class FacultiesPage extends StatefulWidget {
   const FacultiesPage({Key? key}) : super(key: key);
@@ -9,82 +11,54 @@ class FacultiesPage extends StatefulWidget {
 }
 
 class _FacultiesPageState extends State<FacultiesPage> {
-  List<String> testDeps = [];
-
-  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-
-  Future<void> test() async {
-    var myList = [];
-
-    print('test1');
-    QuerySnapshot qSnapshot =
-        await _firebaseFirestore.collection('departments').get();
-
-    print('test2');
-    print(qSnapshot.docs[1].data());
-
-    //print(qSnapshot.docs);
-    // for (var element in myList) {
-    //   print(element);
-    // }
-  }
-
-  String dropdownvalue = 'choice 1';
-  List<String> depsC = [
-    'Computer Engineering',
-    'Civil Engineering',
-    'Electrical Engineering'
-  ];
-  List<String> deps2A = ['Architecture'];
-  List<String> deps3B = ['Business Administration', 'Economy'];
+  final Future faculties = FireStore().getFaculties();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Faculties'),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                CustomDropdown(
-                  text: 'Faculty of Engineering',
-                  dropdowns: depsC,
-                ),
-                SizedBox(height: 30),
-                CustomDropdown(
-                  text: 'Faculty of Architecture',
-                  dropdowns: deps2A,
-                ),
-                SizedBox(height: 30),
-                CustomDropdown(
-                  text: 'Faculty of Managerial Sciences',
-                  dropdowns: deps3B,
-                ),
-                TextButton(
-                  onPressed: test,
-                  child: Text('test'),
-                ),
-                // SizedBox(height: 30),
-                // CustomDropdown(text: 'test4'),
-                // SizedBox(height: 30),
-              ],
+    return FutureBuilder(
+      future: faculties,
+      builder: (context, AsyncSnapshot snapShot) {
+        if (snapShot.hasData) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Faculties'),
             ),
-          ),
-        ),
-      ),
+            body: SingleChildScrollView(
+              child: Center(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: snapShot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      return CustomDropdown(
+                        text: snapShot.data.docs[index].id,
+                        dropdowns: snapShot.data.docs[index]["Departments"]
+                            .map<String>((e) => e.toString())
+                            .toList(),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
 
 class CustomDropdown extends StatefulWidget {
-  List<String> dropdowns;
+  final List<String> dropdowns;
   final String text;
 
-  CustomDropdown({Key? key, required this.text, required this.dropdowns})
+  const CustomDropdown({Key? key, required this.text, required this.dropdowns})
       : super(key: key);
 
   @override
@@ -166,7 +140,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           ),
           isDropdownOpened
               ? DropDown(dropdownItems: dropdownItems)
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );
@@ -174,9 +148,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
 }
 
 class DropDown extends StatelessWidget {
-  List<DropDownItem> dropdownItems = [];
+  final List<DropDownItem> dropdownItems;
 
-  DropDown({Key? key, required this.dropdownItems}) : super(key: key);
+  const DropDown({Key? key, required this.dropdownItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -252,8 +226,12 @@ class DropDownItem extends StatelessWidget {
         primary: Colors.red[400],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: isFirstItem || isOnlyItem ? Radius.circular(4) : Radius.zero,
-            bottom: isLastItem || isOnlyItem ? Radius.circular(4) : Radius.zero,
+            top: isFirstItem || isOnlyItem
+                ? const Radius.circular(4)
+                : Radius.zero,
+            bottom: isLastItem || isOnlyItem
+                ? const Radius.circular(4)
+                : Radius.zero,
           ),
         ),
       ),
@@ -261,10 +239,14 @@ class DropDownItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            text.toUpperCase(),
-            style: const TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
+          Flexible(
+            child: Text(
+              text.toUpperCase(),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600),
+            ),
           ),
           //Spacer(),
           Icon(
