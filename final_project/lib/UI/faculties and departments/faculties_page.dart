@@ -1,6 +1,7 @@
+import 'package:final_project/UI/faculties%20and%20departments/department_page.dart';
 import 'package:flutter/material.dart';
 
-import '../services/firestore.dart';
+import '../../services/firestore.dart';
 
 class FacultiesPage extends StatefulWidget {
   const FacultiesPage({Key? key}) : super(key: key);
@@ -250,7 +251,12 @@ class DropDownItem extends StatelessWidget {
           ),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DepartmentPage(departmentName: text)));
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

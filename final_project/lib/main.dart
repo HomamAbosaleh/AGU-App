@@ -2,15 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
-import 'services/sharedpreference.dart';
 import 'UI/authenticate/authentication.dart';
-import 'UI/faculties_page.dart';
 import 'UI/canteen/food_menu.dart';
-import 'UI/home.dart';
-import 'UI/schedule.dart';
 import 'UI/chat/chatrooms.dart';
 import 'UI/chat/search.dart';
+import 'UI/faculties and departments/faculties_page.dart';
+import 'UI/home.dart';
+import 'UI/schedule.dart';
+import 'constants.dart';
+import 'services/sharedpreference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
