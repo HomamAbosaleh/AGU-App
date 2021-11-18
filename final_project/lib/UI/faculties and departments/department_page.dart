@@ -14,7 +14,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
   late Future department;
   @override
   void initState() {
-    department = FireStore().getDepartpents(widget.departmentName);
+    department = FireStore().getDepartments(widget.departmentName);
     super.initState();
   }
 

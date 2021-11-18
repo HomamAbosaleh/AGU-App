@@ -1,256 +1,258 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../constants.dart';
 import '../../services/fireauth.dart';
-import '../../services/firestore.dart';
-import '../../model/student.dart';
+import '/../services/firestore.dart';
+import '/../model/department.dart';
+import '/../model/faculty.dart';
+import '/../widgets/alertdialog.dart';
+import '/../model/student.dart';
 
 class SignUp extends StatefulWidget {
-  VoidCallback changeSignIn;
-
-  SignUp({Key? key, required this.changeSignIn}) : super(key: key);
+  final VoidCallback changeSignIn;
+  const SignUp({Key? key, required this.changeSignIn}) : super(key: key);
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
-  String? faculty;
-  final faculties = [
-    'Engineering',
-    'Architecture',
-    'Managerial Sciences',
-    'Humanities and Social Sciences',
-    'Life and Natural Science'
-  ];
-  final _name = TextEditingController();
-  final _surname = TextEditingController();
-  final _id = TextEditingController();
-  final _email = TextEditingController(text: '');
-  final _department = TextEditingController();
-  final _semester = TextEditingController();
-  final _password = TextEditingController();
-  final _passwordConfirmation = TextEditingController();
-  bool eye = true;
-  Icon eyeIcon = Icon(Icons.remove_red_eye_outlined);
-  static const domain = '@agu.edu.tr';
+  final formKey = GlobalKey<FormState>();
+  Faculty? faculty;
+  Department? department;
+  int? semester;
+  String? status;
+  List<Department> departments = [];
+  final faculties = FireStore().getFaculties();
+  final List<TextEditingController> controller =
+      List.generate(6, (index) => TextEditingController());
+
+  signMeUp(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      if (faculty == null ||
+          department == null ||
+          semester == null ||
+          status == null) {
+        showAlertDialog(context, "Incomplete Information",
+            "Please fill in all information");
+      } else if (controller[4].text != controller[5].text) {
+        showAlertDialog(
+            context, "Password Incorrect", "Please check your password");
+      } else {
+        String signed = await FireAuth().signUp(
+          email: controller[2].text + "@agu.edu.tr",
+          password: controller[4].text,
+        );
+        if (signed == "true") {
+          Student s = Student(
+              name: controller[0].text,
+              surname: controller[1].text,
+              gpa: 0.00,
+              id: controller[3].text,
+              email: controller[2].text + "@agu.edu.tr",
+              faculty: faculty!.name,
+              department: department!.name,
+              semester: semester,
+              status: status);
+          FireStore().addStudent(student: s);
+          await setUpDate();
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        } else {
+          showAlertDialog(context, "Cannot Sign Up", signed);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Student s;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            TextField(
-              controller: _name,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
-              ],
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Name',
-              ),
-              onChanged: (name) {
-                if (name == '') {
-                  _email.text = '';
-                } else {
-                  _email.text = name + '.' + _surname.text + domain;
-                }
-              },
-            ),
-            TextField(
-              controller: _surname,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
-              ],
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Surname',
-              ),
-              onChanged: (surname) {
-                _email.text = _name.text + '.' + surname + domain;
-              },
-            ),
-            TextField(
-              enabled: false,
-              controller: _email,
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Email',
-              ),
-            ),
-            TextField(
-              controller: _id,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp("[0-9]"))
-              ],
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Student ID',
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: DropdownButton<String>(
-                value: faculty,
-                iconSize: 24,
-                elevation: 1,
-                underline: Container(
-                  height: 1,
-                  color: Color(0xFFD00001),
-                ),
-                onChanged: (value) => setState(() => faculty = value),
-                items: faculties.map(buildMenuItem).toList(),
-                hint: const Text(
-                  "Faculty",
-                  style: TextStyle(
-                    color: Color(0xFFD00001),
-                    fontSize: 15,
+    return FutureBuilder(
+      future: faculties,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: [
+              Card(
+                elevation: 6.0,
+                child: Form(
+                  key: formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 7,
+                          itemBuilder: (context, index) {
+                            if (index == 4) {
+                              return dropDownList(snapshot);
+                            } else {
+                              return customTextFormField(controller, index);
+                            }
+                          },
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              signMeUp(context);
+                            },
+                            child: const Text("Submit")),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            TextField(
-              controller: _department,
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Department',
+              TextButton(
+                onPressed: () {
+                  widget.changeSignIn();
+                },
+                child: const Text('Go back'),
               ),
-            ),
-            TextField(
-              controller: _semester,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp("[1-9]"))
-              ],
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Semester',
-              ),
-            ),
-            TextField(
-              cursorColor: Color(0xFFA0A0A0),
-              obscureText: eye,
-              controller: _password,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      eye = !eye;
-                      if (eye == true) {
-                        eyeIcon = Icon(Icons.remove_red_eye_outlined);
-                      } else {
-                        eyeIcon = Icon(Icons.remove_red_eye_sharp);
-                      }
-                    });
-                  },
-                  icon: eyeIcon,
-                  color: Color(0xFFA0A0A0),
-                ),
-                labelStyle: const TextStyle(
-                  color: Color(0xFFA0A0A0),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Password',
-              ),
-            ),
-            TextField(
-              cursorColor: Color(0xFFA0A0A0),
-              obscureText: eye,
-              controller: _passwordConfirmation,
-              decoration: const InputDecoration(
-                labelStyle: const TextStyle(
-                  color: Color(0xFFA0A0A0),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                labelText: 'Password Confirmation',
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (_name.text.isEmpty ||
-                    _surname.text.isEmpty ||
-                    _id.text.isEmpty ||
-                    _department.text.isEmpty ||
-                    _semester.text.isEmpty ||
-                    _password.text.isEmpty ||
-                    _passwordConfirmation.text.isEmpty) {
-                  print("Please fill in all information");
-                } else {
-                  if (_passwordConfirmation.text != _password.text) {
-                    print("Please check your password");
-                  } else {
-                    bool signed = await FireAuth().signUp(
-                      email: _email.text,
-                      password: _password.text,
-                    );
-                    if (signed) {
-                      s = Student(
-                          name: _name.text,
-                          surname: _surname.text,
-                          gpa: 0.00,
-                          id: _id.text,
-                          email: _email.text,
-                          faculty: faculty,
-                          department: _department.text,
-                          semester: int.parse(_semester.text));
-                      FireStore().addStudent(student: s);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
-                    } else {
-                      print("Something Went Wrong");
-                    }
-                  }
-                }
-              },
-              child: const Text("Submit"),
-            ),
-            TextButton(
-              onPressed: () {
-                widget.changeSignIn();
-              },
-              child: Text('Go back'),
-            ),
-          ],
-        ),
-      ),
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
-  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-        value: item,
-        child: Text(
-          item,
+  Widget dropDownList(AsyncSnapshot snapshot) {
+    return Column(
+      children: [
+        DropdownButton<dynamic>(
+          isExpanded: true,
+          value: faculty,
+          items: snapshot.data
+              .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
+              .toList(),
+          hint: const Text("Faculty"),
+          onChanged: (value) {
+            setState(() {
+              department = null;
+              faculty = value;
+              departments = value.departments;
+            });
+          },
         ),
-      );
+        DropdownButton<dynamic>(
+          isExpanded: true,
+          value: department,
+          items: departments
+              .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
+              .toList(),
+          hint: const Text("Department"),
+          onChanged: (value) {
+            setState(() {
+              department = value;
+            });
+          },
+        ),
+        DropdownButton<dynamic>(
+          isExpanded: true,
+          value: semester,
+          items: List.generate(
+            8,
+            (index) => DropdownMenuItem(
+              value: index + 1,
+              child: Text((index + 1).toString()),
+            ),
+          ),
+          hint: const Text("Semester"),
+          onChanged: (value) {
+            setState(() {
+              semester = value;
+            });
+          },
+        ),
+        DropdownButton<dynamic>(
+          isExpanded: true,
+          value: status,
+          items: ["Graduate", "Undergraduate"]
+              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              .toList(),
+          hint: const Text("Status"),
+          onChanged: (value) {
+            setState(() {
+              status = value;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Future<void> setUpDate() async {
+    Constants.myName = controller[0].text;
+    Constants.email = controller[2].text + "@agu.edu.tr";
+    Constants.uid = await FireAuth().currentUserID;
+    Constants.rememberMe = false;
+  }
+}
+
+DropdownMenuItem<dynamic> dropDownBuilder(item) {
+  return DropdownMenuItem(value: item, child: Text(item.name));
+}
+
+Widget customTextFormField(controller, int index) {
+  final Map properties = {
+    0: {
+      "label": "Name",
+      "Filter": FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+      "controller": controller[0],
+    },
+    1: {
+      "label": "Surname",
+      "Filter": FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+      "controller": controller[1],
+    },
+    2: {
+      "label": "Email",
+      "Filter": FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]")),
+      "suffix": "@agu.edu.tr",
+      "hint": "name.surname",
+      "controller": controller[2],
+    },
+    3: {
+      "label": "Student ID",
+      "Filter": FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+      "controller": controller[3],
+      "maxLength": 10,
+    },
+    5: {
+      "label": "Password",
+      "Filter": FilteringTextInputFormatter.deny(RegExp(" ")),
+      "controller": controller[4],
+    },
+    6: {
+      "label": "Confirmation Password",
+      "Filter": FilteringTextInputFormatter.deny(RegExp(" ")),
+      "controller": controller[5],
+    },
+  };
+  return TextFormField(
+    validator: (value) {
+      if (value == null || value.isEmpty) {
+        return "This field cannot be empty";
+      }
+    },
+    maxLength: properties[index]["maxLength"],
+    cursorColor: const Color(0xFFA0A0A0),
+    obscureText: index >= 5 ? true : false,
+    inputFormatters: [properties[index]["Filter"]],
+    controller: properties[index]["controller"],
+    decoration: InputDecoration(
+        hintText: properties[index]["hint"] ?? "",
+        labelText: properties[index]["label"],
+        enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFFD00001))),
+        focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFFD00001))),
+        suffixText: properties[index]["suffix"] ?? ""),
+  );
 }

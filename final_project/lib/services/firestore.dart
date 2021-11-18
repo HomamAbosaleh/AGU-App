@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/constants.dart';
 
+import '../model/department.dart';
+import '../model/faculty.dart';
+import '../constants.dart';
 import '../model/student.dart';
 import 'fireauth.dart';
 
@@ -8,11 +10,25 @@ class FireStore {
   static final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
 
-  Future getFaculties() {
-    return _firebaseFirestore.collection("faculties").get();
+  Future<List<Faculty>> getFaculties() async {
+    List<Faculty> f = [];
+    await _firebaseFirestore.collection("faculties").get().then((e) {
+      for (var element in e.docs) {
+        f.add(
+          Faculty(
+            name: element.id,
+            departments: List.generate(
+              element.get("Departments").length,
+              (index) => Department(name: element.get("Departments")[index]),
+            ),
+          ),
+        );
+      }
+    });
+    return f;
   }
 
-  Future getDepartpents(String departmentName) {
+  Future getDepartments(String departmentName) {
     return _firebaseFirestore
         .collection('departments')
         .doc(departmentName)

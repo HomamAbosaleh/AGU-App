@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../../constants.dart';
 import '../../services/sharedpreference.dart';
 import '../../services/fireauth.dart';
+import '/../widgets/alertdialog.dart';
 
 class LogIn extends StatefulWidget {
   VoidCallback changeSignIn;
@@ -31,7 +32,7 @@ class _LogInState extends State<LogIn> {
         padding: const EdgeInsets.all(12),
         child: Column(children: <Widget>[
           TextField(
-            cursorColor: Color(0xFFA0A0A0),
+            cursorColor: const Color(0xFFA0A0A0),
             controller: _userName,
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
@@ -50,7 +51,7 @@ class _LogInState extends State<LogIn> {
             ),
           ),
           TextField(
-            cursorColor: Color(0xFFA0A0A0),
+            cursorColor: const Color(0xFFA0A0A0),
             obscureText: eye,
             controller: _password,
             decoration: InputDecoration(
@@ -59,14 +60,14 @@ class _LogInState extends State<LogIn> {
                   setState(() {
                     eye = !eye;
                     if (eye == true) {
-                      eyeIcon = Icon(Icons.remove_red_eye_outlined);
+                      eyeIcon = const Icon(Icons.remove_red_eye_outlined);
                     } else {
-                      eyeIcon = Icon(Icons.remove_red_eye_sharp);
+                      eyeIcon = const Icon(Icons.remove_red_eye_sharp);
                     }
                   });
                 },
                 icon: eyeIcon,
-                color: Color(0xFFA0A0A0),
+                color: const Color(0xFFA0A0A0),
               ),
               labelStyle: const TextStyle(
                 color: Color(0xFFA0A0A0),
@@ -78,7 +79,7 @@ class _LogInState extends State<LogIn> {
               labelText: 'Password',
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -87,21 +88,25 @@ class _LogInState extends State<LogIn> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_userName.text.isEmpty || _password.text.isEmpty) {
-                      print("please fill in all information");
+                      showAlertDialog(context, "Cannot Sign In",
+                          "Please fill up all information");
                     } else {
-                      bool shouldNavigate = await FireAuth().signIn(
+                      String shouldNavigate = await FireAuth().signIn(
                         email: _userName.text + domain,
                         password: _password.text,
                       );
-                      if (rememberMe) {
-                        await SharedPreference.saveLoggingIn(true);
-                      } else {
-                        await SharedPreference.saveLoggingIn(false);
-                      }
-                      await setUpDate();
-                      if (shouldNavigate) {
+                      if (shouldNavigate == "true") {
+                        if (rememberMe) {
+                          await SharedPreference.saveLoggingIn(true);
+                        } else {
+                          await SharedPreference.saveLoggingIn(false);
+                        }
+                        await setUpDate();
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/home', (route) => false);
+                      } else {
+                        showAlertDialog(
+                            context, "Cannot Sign In", shouldNavigate);
                       }
                     }
                   },
@@ -120,7 +125,7 @@ class _LogInState extends State<LogIn> {
                     Checkbox(
                       checkColor: Colors.white,
                       value: rememberMe,
-                      activeColor: Color(0xFFD00001),
+                      activeColor: const Color(0xFFD00001),
                       onChanged: (value) {
                         setState(() {
                           rememberMe = value!;
