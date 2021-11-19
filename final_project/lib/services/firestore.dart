@@ -12,7 +12,7 @@ class FireStore {
     return _firebaseFirestore.collection("faculties").get();
   }
 
-  Future getDepartpents(String departmentName) {
+  Future getDepartments(String departmentName) {
     return _firebaseFirestore
         .collection('departments')
         .doc(departmentName)
