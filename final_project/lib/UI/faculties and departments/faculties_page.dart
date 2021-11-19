@@ -1,6 +1,6 @@
-import 'package:final_project/UI/faculties%20and%20departments/department_page.dart';
 import 'package:flutter/material.dart';
 
+import 'department_page.dart';
 import '../../services/firestore.dart';
 
 class FacultiesPage extends StatefulWidget {
@@ -29,14 +29,14 @@ class _FacultiesPageState extends State<FacultiesPage> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                    itemCount: snapShot.data.docs.length,
+                    itemCount: snapShot.data.length,
                     itemBuilder: (context, index) {
                       return Container(
                         padding: const EdgeInsets.all(8.0),
                         child: CustomDropdown(
-                          text: snapShot.data.docs[index].id,
-                          dropdowns: snapShot.data.docs[index]["Departments"]
-                              .map<String>((e) => e.toString())
+                          text: snapShot.data[index].name,
+                          dropdowns: snapShot.data[index].departments
+                              .map<String>((e) => e.name.toString())
                               .toList(),
                         ),
                       );
