@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/drawer.dart';
 import 'sign_up.dart';
 import 'log_in.dart';
 import '../../widgets/appbar.dart';
@@ -30,6 +31,7 @@ class AuthenticationState extends State<Authentication> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(context),
+      drawer: customDrawer(context),
       body: SingleChildScrollView(
         child: Center(
           child: Container(
