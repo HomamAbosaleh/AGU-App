@@ -51,6 +51,11 @@ class FireStore {
         .where("name", isEqualTo: name)
         .get();
   }
+  Future getStudent() async {
+    return await _firebaseFirestore
+        .collection("student").doc(Constants.uid)
+        .get();
+  }
 
   void addConversationMessages(String chatRoomId, messageMap) {
     _firebaseFirestore

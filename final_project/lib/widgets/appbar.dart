@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 PreferredSizeWidget customAppBar(BuildContext context) {
+
   return AppBar(
     toolbarHeight: 85,
     backgroundColor: Color(0x95000000),

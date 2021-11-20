@@ -96,6 +96,7 @@ class _SignUpState extends State<SignUp> {
                           },
                         ),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(primary: Colors.red),
                             onPressed: () {
                               signMeUp(context);
                             },
@@ -109,7 +110,7 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () {
                   widget.changeSignIn();
                 },
-                child: const Text('Go back'),
+                child: const Text('Go back',style: TextStyle(color: Colors.red),),
               ),
             ],
           );
