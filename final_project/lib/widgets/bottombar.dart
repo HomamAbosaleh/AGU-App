@@ -1,3 +1,4 @@
+import 'package:final_project/UI/api/apipage.dart';
 import 'package:flutter/material.dart';
 import '../../services/sharedpreference.dart';
 import '../constants.dart';
@@ -76,8 +77,12 @@ class _customBottomBarState extends State<customBottomBar> {
                 IconButton(
                   color: Color(0xFFD7D6D6),
                   iconSize: defval, //FFBDBBBB
-                  icon: const Icon(Icons.people_rounded),
+                  icon: const Icon(Icons.wifi),
                   onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (coxntext){
+                      return apiPage();
+                    }
+                    ));
                     setState(() {
                       defval=30;
                     });
