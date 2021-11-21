@@ -45,7 +45,7 @@ class _customBottomBarState extends State<customBottomBar> {
                 IconButton(
                   color: Color(0xFFD7D6D6),
                   iconSize: defval,
-                  icon: const Icon(Icons.location_on),
+                  icon: const Icon(Icons.school),
                   onPressed: () {
                     setState(() {
                       defval=30;
@@ -54,7 +54,7 @@ class _customBottomBarState extends State<customBottomBar> {
                   },
                 ),
                 PopupMenuButton(
-                  icon: Icon(Icons.school,color: Color(0xFFD00001),size: 30,),
+                  icon: Icon(Icons.people,color: Color(0xFFD00001),size: 30,),
                   itemBuilder: (context)=>[
                     PopupMenuItem(
                       child: Text("Profile Information"),
