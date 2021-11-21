@@ -75,7 +75,7 @@ class _customBottomBarState extends State<customBottomBar> {
                 ),
 
                 IconButton(
-                  color: Color(0xFFD7D6D6),x
+                  color: Color(0xFFD7D6D6),
                   iconSize: defval, //FFBDBBBB
                   icon: const Icon(Icons.wifi),
                   onPressed: () {
@@ -84,7 +84,7 @@ class _customBottomBarState extends State<customBottomBar> {
                     }
                     ));
                     setState(() {
-                      defval=30;x
+                      defval=30;
                     });
                   },
                 ),
