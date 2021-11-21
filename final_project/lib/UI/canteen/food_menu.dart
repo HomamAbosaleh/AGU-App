@@ -5,8 +5,6 @@ import 'meal.dart';
 import 'payment.dart';
 import '../schedule.dart';
 
-void main() => runApp(const Food());
-
 class Food extends StatefulWidget {
   const Food({Key? key}) : super(key: key);
 
@@ -27,14 +25,18 @@ class _foodState extends State<Food> {
     Schedule(),
     payments(),
   ];
+  final titles = [
+    'December 10',
+    'December',
+    'My Wallet',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(
-            DateFormat.MMMMEEEEd().format(DateTime.now()),
+           titles[currentIndex],
             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
           ),
           backgroundColor: Colors.red[400],
@@ -44,7 +46,7 @@ class _foodState extends State<Food> {
           currentIndex: currentIndex,
           onTap: _onItemTapped,
           iconSize: 30,
-          selectedFontSize: 20,
+          selectedFontSize: 15,
           selectedIconTheme: const IconThemeData(color: Colors.white, size: 40),
           selectedItemColor: Colors.white,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
@@ -72,7 +74,6 @@ class _foodState extends State<Food> {
           ],
         ),
         backgroundColor: Colors.grey[800],
-      ),
     );
   }
 }

@@ -31,7 +31,6 @@ class _DepartmentPageState extends State<DepartmentPage> {
             body: Center(
               child: Column(
                 children: [
-
                 ],
               ),
             ),
