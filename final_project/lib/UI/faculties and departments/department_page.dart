@@ -12,6 +12,7 @@ class DepartmentPage extends StatefulWidget {
 
 class _DepartmentPageState extends State<DepartmentPage> {
   late Future department;
+
   @override
   void initState() {
     department = FireStore().getDepartments(widget.departmentName);
@@ -31,7 +32,6 @@ class _DepartmentPageState extends State<DepartmentPage> {
             body: Center(
               child: Column(
                 children: [
-
                 ],
               ),
             ),
