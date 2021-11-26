@@ -10,11 +10,17 @@ class Schedule extends StatefulWidget {
 class _scheduleState extends State<Schedule> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-        title: Text('sth'),
-      )),
+    return Center(
+    child:  Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text('Monday,December 10'),
+          Text('Main Dish: Lahmacun'),
+          Text('Second Dish: Iskembe Corbasi'),
+          Text('Salad: Salad'),
+          Text('Fruit: Apple')
+        ],
+      ),
     );
   }
 }

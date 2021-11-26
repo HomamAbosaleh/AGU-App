@@ -12,6 +12,7 @@ class DepartmentPage extends StatefulWidget {
 
 class _DepartmentPageState extends State<DepartmentPage> {
   late Future department;
+
   @override
   void initState() {
     department = FireStore().getDepartments(widget.departmentName);
@@ -26,12 +27,11 @@ class _DepartmentPageState extends State<DepartmentPage> {
         if (snapShot.hasData) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('tiddies'),
+              title: Text(snapShot.data.id),
             ),
             body: Center(
               child: Column(
                 children: [
-                  Text(snapShot.data.id),
                 ],
               ),
             ),

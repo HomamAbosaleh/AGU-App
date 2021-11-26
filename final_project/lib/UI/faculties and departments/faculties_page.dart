@@ -130,7 +130,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(20),
               color: Colors.red.shade600,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -176,9 +176,7 @@ class DropDown extends StatelessWidget {
           height: 5,
         ),
         Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-          ),
+
           child: Column(
             children: <Widget>[...dropdownItems.map((e) => e)],
           ),
@@ -243,10 +241,10 @@ class DropDownItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: isFirstItem || isOnlyItem
-                ? const Radius.circular(4)
+                ? const Radius.circular(15)
                 : Radius.zero,
             bottom: isLastItem || isOnlyItem
-                ? const Radius.circular(4)
+                ? const Radius.circular(15)
                 : Radius.zero,
           ),
         ),

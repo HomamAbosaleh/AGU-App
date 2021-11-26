@@ -16,7 +16,10 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+<<<<<<< HEAD
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" generated="true" />
+=======
+>>>>>>> 602a0077e192a4db1ed632c0c5b188294eddbeb0
       <excludeFolder url="file://$MODULE_DIR$/assignment3/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/assignment3/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/assignment3/build" />
