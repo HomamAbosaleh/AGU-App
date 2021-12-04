@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: s,
-        builder: (context, AsyncSnapshot snapShot){
-          if(snapShot.hasData){
+        builder: (context, AsyncSnapshot snapShot) {
+          if (snapShot.hasData) {
             return Scaffold(
               backgroundColor: const Color(0xFF181515),
               appBar: customAppBar(context),
@@ -33,57 +33,65 @@ class _HomePageState extends State<HomePage> {
                 child: SizedBox(
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0,10.0,0.0,0.0),
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 0.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Center(
+                        const Center(
                           child: CircleAvatar(
                             radius: 60,
                           ),
                         ),
-                          Text("Name",style: TextStyle(fontSize: 17),textAlign: TextAlign.left,),
-                           Text(snapShot.data["name"]+" "+
-                            snapShot.data["surname"]+'\n',style: customTextStyle(),
-                          ),
-                          Text("Student ID",style: TextStyle(fontSize: 17),textAlign: TextAlign.left,),
-                          Text(
-                                snapShot.data["id"]+'\n',style: customTextStyle(),
+                        const Text(
+                          "Name",
+                          style: TextStyle(fontSize: 17),
+                          textAlign: TextAlign.left,
                         ),
-                       Text("Department",style: TextStyle(fontSize: 17),),
-                          Text(
-                            snapShot.data["department"].toString()+'\n',style: customTextStyle(),
+                        Text(
+                          snapShot.data["name"] +
+                              " " +
+                              snapShot.data["surname"] +
+                              '\n',
+                          style: customTextStyle(),
                         ),
-                         Text("GPA",style: TextStyle(fontSize: 17),),
-                           Text(
-                                snapShot.data["gpa"].toString()+'\n',style: customTextStyle(),
+                        const Text(
+                          "Student ID",
+                          style: TextStyle(fontSize: 17),
+                          textAlign: TextAlign.left,
                         ),
-                        // ElevatedButton(
-                        //   onPressed: () async {
-                        //     await SharedPreference.signOut();
-                        //     Constants.rememberMe = false;
-                        //     Navigator.pushNamedAndRemoveUntil(
-                        //       context,
-                        //       '/',
-                        //       (route) => false,
-                        //     );
-                        //   },
-                        //   child: const Text("Sign Out"),
-                        // ),
+                        Text(
+                          snapShot.data["id"] + '\n',
+                          style: customTextStyle(),
+                        ),
+                        const Text(
+                          "Department",
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        Text(
+                          snapShot.data["department"].toString() + '\n',
+                          style: customTextStyle(),
+                        ),
+                        const Text(
+                          "GPA",
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        Text(
+                          snapShot.data["gpa"].toString() + '\n',
+                          style: customTextStyle(),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
               bottomNavigationBar: customBottomBar(),
-             // floatingActionButton: customFloatingButton(context),
+              // floatingActionButton: customFloatingButton(context),
             );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-        }
-    );
+        });
   }
 }

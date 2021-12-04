@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'UI/authenticate/authentication.dart';
 import 'UI/canteen/food_menu.dart';
 import 'UI/chat/chatrooms.dart';

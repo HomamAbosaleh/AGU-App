@@ -96,7 +96,8 @@ class _SignUpState extends State<SignUp> {
                           },
                         ),
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.red),
                             onPressed: () {
                               signMeUp(context);
                             },
@@ -110,7 +111,10 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () {
                   widget.changeSignIn();
                 },
-                child: const Text('Go back',style: TextStyle(color: Colors.red),),
+                child: const Text(
+                  'Go back',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ],
           );
@@ -242,6 +246,7 @@ Widget customTextFormField(controller, int index) {
         return "This field cannot be empty";
       }
     },
+    focusNode: FocusNode(canRequestFocus: false),
     maxLength: properties[index]["maxLength"],
     cursorColor: const Color(0xFFA0A0A0),
     obscureText: index >= 5 ? true : false,
