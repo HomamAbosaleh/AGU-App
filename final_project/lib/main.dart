@@ -14,6 +14,7 @@ import 'services/sharedpreference.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Constants.myName = await SharedPreference.getUserName();
+  Constants.mySurname = await SharedPreference.getUserSurname();
   Constants.email = await SharedPreference.getUserName();
   Constants.uid = await SharedPreference.getUserId();
   Constants.rememberMe = await SharedPreference.getUserLoggedIn();

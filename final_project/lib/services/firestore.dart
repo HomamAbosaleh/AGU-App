@@ -51,9 +51,11 @@ class FireStore {
         .where("name", isEqualTo: name)
         .get();
   }
+
   Future getStudent() async {
     return await _firebaseFirestore
-        .collection("student").doc(Constants.uid)
+        .collection("student")
+        .doc(Constants.uid)
         .get();
   }
 
@@ -97,6 +99,7 @@ class FireStore {
       'department': '${student.department}',
       'semester': '${student.semester}',
       'courses': student.courses,
+      'wallet': student.wallet,
     });
   }
 }

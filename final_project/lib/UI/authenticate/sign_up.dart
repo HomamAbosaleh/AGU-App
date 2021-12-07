@@ -19,6 +19,12 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  static const int _nameControllerNumber = 0;
+  static const int _surnameControllerNumber = 1;
+  static const int _emailControllerNumber = 2;
+  static const int _idControllerNumber = 3;
+  static const int _passwordControllerNumber = 4;
+  static const int _confPasswordControllerNumber = 5;
   final formKey = GlobalKey<FormState>();
   Faculty? faculty;
   Department? department;
@@ -31,31 +37,40 @@ class _SignUpState extends State<SignUp> {
 
   signMeUp(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      if (faculty == null ||
+      if (controller[_nameControllerNumber].text.isEmpty ||
+          controller[_surnameControllerNumber].text.isEmpty ||
+          controller[_emailControllerNumber].text.isEmpty ||
+          controller[_idControllerNumber].text.isEmpty ||
+          controller[_passwordControllerNumber].text.isEmpty ||
+          controller[_confPasswordControllerNumber].text.isEmpty ||
+          faculty == null ||
           department == null ||
           semester == null ||
           status == null) {
-        showAlertDialog(context, "Incomplete Information",
-            "Please fill in all information");
-      } else if (controller[4].text != controller[5].text) {
+        showAlertDialog(
+            context, "Incomplete Information", "Please fill in all the fields");
+      } else if (controller[_passwordControllerNumber].text !=
+          controller[_confPasswordControllerNumber].text) {
         showAlertDialog(
             context, "Password Incorrect", "Please check your password");
       } else {
         String signed = await FireAuth().signUp(
-          email: controller[2].text + "@agu.edu.tr",
-          password: controller[4].text,
+          email: controller[_emailControllerNumber].text + "@agu.edu.tr",
+          password: controller[_passwordControllerNumber].text,
         );
         if (signed == "true") {
           Student s = Student(
-              name: controller[0].text,
-              surname: controller[1].text,
+              name: controller[_nameControllerNumber].text.toLowerCase(),
+              surname: controller[_surnameControllerNumber].text.toLowerCase(),
               gpa: 0.00,
-              id: controller[3].text,
-              email: controller[2].text + "@agu.edu.tr",
+              id: controller[_idControllerNumber].text,
+              email: controller[_emailControllerNumber].text.toLowerCase() +
+                  "@agu.edu.tr",
               faculty: faculty!.name,
               department: department!.name,
               semester: semester,
-              status: status);
+              status: status,
+              wallet: 0.00);
           FireStore().addStudent(student: s);
           await setUpDate();
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
@@ -130,7 +145,13 @@ class _SignUpState extends State<SignUp> {
   Widget dropDownList(AsyncSnapshot snapshot) {
     return Column(
       children: [
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+          ),
           isExpanded: true,
           value: faculty,
           items: snapshot.data
@@ -145,7 +166,13 @@ class _SignUpState extends State<SignUp> {
             });
           },
         ),
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+          ),
           isExpanded: true,
           value: department,
           items: departments
@@ -158,7 +185,13 @@ class _SignUpState extends State<SignUp> {
             });
           },
         ),
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+          ),
           isExpanded: true,
           value: semester,
           items: List.generate(
@@ -175,7 +208,13 @@ class _SignUpState extends State<SignUp> {
             });
           },
         ),
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD00001))),
+          ),
           isExpanded: true,
           value: status,
           items: ["Graduate", "Undergraduate"]
@@ -193,8 +232,10 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> setUpDate() async {
-    Constants.myName = controller[0].text;
-    Constants.email = controller[2].text + "@agu.edu.tr";
+    Constants.myName = controller[_nameControllerNumber].text.toLowerCase();
+    Constants.mySurname =
+        controller[_surnameControllerNumber].text.toLowerCase();
+    Constants.email = controller[_emailControllerNumber].text + "@agu.edu.tr";
     Constants.uid = await FireAuth().currentUserID;
     Constants.rememberMe = false;
   }
@@ -227,7 +268,7 @@ Widget customTextFormField(controller, int index) {
       "label": "Student ID",
       "Filter": FilteringTextInputFormatter.allow(RegExp("[0-9]")),
       "controller": controller[3],
-      "maxLength": 10,
+      "maxLength": LengthLimitingTextInputFormatter(10),
     },
     5: {
       "label": "Password",
@@ -241,16 +282,13 @@ Widget customTextFormField(controller, int index) {
     },
   };
   return TextFormField(
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return "This field cannot be empty";
-      }
-    },
     focusNode: FocusNode(canRequestFocus: false),
-    maxLength: properties[index]["maxLength"],
     cursorColor: const Color(0xFFA0A0A0),
     obscureText: index >= 5 ? true : false,
-    inputFormatters: [properties[index]["Filter"]],
+    inputFormatters: [
+      properties[index]["Filter"],
+      properties[index]["maxLength"] ?? LengthLimitingTextInputFormatter(100),
+    ],
     controller: properties[index]["controller"],
     decoration: InputDecoration(
         hintText: properties[index]["hint"] ?? "",

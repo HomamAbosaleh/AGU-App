@@ -4,6 +4,7 @@ import '../../services/fireauth.dart';
 class SharedPreference {
   static String userLoggedInKey = "ISLOGGEDIN";
   static String userNameKey = "USERNAMEKEY";
+  static String userSurnameKey = "USERSURNAMEKEY";
   static String userEmailKey = "USEREMAILKEY";
   static String userId = "USERIDKEY";
 
@@ -21,6 +22,11 @@ class SharedPreference {
   static Future<void> saveUserName(String userName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(userNameKey, userName);
+  }
+
+  static Future<void> saveUserSurname(String surname) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(userSurnameKey, surname);
   }
 
   static Future<void> saveUserEmail(String userEmail) async {
@@ -42,6 +48,11 @@ class SharedPreference {
   static Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(userNameKey) ?? "";
+  }
+
+  static Future<String> getUserSurname() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(userSurnameKey) ?? "";
   }
 
   static Future<String?> getUserEmail() async {

@@ -8,6 +8,7 @@ class Student {
   final String? department;
   final String? status;
   final int? semester;
+  final double? wallet;
   final List<Map<String, String>>? courses;
 
   Student(
@@ -20,5 +21,6 @@ class Student {
       this.status,
       this.faculty,
       this.semester,
-      this.courses});
+      this.courses,
+      this.wallet});
 }

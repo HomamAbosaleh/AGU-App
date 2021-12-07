@@ -159,10 +159,14 @@ class _LogInState extends State<LogIn> {
   }
 
   Future<void> setUpDate() async {
-    await SharedPreference.saveUserName(_userName.text.split(".")[0]);
+    await SharedPreference.saveUserName(
+        _userName.text.split(".")[0].toLowerCase());
+    await SharedPreference.saveUserSurname(
+        _userName.text.split(".")[1].toLowerCase());
     await SharedPreference.saveUserId(FireAuth().currentUserID);
-    await SharedPreference.saveUserEmail(_userName.text + domain);
+    await SharedPreference.saveUserEmail(_userName.text.toLowerCase() + domain);
     Constants.myName = await SharedPreference.getUserName();
+    Constants.mySurname = await SharedPreference.getUserSurname();
     Constants.email = await SharedPreference.getUserName();
     Constants.uid = await SharedPreference.getUserId();
     Constants.rememberMe = await SharedPreference.getUserLoggedIn();
