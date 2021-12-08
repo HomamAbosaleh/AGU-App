@@ -47,8 +47,6 @@ class meal extends StatelessWidget {
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(70),
                         topRight: Radius.circular(70),
-                        // bottomLeft: Radius.circular(50),
-                        // bottomRight: Radius.circular(50),
                       ),
                       color: Color(0xF3000000),
                     ),
