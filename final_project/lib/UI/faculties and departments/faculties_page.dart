@@ -23,27 +23,20 @@ class _FacultiesPageState extends State<FacultiesPage> {
             appBar: AppBar(
               title: const Text('Faculties'),
             ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    itemCount: snapShot.data.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomDropdown(
-                          text: snapShot.data[index].name,
-                          dropdowns: snapShot.data[index].departments
-                              .map<String>((e) => e.name.toString())
-                              .toList(),
-                        ),
-                      );
-                    },
+            body: ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapShot.data.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CustomDropdown(
+                    text: snapShot.data[index].name,
+                    dropdowns: snapShot.data[index].departments
+                        .map<String>((e) => e.name.toString())
+                        .toList(),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           );
         } else {
@@ -176,7 +169,6 @@ class DropDown extends StatelessWidget {
           height: 5,
         ),
         Container(
-
           child: Column(
             children: <Widget>[...dropdownItems.map((e) => e)],
           ),
