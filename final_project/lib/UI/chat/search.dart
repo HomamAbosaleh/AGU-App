@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../../widgets/appbar.dart';
 import '../../services/firestore.dart';
 import 'conversation.dart';
 
@@ -14,111 +12,107 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final searchBarText = TextEditingController();
-  QuerySnapshot? searchSnapShot;
+  List<String> students = [];
+  List<String> filteredStudents = [];
+  TextEditingController search = TextEditingController();
 
-  createChatRoom(String userName) async {
-    if (userName != Constants.myName) {
-      String chatRoomId = getChatRoomId(userName, Constants.myName);
-      List<String> users = [userName, Constants.myName];
-      Map<String, dynamic> chatRoomMap = {
-        "users": users,
-        "chatRoomId": chatRoomId,
-      };
-      FireStore().createChatRoom(chatRoomId, chatRoomMap);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Conversation(
-            chatRoomId: chatRoomId,
-          ),
-        ),
-      );
-    } else {
-      print("You cannot search for yourself");
-    }
+  String getName(name) {
+    return name.split(" ")[0].substring(0, 1).toUpperCase() +
+        name.split(" ")[0].substring(1) +
+        " " +
+        name.split(" ")[1].substring(0, 1).toUpperCase() +
+        name.split(" ")[1].substring(1);
   }
 
-  void search() {
-    FireStore().getUser(searchBarText.text).then((value) {
+  createChatRoom(name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Conversation(
+          chatRoomId: name,
+        ),
+      ),
+    );
+  }
+
+  getAllStudents() async {
+    await FireStore().getUser().then((value) {
       setState(() {
-        searchSnapShot = value;
+        students = value;
       });
     });
   }
 
-  Widget searchTile({required String name, required String email}) {
-    return InkWell(
-      onTap: () {
-        createChatRoom(name);
-      },
-      child: Card(
+  filterStudents() {
+    List<String> filtered = [];
+    filtered.addAll(students);
+    if (search.text.isNotEmpty) {
+      filtered.retainWhere((element) {
+        return element.contains(search.text.toLowerCase());
+      });
+    }
+
+    setState(() {
+      filteredStudents = filtered;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllStudents();
+    search.addListener(() {
+      filterStudents();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool searching = search.text.isNotEmpty;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Search Student"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              name,
-              textAlign: TextAlign.left,
+            TextField(
+              controller: search,
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFFD00001),
+                  ),
+                ),
+                prefixIcon: Icon(Icons.search),
+              ),
             ),
-            Text(
-              email,
-              textAlign: TextAlign.left,
+            Card(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: searching == true
+                    ? filteredStudents.length
+                    : students.length,
+                itemBuilder: (context, index) {
+                  String name = searching == true
+                      ? filteredStudents[index]
+                      : students[index];
+                  return InkWell(
+                    onTap: () {
+                      createChatRoom(name);
+                    },
+                    child: ListTile(
+                      title: Text(getName(name)),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget searchList() {
-    return searchSnapShot != null
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: searchSnapShot!.docs.length,
-            itemBuilder: (context, index) {
-              return searchTile(
-                  name: searchSnapShot!.docs[index].get("name"),
-                  email: searchSnapShot!.docs[index].get("email"));
-            })
-        : Container();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(context),
-      body: Column(
-        children: [
-          Card(
-            elevation: 6,
-            child: TextField(
-              controller: searchBarText,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(8),
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      search();
-                    },
-                    icon: const Icon(Icons.search)),
-                labelText: "search name surname",
-                enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-              ),
-            ),
-          ),
-          searchList(),
-        ],
-      ),
-    );
-  }
-}
-
-getChatRoomId(String a, String b) {
-  if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
-    return "$b\_$a";
-  } else {
-    return "$a\_$b";
   }
 }

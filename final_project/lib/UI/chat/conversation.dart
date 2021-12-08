@@ -16,6 +16,14 @@ class _ConversationState extends State<Conversation> {
   TextEditingController message = TextEditingController();
   Stream? chatMessagesStream;
 
+  String getName() {
+    return widget.chatRoomId.split(" ")[0].substring(0, 1).toUpperCase() +
+        widget.chatRoomId.split(" ")[0].substring(1) +
+        " " +
+        widget.chatRoomId.split(" ")[1].substring(0, 1).toUpperCase() +
+        widget.chatRoomId.split(" ")[1].substring(1);
+  }
+
   Widget chatMessageList() {
     return StreamBuilder(
       stream: chatMessagesStream,
@@ -42,6 +50,17 @@ class _ConversationState extends State<Conversation> {
 
   sendMessage() {
     if (message.text.isNotEmpty) {
+      List<String> users = [widget.chatRoomId, Constants.myName];
+      Map<String, dynamic> chatRoomMap = {
+        "users": users,
+        "chatRoomId": widget.chatRoomId,
+      };
+      Map<String, dynamic> sendToChatRoomMap = {
+        "users": users,
+        "chatRoomId": Constants.myName,
+      };
+      FireStore()
+          .createChatRoom(widget.chatRoomId, chatRoomMap, sendToChatRoomMap);
       Map<String, dynamic> messageMap = {
         "message": message.text,
         "sendBy": Constants.myName,
@@ -66,6 +85,7 @@ class _ConversationState extends State<Conversation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(getName()),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
