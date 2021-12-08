@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../model/department.dart';
 import '../model/faculty.dart';
@@ -51,10 +52,26 @@ class FireStore {
         .where("name", isEqualTo: name)
         .get();
   }
+
   Future getStudent() async {
     return await _firebaseFirestore
-        .collection("student").doc(Constants.uid)
+        .collection("student")
+        .doc(Constants.uid)
         .get();
+  }
+
+  getStudentStream() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .snapshots();
+  }
+
+  void addMoney(double newBalance) async {
+    await _firebaseFirestore
+        .collection('student')
+        .doc(Constants.uid)
+        .update({'wallet': newBalance});
   }
 
   void addConversationMessages(String chatRoomId, messageMap) {
@@ -97,6 +114,7 @@ class FireStore {
       'department': '${student.department}',
       'semester': '${student.semester}',
       'courses': student.courses,
+      'wallet': student.wallet,
     });
   }
 }

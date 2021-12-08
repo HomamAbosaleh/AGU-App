@@ -9,6 +9,7 @@ class Student {
   final String? status;
   final int? semester;
   final List<Map<String, String>>? courses;
+  late final double? wallet;
 
   Student(
       {this.name,
@@ -20,5 +21,6 @@ class Student {
       this.status,
       this.faculty,
       this.semester,
-      this.courses});
+      this.courses,
+      this.wallet});
 }
