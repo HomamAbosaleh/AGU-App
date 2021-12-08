@@ -45,11 +45,17 @@ class FireStore {
     });
   }
 
-  getUser(String name) async {
-    return await _firebaseFirestore
-        .collection("student")
-        .where("name", isEqualTo: name)
-        .get();
+  getUser() async {
+    List<String> l = [];
+    await _firebaseFirestore.collection("student").get().then((value) {
+      for (var element in value.docs) {
+        l.add(element["name"] + " " + element["surname"]);
+      }
+    });
+    l.sort((a, b) {
+      return a.compareTo(b);
+    });
+    return l;
   }
 
   Future getStudent() async {

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../../constants.dart';
-import '../../widgets/appbar.dart';
 import '../../services/firestore.dart';
 import 'conversation.dart';
 
@@ -14,13 +14,14 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final searchBarText = TextEditingController();
-  QuerySnapshot? searchSnapShot;
+  List<String> students = [];
+  List<String> filteredStudents = [];
+  TextEditingController search = TextEditingController();
 
-  createChatRoom(String userName) async {
-    if (userName != Constants.myName) {
-      String chatRoomId = getChatRoomId(userName, Constants.myName);
-      List<String> users = [userName, Constants.myName];
+  what(name) {
+    if (name != Constants.myName) {
+      String chatRoomId = getChatRoomId(name, Constants.myName);
+      List<String> users = [name, Constants.myName];
       Map<String, dynamic> chatRoomMap = {
         "users": users,
         "chatRoomId": chatRoomId,
@@ -39,77 +40,78 @@ class _SearchState extends State<Search> {
     }
   }
 
-  void search() {
-    FireStore().getUser(searchBarText.text).then((value) {
+  getAllStudents() async {
+    await FireStore().getUser().then((value) {
       setState(() {
-        searchSnapShot = value;
+        students = value;
       });
     });
   }
 
-  Widget searchTile({required String name, required String email}) {
-    return InkWell(
-      onTap: () {
-        createChatRoom(name);
-      },
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              email,
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-      ),
-    );
+  filterStudents() {
+    List<String> filtered = [];
+    filtered.addAll(students);
+    if (search.text.isNotEmpty) {
+      filtered.retainWhere((element) {
+        return element.contains(search.text.toLowerCase());
+      });
+    }
+
+    setState(() {
+      filteredStudents = filtered;
+    });
   }
 
-  Widget searchList() {
-    return searchSnapShot != null
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: searchSnapShot!.docs.length,
-            itemBuilder: (context, index) {
-              return searchTile(
-                  name: searchSnapShot!.docs[index].get("name"),
-                  email: searchSnapShot!.docs[index].get("email"));
-            })
-        : Container();
+  @override
+  void initState() {
+    super.initState();
+    getAllStudents();
+    search.addListener(() {
+      filterStudents();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    bool searching = search.text.isNotEmpty;
     return Scaffold(
-      appBar: customAppBar(context),
-      body: Column(
-        children: [
-          Card(
-            elevation: 6,
-            child: TextField(
-              controller: searchBarText,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(8),
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      search();
-                    },
-                    icon: const Icon(Icons.search)),
-                labelText: "search name surname",
-                enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFD00001))),
+      appBar: AppBar(
+        title: const Text("Search Student"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            TextField(
+              controller: search,
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFFD00001),
+                  ),
+                ),
+                prefixIcon: Icon(Icons.search),
               ),
             ),
-          ),
-          searchList(),
-        ],
+            Card(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: searching == true
+                    ? filteredStudents.length
+                    : students.length,
+                itemBuilder: (context, index) {
+                  String name = searching == true
+                      ? filteredStudents[index]
+                      : students[index];
+                  return ListTile(
+                    title: Text(name),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
