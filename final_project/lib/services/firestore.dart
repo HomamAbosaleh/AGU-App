@@ -41,6 +41,20 @@ class FireStore {
         .doc(Constants.uid)
         .get();
   }
+  
+  getStudentStream() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .snapshots();
+  }
+  
+  void addMoney(double newBalance) async {
+    await _firebaseFirestore
+        .collection('student')
+        .doc(Constants.uid)
+        .update({'wallet': newBalance});
+  }
 
   Future<void> addStudent({required Student student}) async {
     String uid = FireAuth().currentUserID;

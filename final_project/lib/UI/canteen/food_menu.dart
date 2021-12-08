@@ -9,10 +9,10 @@ class Food extends StatefulWidget {
   const Food({Key? key}) : super(key: key);
 
   @override
-  _foodState createState() => _foodState();
+  _FoodState createState() => _FoodState();
 }
 
-class _foodState extends State<Food> {
+class _FoodState extends State<Food> {
   int currentIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -22,8 +22,8 @@ class _foodState extends State<Food> {
 
   final pages = [
     meal(),
-    Schedule(),
-    payments(),
+    const Schedule(),
+    const Payments(),
   ];
   final titles = [
     'December 10',
@@ -39,7 +39,7 @@ class _foodState extends State<Food> {
           titles[currentIndex],
           style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
         ),
-        backgroundColor: Color(0xF3000000),
+        backgroundColor: const Color(0xF3000000),
       ),
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -49,13 +49,13 @@ class _foodState extends State<Food> {
         selectedFontSize: 15,
         selectedIconTheme:
             const IconThemeData(color: Color(0xFFD00001), size: 40),
-        selectedItemColor: Color(0xFFD00001),
+        selectedItemColor: const Color(0xFFD00001),
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        backgroundColor: Color(0xF3000000),
+        backgroundColor: const Color(0xF3000000),
         unselectedIconTheme: const IconThemeData(
           color: Color(0xFFD7D6D6),
         ),
-        unselectedItemColor: Color(0xFFD7D6D6),
+        unselectedItemColor: const Color(0xFFD7D6D6),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time),
