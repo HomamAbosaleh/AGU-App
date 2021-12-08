@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import '../../constants.dart';
 import '../../services/sharedpreference.dart';
 import '../../services/fireauth.dart';
-import '/../widgets/alertdialog.dart';
+import '/../widgets/dialogbox.dart';
 
 class LogIn extends StatefulWidget {
   VoidCallback changeSignIn;
@@ -88,7 +88,7 @@ class _LogInState extends State<LogIn> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_userName.text.isEmpty || _password.text.isEmpty) {
-                      showAlertDialog(context, "Cannot Sign In",
+                      alertDialog(context, "Cannot Sign In",
                           "Please fill up all information");
                     } else {
                       String shouldNavigate = await FireAuth().signIn(
@@ -96,17 +96,12 @@ class _LogInState extends State<LogIn> {
                         password: _password.text,
                       );
                       if (shouldNavigate == "true") {
-                        if (rememberMe) {
-                          await SharedPreference.saveLoggingIn(true);
-                        } else {
-                          await SharedPreference.saveLoggingIn(false);
-                        }
+                        await SharedPreference.saveLoggingIn(rememberMe);
                         await setUpDate();
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/home', (route) => false);
                       } else {
-                        showAlertDialog(
-                            context, "Cannot Sign In", shouldNavigate);
+                        alertDialog(context, "Cannot Sign In", shouldNavigate);
                       }
                     }
                   },
@@ -160,15 +155,9 @@ class _LogInState extends State<LogIn> {
 
   Future<void> setUpDate() async {
     await SharedPreference.saveUserName(
-        _userName.text.split(".")[0].toLowerCase());
-    await SharedPreference.saveUserSurname(
-        _userName.text.split(".")[1].toLowerCase());
+        _userName.text.replaceAll(".", " ").toLowerCase());
     await SharedPreference.saveUserId(FireAuth().currentUserID);
     await SharedPreference.saveUserEmail(_userName.text.toLowerCase() + domain);
-    Constants.myName = await SharedPreference.getUserName();
-    Constants.mySurname = await SharedPreference.getUserSurname();
-    Constants.email = await SharedPreference.getUserName();
-    Constants.uid = await SharedPreference.getUserId();
-    Constants.rememberMe = await SharedPreference.getUserLoggedIn();
+    Constants.getUpConstants();
   }
 }

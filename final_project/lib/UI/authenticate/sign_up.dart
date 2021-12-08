@@ -7,7 +7,7 @@ import '../../services/fireauth.dart';
 import '/../services/firestore.dart';
 import '/../model/department.dart';
 import '/../model/faculty.dart';
-import '/../widgets/alertdialog.dart';
+import '/../widgets/dialogbox.dart';
 import '/../model/student.dart';
 
 class SignUp extends StatefulWidget {
@@ -19,6 +19,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool rememberMe = false;
+  static const String domain = "@agu.edu.tr";
   static const int _nameControllerNumber = 0;
   static const int _surnameControllerNumber = 1;
   static const int _emailControllerNumber = 2;
@@ -47,15 +49,15 @@ class _SignUpState extends State<SignUp> {
           department == null ||
           semester == null ||
           status == null) {
-        showAlertDialog(
+        alertDialog(
             context, "Incomplete Information", "Please fill in all the fields");
       } else if (controller[_passwordControllerNumber].text !=
           controller[_confPasswordControllerNumber].text) {
-        showAlertDialog(
+        alertDialog(
             context, "Password Incorrect", "Please check your password");
       } else {
         String signed = await FireAuth().signUp(
-          email: controller[_emailControllerNumber].text + "@agu.edu.tr",
+          email: controller[_emailControllerNumber].text + domain,
           password: controller[_passwordControllerNumber].text,
         );
         if (signed == "true") {
@@ -65,7 +67,7 @@ class _SignUpState extends State<SignUp> {
               gpa: 0.00,
               id: controller[_idControllerNumber].text,
               email: controller[_emailControllerNumber].text.toLowerCase() +
-                  "@agu.edu.tr",
+                  domain,
               faculty: faculty!.name,
               department: department!.name,
               semester: semester,
@@ -75,7 +77,7 @@ class _SignUpState extends State<SignUp> {
           await setUpDate();
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         } else {
-          showAlertDialog(context, "Cannot Sign Up", signed);
+          alertDialog(context, "Cannot Sign Up", signed);
         }
       }
     }
@@ -232,12 +234,14 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> setUpDate() async {
-    Constants.myName = controller[_nameControllerNumber].text.toLowerCase();
-    Constants.mySurname =
-        controller[_surnameControllerNumber].text.toLowerCase();
-    Constants.email = controller[_emailControllerNumber].text + "@agu.edu.tr";
-    Constants.uid = await FireAuth().currentUserID;
-    Constants.rememberMe = false;
+    await Constants.setUpConstants(
+        (controller[_nameControllerNumber].text +
+                " " +
+                controller[_surnameControllerNumber].text)
+            .toLowerCase(),
+        controller[_emailControllerNumber].text + domain,
+        FireAuth().currentUserID,
+        rememberMe);
   }
 }
 

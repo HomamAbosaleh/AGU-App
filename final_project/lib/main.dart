@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'UI/authenticate/authentication.dart';
 import 'UI/canteen/food_menu.dart';
 import 'UI/chat/chatrooms.dart';
@@ -9,15 +10,10 @@ import 'UI/faculties and departments/faculties_page.dart';
 import 'UI/home.dart';
 import 'UI/schedule.dart';
 import 'constants.dart';
-import 'services/sharedpreference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Constants.myName = await SharedPreference.getUserName();
-  Constants.mySurname = await SharedPreference.getUserSurname();
-  Constants.email = await SharedPreference.getUserName();
-  Constants.uid = await SharedPreference.getUserId();
-  Constants.rememberMe = await SharedPreference.getUserLoggedIn();
+  Constants.getUpConstants();
   runApp(MyApp());
 }
 

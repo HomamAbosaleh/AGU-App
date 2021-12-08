@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            bottomNavigationBar: const customBottomBar(),
+            bottomNavigationBar: const CustomBottomBar(),
             // floatingActionButton: customFloatingButton(context),
           );
         } else {
