@@ -235,9 +235,9 @@ class _SignUpState extends State<SignUp> {
 
   Future<void> setUpDate() async {
     await Constants.setUpConstants(
-        (controller[_nameControllerNumber].text +
-                " " +
-                controller[_surnameControllerNumber].text)
+        controller[_emailControllerNumber]
+            .text
+            .replaceAll(".", " ")
             .toLowerCase(),
         controller[_emailControllerNumber].text + domain,
         FireAuth().currentUserID,

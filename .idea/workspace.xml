@@ -6,21 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0b42adc5-c639-4c84-844e-dbd7eb6c7070" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/log_in.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/log_in.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/sign_up.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/sign_up.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/chat/chatrooms.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/chat/chatrooms.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/chat/conversation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/chat/conversation.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/chat/search.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/chat/search.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/constants.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/services/firestore.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/services/firestore.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/services/sharedpreference.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/services/sharedpreference.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/alertdialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/dialogbox.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/appbar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/appbar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/bottombar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/bottombar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/drawer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/drawer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/floatingbutton.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/floatingbutton.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +23,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -80,6 +72,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Flutter.main.dart" />
         <item itemvalue="Flutter.main.dart" />
       </list>
     </recent_temporary>
