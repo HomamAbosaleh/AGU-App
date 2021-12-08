@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../../constants.dart';
 import '../../services/firestore.dart';
@@ -18,26 +16,23 @@ class _SearchState extends State<Search> {
   List<String> filteredStudents = [];
   TextEditingController search = TextEditingController();
 
-  what(name) {
-    if (name != Constants.myName) {
-      String chatRoomId = getChatRoomId(name, Constants.myName);
-      List<String> users = [name, Constants.myName];
-      Map<String, dynamic> chatRoomMap = {
-        "users": users,
-        "chatRoomId": chatRoomId,
-      };
-      FireStore().createChatRoom(chatRoomId, chatRoomMap);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Conversation(
-            chatRoomId: chatRoomId,
-          ),
+  String getName(name) {
+    return name.split(" ")[0].substring(0, 1).toUpperCase() +
+        name.split(" ")[0].substring(1) +
+        " " +
+        name.split(" ")[1].substring(0, 1).toUpperCase() +
+        name.split(" ")[1].substring(1);
+  }
+
+  createChatRoom(name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Conversation(
+          chatRoomId: name,
         ),
-      );
-    } else {
-      print("You cannot search for yourself");
-    }
+      ),
+    );
   }
 
   getAllStudents() async {
@@ -104,8 +99,13 @@ class _SearchState extends State<Search> {
                   String name = searching == true
                       ? filteredStudents[index]
                       : students[index];
-                  return ListTile(
-                    title: Text(name),
+                  return InkWell(
+                    onTap: () {
+                      createChatRoom(name);
+                    },
+                    child: ListTile(
+                      title: Text(getName(name)),
+                    ),
                   );
                 },
               ),
@@ -114,13 +114,5 @@ class _SearchState extends State<Search> {
         ),
       ),
     );
-  }
-}
-
-getChatRoomId(String a, String b) {
-  if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
-    return "$b\_$a";
-  } else {
-    return "$a\_$b";
   }
 }
