@@ -25,14 +25,12 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
             bottomLeft: Radius.circular(50),
             bottomRight: Radius.circular(50)),
         child: BottomAppBar(
-          color: const Color(0xF3000000),
           child: SizedBox(
             height: 65,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 IconButton(
-                  color: const Color(0xFFD7D6D6),
                   iconSize: defval,
                   icon: const Icon(Icons.fastfood),
                   onPressed: () {
@@ -43,7 +41,6 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   },
                 ),
                 IconButton(
-                  color: const Color(0xFFD7D6D6),
                   iconSize: defval,
                   icon: const Icon(Icons.school),
                   onPressed: () {
@@ -56,7 +53,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                 PopupMenuButton(
                   icon: const Icon(
                     Icons.people,
-                    color: Color(0xFFD00001),
+                    color: Color(0xFFCD0808),
                     size: 30,
                   ),
                   itemBuilder: (context) => [
@@ -78,7 +75,6 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   ],
                 ),
                 IconButton(
-                  color: const Color(0xFFD7D6D6),
                   iconSize: defval, //FFBDBBBB
                   icon: const Icon(Icons.wifi),
                   onPressed: () {
@@ -92,7 +88,6 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   },
                 ),
                 IconButton(
-                  color: const Color(0xFFD7D6D6),
                   iconSize: defval,
                   icon: const Icon(Icons.chat_bubble),
                   onPressed: () {

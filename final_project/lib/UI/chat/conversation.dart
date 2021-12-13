@@ -122,6 +122,16 @@ class _ConversationState extends State<Conversation> {
                           setPostion();
                         },
                         decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
                           contentPadding: const EdgeInsets.all(8),
                           suffixIcon: IconButton(
                               onPressed: () {
@@ -130,10 +140,6 @@ class _ConversationState extends State<Conversation> {
                               },
                               icon: const Icon(Icons.send)),
                           labelText: "Message ...",
-                          enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFD00001))),
-                          focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFD00001))),
                         ),
                       ),
                     ),

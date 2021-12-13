@@ -32,6 +32,7 @@ class _LogInState extends State<LogIn> {
         padding: const EdgeInsets.all(12),
         child: Column(children: <Widget>[
           TextField(
+            style: Theme.of(context).textTheme.headline1,
             cursorColor: const Color(0xFFA0A0A0),
             controller: _userName,
             inputFormatters: [
@@ -41,16 +42,13 @@ class _LogInState extends State<LogIn> {
               labelStyle: TextStyle(
                 color: Color(0xFFA0A0A0),
               ),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
               labelText: 'Email',
               hintText: "name.surname",
               suffixText: domain,
             ),
           ),
           TextField(
+            style: Theme.of(context).textTheme.headline1,
             cursorColor: const Color(0xFFA0A0A0),
             obscureText: eye,
             controller: _password,
@@ -72,10 +70,6 @@ class _LogInState extends State<LogIn> {
               labelStyle: const TextStyle(
                 color: Color(0xFFA0A0A0),
               ),
-              enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
-              focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
               labelText: 'Password',
             ),
           ),
@@ -105,7 +99,6 @@ class _LogInState extends State<LogIn> {
                       }
                     }
                   },
-                  style: ElevatedButton.styleFrom(primary: Color(0xFFD00001)),
                   child: const Text("Sign In"),
                 ),
               ),
@@ -118,7 +111,6 @@ class _LogInState extends State<LogIn> {
                 child: Row(
                   children: [
                     Checkbox(
-                      checkColor: Colors.white,
                       value: rememberMe,
                       activeColor: const Color(0xFFD00001),
                       onChanged: (value) {

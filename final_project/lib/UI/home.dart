@@ -2,7 +2,7 @@ import 'package:final_project/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/customtextstyle.dart';
+import '../../widgets/drawer.dart';
 import '../widgets/appbar.dart';
 import '../widgets/bottombar.dart';
 
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, AsyncSnapshot snapShot) {
         if (snapShot.hasData) {
           return Scaffold(
-            backgroundColor: const Color(0xFF181515),
+            drawer: customDrawer(context),
             appBar: customAppBar(context),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -39,9 +39,9 @@ class _HomePageState extends State<HomePage> {
                           radius: 60,
                         ),
                       ),
-                      const Text(
+                      Text(
                         "Name",
-                        style: TextStyle(fontSize: 17),
+                        style: Theme.of(context).textTheme.headline1,
                         textAlign: TextAlign.left,
                       ),
                       Text(
@@ -49,32 +49,32 @@ class _HomePageState extends State<HomePage> {
                             " " +
                             capitalize(snapShot.data["surname"]) +
                             '\n',
-                        style: customTextStyle(),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      const Text(
+                      Text(
                         "Student ID",
-                        style: TextStyle(fontSize: 17),
+                        style: Theme.of(context).textTheme.headline1,
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         snapShot.data["id"] + '\n',
-                        style: customTextStyle(),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      const Text(
+                      Text(
                         "Department",
-                        style: TextStyle(fontSize: 17),
+                        style: Theme.of(context).textTheme.headline1,
                       ),
                       Text(
                         snapShot.data["department"].toString() + '\n',
-                        style: customTextStyle(),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      const Text(
+                      Text(
                         "GPA",
-                        style: TextStyle(fontSize: 17),
+                        style: Theme.of(context).textTheme.headline1,
                       ),
                       Text(
                         snapShot.data["gpa"].toString() + '\n',
-                        style: customTextStyle(),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ],
                   ),

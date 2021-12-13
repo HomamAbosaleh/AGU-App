@@ -108,13 +108,12 @@ class _SignUpState extends State<SignUp> {
                             if (index == 4) {
                               return dropDownList(snapshot);
                             } else {
-                              return customTextFormField(controller, index);
+                              return customTextFormField(
+                                  context, controller, index);
                             }
                           },
                         ),
                         ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(primary: Colors.red),
                             onPressed: () {
                               signMeUp(context);
                             },
@@ -148,12 +147,6 @@ class _SignUpState extends State<SignUp> {
     return Column(
       children: [
         DropdownButtonFormField<dynamic>(
-          decoration: const InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-          ),
           isExpanded: true,
           value: faculty,
           items: snapshot.data
@@ -169,12 +162,6 @@ class _SignUpState extends State<SignUp> {
           },
         ),
         DropdownButtonFormField<dynamic>(
-          decoration: const InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-          ),
           isExpanded: true,
           value: department,
           items: departments
@@ -188,19 +175,14 @@ class _SignUpState extends State<SignUp> {
           },
         ),
         DropdownButtonFormField<dynamic>(
-          decoration: const InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-          ),
           isExpanded: true,
           value: semester,
           items: List.generate(
             8,
             (index) => DropdownMenuItem(
               value: index + 1,
-              child: Text((index + 1).toString()),
+              child: Text((index + 1).toString(),
+                  style: Theme.of(context).textTheme.headline1),
             ),
           ),
           hint: const Text("Semester"),
@@ -211,16 +193,15 @@ class _SignUpState extends State<SignUp> {
           },
         ),
         DropdownButtonFormField<dynamic>(
-          decoration: const InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD00001))),
-          ),
           isExpanded: true,
           value: status,
           items: ["Graduate", "Undergraduate"]
-              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              .map((e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(
+                    e,
+                    style: Theme.of(context).textTheme.headline1,
+                  )))
               .toList(),
           hint: const Text("Status"),
           onChanged: (value) {
@@ -243,13 +224,15 @@ class _SignUpState extends State<SignUp> {
         FireAuth().currentUserID,
         rememberMe);
   }
+
+  DropdownMenuItem<dynamic> dropDownBuilder(item) {
+    return DropdownMenuItem(
+        value: item,
+        child: Text(item.name, style: Theme.of(context).textTheme.headline1));
+  }
 }
 
-DropdownMenuItem<dynamic> dropDownBuilder(item) {
-  return DropdownMenuItem(value: item, child: Text(item.name));
-}
-
-Widget customTextFormField(controller, int index) {
+Widget customTextFormField(context, controller, int index) {
   final Map properties = {
     0: {
       "label": "Name",
@@ -286,6 +269,7 @@ Widget customTextFormField(controller, int index) {
     },
   };
   return TextFormField(
+    style: Theme.of(context).textTheme.headline1,
     focusNode: FocusNode(canRequestFocus: false),
     cursorColor: const Color(0xFFA0A0A0),
     obscureText: index >= 5 ? true : false,
@@ -297,10 +281,6 @@ Widget customTextFormField(controller, int index) {
     decoration: InputDecoration(
         hintText: properties[index]["hint"] ?? "",
         labelText: properties[index]["label"],
-        enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFD00001))),
-        focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFD00001))),
         suffixText: properties[index]["suffix"] ?? ""),
   );
 }
