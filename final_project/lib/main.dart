@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
               '/food_menu': (context) => const Food(),
               '/courseSchedule': (context) => const CourseSchedule(),
             },
-            darkTheme: darkTheme,
             theme: state ? darkTheme : lightTheme,
             home: FutureBuilder(
               future: _fbApp,
