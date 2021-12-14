@@ -39,46 +39,53 @@ class _SignUpState extends State<SignUp> {
 
   signMeUp(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      if (controller[_nameControllerNumber].text.isEmpty ||
-          controller[_surnameControllerNumber].text.isEmpty ||
-          controller[_emailControllerNumber].text.isEmpty ||
-          controller[_idControllerNumber].text.isEmpty ||
-          controller[_passwordControllerNumber].text.isEmpty ||
-          controller[_confPasswordControllerNumber].text.isEmpty ||
-          faculty == null ||
-          department == null ||
-          semester == null ||
-          status == null) {
-        alertDialog(
-            context, "Incomplete Information", "Please fill in all the fields");
-      } else if (controller[_passwordControllerNumber].text !=
-          controller[_confPasswordControllerNumber].text) {
-        alertDialog(
-            context, "Password Incorrect", "Please check your password");
-      } else {
-        String signed = await FireAuth().signUp(
-          email: controller[_emailControllerNumber].text + domain,
-          password: controller[_passwordControllerNumber].text,
-        );
-        if (signed == "true") {
-          Student s = Student(
-              name: controller[_nameControllerNumber].text.toLowerCase(),
-              surname: controller[_surnameControllerNumber].text.toLowerCase(),
-              gpa: 0.00,
-              id: controller[_idControllerNumber].text,
-              email: controller[_emailControllerNumber].text.toLowerCase() +
-                  domain,
-              faculty: faculty!.name,
-              department: department!.name,
-              semester: semester,
-              status: status,
-              wallet: 0.00);
-          FireStore().addStudent(student: s);
-          await setUpDate();
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      if (controller[_idControllerNumber].text.length == 10) {
+        if (controller[_nameControllerNumber].text.isEmpty ||
+            controller[_surnameControllerNumber].text.isEmpty ||
+            controller[_emailControllerNumber].text.isEmpty ||
+            controller[_idControllerNumber].text.isEmpty ||
+            controller[_passwordControllerNumber].text.isEmpty ||
+            controller[_confPasswordControllerNumber].text.isEmpty ||
+            faculty == null ||
+            department == null ||
+            semester == null ||
+            status == null) {
+          alertDialog(context, "Incomplete Information",
+              "Please fill in all the fields");
+        } else if (controller[_passwordControllerNumber].text !=
+            controller[_confPasswordControllerNumber].text) {
+          alertDialog(
+              context, "Password Incorrect", "Please check your password");
         } else {
-          alertDialog(context, "Cannot Sign Up", signed);
+          String signed = await FireAuth().signUp(
+            email: controller[_emailControllerNumber].text + domain,
+            password: controller[_passwordControllerNumber].text,
+          );
+          if (signed == "true") {
+            Student s = Student(
+                name: controller[_nameControllerNumber].text.toLowerCase(),
+                surname:
+                    controller[_surnameControllerNumber].text.toLowerCase(),
+                gpa: 0.00,
+                id: controller[_idControllerNumber].text,
+                email: controller[_emailControllerNumber].text.toLowerCase() +
+                    domain,
+                faculty: faculty!.name,
+                department: department!.name,
+                semester: semester,
+                status: status,
+                wallet: 0.00);
+            FireStore().addStudent(student: s);
+            await setUpDate();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            alertDialog(context, "Cannot Sign Up", signed);
+          }
         }
+      } else {
+        alertDialog(context, "Incomplete Information",
+            "Student number must be 10 digits");
       }
     }
   }

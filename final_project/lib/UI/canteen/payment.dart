@@ -1,6 +1,8 @@
-import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+
+import '/services/firestore.dart';
 
 class Payments extends StatefulWidget {
   const Payments({Key? key}) : super(key: key);
@@ -82,6 +84,9 @@ class _PaymentsState extends State<Payments> {
             child: TextField(
               controller: balanceController,
               decoration: const InputDecoration(label: Text('balance')),
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp("[- ]"))
+              ],
             ),
           ),
           TextButton(

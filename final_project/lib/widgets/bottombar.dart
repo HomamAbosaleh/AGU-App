@@ -42,12 +42,12 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                 ),
                 IconButton(
                   iconSize: defval,
-                  icon: const Icon(Icons.school),
+                  icon: const Icon(Icons.book),
                   onPressed: () {
                     setState(() {
                       defval = 30;
                     });
-                    Navigator.pushNamed(context, '/faculties_page');
+                    Navigator.pushNamed(context, '/courseSchedule');
                   },
                 ),
                 PopupMenuButton(
@@ -57,8 +57,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                     size: 30,
                   ),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      child: Text("Profile Information"),
+                    PopupMenuItem(
+                      child: Text("Profile Information",
+                          style: Theme.of(context).textTheme.headline1),
                     ),
                     PopupMenuItem(
                       onTap: () async {
@@ -70,7 +71,8 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                           (route) => false,
                         );
                       },
-                      child: const Text("Sign out"),
+                      child: Text("Sign out",
+                          style: Theme.of(context).textTheme.headline1),
                     ),
                   ],
                 ),
