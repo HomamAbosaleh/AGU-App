@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'meal.dart';
 import 'payment.dart';
-import '../schedule.dart';
+import 'schedule.dart';
 
 class Food extends StatefulWidget {
   const Food({Key? key}) : super(key: key);
@@ -21,7 +20,11 @@ class _FoodState extends State<Food> {
   }
 
   final pages = [
+<<<<<<< HEAD
     meal(),
+=======
+    const MealOfToday(),
+>>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
     const Schedule(),
     const Payments(),
   ];

@@ -4,15 +4,15 @@ class Schedule extends StatefulWidget {
   const Schedule({Key? key}) : super(key: key);
 
   @override
-  _scheduleState createState() => _scheduleState();
+  _ScheduleState createState() => _ScheduleState();
 }
 
-class _scheduleState extends State<Schedule> {
+class _ScheduleState extends State<Schedule> {
   @override
   Widget build(BuildContext context) {
     return Center(
-    child:  Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           Text('Monday,December 10'),
           Text('Main Dish: Lahmacun'),

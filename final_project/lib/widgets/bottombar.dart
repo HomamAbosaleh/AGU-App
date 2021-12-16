@@ -2,100 +2,101 @@ import 'package:final_project/UI/api/apipage.dart';
 import 'package:flutter/material.dart';
 import '../../services/sharedpreference.dart';
 import '../constants.dart';
-class customBottomBar extends StatefulWidget {
-  const customBottomBar({Key? key}) : super(key: key);
+
+class CustomBottomBar extends StatefulWidget {
+  const CustomBottomBar({Key? key}) : super(key: key);
 
   @override
-  _customBottomBarState createState() => _customBottomBarState();
+  _CustomBottomBarState createState() => _CustomBottomBarState();
 }
 
-class _customBottomBarState extends State<customBottomBar> {
-  int bigval=60;
-  double defval=35.0;
+class _CustomBottomBarState extends State<CustomBottomBar> {
+  int bigval = 60;
+  double defval = 35.0;
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+      margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
             topRight: Radius.circular(50),
             topLeft: Radius.circular(50),
             bottomLeft: Radius.circular(50),
-            bottomRight: Radius.circular(50)
-        ),
+            bottomRight: Radius.circular(50)),
         child: BottomAppBar(
-          color: Color(0xF3000000),
-          child: Container(
+          child: SizedBox(
             height: 65,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 IconButton(
-                  color: Color(0xFFD7D6D6),
                   iconSize: defval,
-                  icon: Icon(Icons.fastfood),
+                  icon: const Icon(Icons.fastfood),
                   onPressed: () {
                     setState(() {
-                      defval=30;
+                      defval = 30;
                     });
                     Navigator.pushNamed(context, '/food_menu');
                   },
                 ),
                 IconButton(
-                  color: Color(0xFFD7D6D6),
                   iconSize: defval,
-                  icon: const Icon(Icons.school),
+                  icon: const Icon(Icons.book),
                   onPressed: () {
                     setState(() {
-                      defval=30;
+                      defval = 30;
                     });
-                    Navigator.pushNamed(context, '/faculties_page');
+                    Navigator.pushNamed(context, '/courseSchedule');
                   },
                 ),
                 PopupMenuButton(
-                  icon: Icon(Icons.people,color: Color(0xFFD00001),size: 30,),
-                  itemBuilder: (context)=>[
+                  icon: const Icon(
+                    Icons.people,
+                    color: Color(0xFFCD0808),
+                    size: 30,
+                  ),
+                  itemBuilder: (context) => [
                     PopupMenuItem(
-                      child: Text("Profile Information"),
+                      child: Text("Profile Information",
+                          style: Theme.of(context).textTheme.headline1),
                     ),
                     PopupMenuItem(
-                      onTap: ()async {
+                      onTap: () async {
                         await SharedPreference.signOut();
                         Constants.rememberMe = false;
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           '/',
-                              (route) => false,
+                          (route) => false,
                         );
                       },
-                      child: Text("Sign out"),
+                      child: Text("Sign out",
+                          style: Theme.of(context).textTheme.headline1),
                     ),
                   ],
                 ),
-
                 IconButton(
-                  color: Color(0xFFD7D6D6),
                   iconSize: defval, //FFBDBBBB
                   icon: const Icon(Icons.wifi),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (coxntext){
-                      return apiPage();
-                    }
-                    ));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (coxntext) {
+                      return const apiPage();
+                    }));
                     setState(() {
-                      defval=30;
+                      defval = 30;
                     });
                   },
                 ),
                 IconButton(
-                  color: Color(0xFFD7D6D6),
                   iconSize: defval,
                   icon: const Icon(Icons.chat_bubble),
                   onPressed: () {
-                    Navigator.pushNamed(
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
                       "/chat",
+                      (route) => false,
                     );
                   },
                 ),

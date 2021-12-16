@@ -1,23 +1,28 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'theme/theme.dart';
+import 'theme/cubit/theme_cubit.dart';
+import 'UI/courses/courses.dart';
 import 'UI/authenticate/authentication.dart';
 import 'UI/canteen/food_menu.dart';
 import 'UI/chat/chatrooms.dart';
 import 'UI/chat/search.dart';
 import 'UI/faculties and departments/faculties_page.dart';
 import 'UI/home.dart';
-import 'UI/schedule.dart';
+import 'UI/canteen/schedule.dart';
 import 'constants.dart';
-import 'services/sharedpreference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Constants.myName = await SharedPreference.getUserName();
-  Constants.email = await SharedPreference.getUserName();
-  Constants.uid = await SharedPreference.getUserId();
-  Constants.rememberMe = await SharedPreference.getUserLoggedIn();
-  runApp(MyApp());
+  Constants.getUpConstants();
+  final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+  HydratedBlocOverrides.runZoned(() => runApp(MyApp()), storage: storage);
 }
 
 class MyApp extends StatelessWidget {
@@ -25,35 +30,44 @@ class MyApp extends StatelessWidget {
 
   MyApp({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/home': (context) => const HomePage(),
-        '/faculties_page': (context) => const FacultiesPage(),
-        '/chat': (context) => const Chat(),
-        '/search': (context) => const Search(),
-        '/food_menu/schedule': (context) => const Schedule(),
-        '/food_menu': (context) => const Food(),
-      },
-      theme: ThemeData.dark(),
-      home: FutureBuilder(
-        future: _fbApp,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print("You have an error! ${snapshot.error.toString()}");
-            return const Text("Something went wrong!");
-          } else if (snapshot.hasData) {
-            if (Constants.rememberMe == true) {
-              return const HomePage();
-            } else {
-              return const Authentication();
-            }
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    return BlocProvider<ThemeCubit>(
+      create: (ctx) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, bool>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            routes: {
+              '/home': (context) => const HomePage(),
+              '/faculties_page': (context) => const FacultiesPage(),
+              '/chat': (context) => const Chat(),
+              '/search': (context) => const Search(),
+              '/food_menu/schedule': (context) => const Schedule(),
+              '/food_menu': (context) => const Food(),
+              '/courseSchedule': (context) => const CourseSchedule(),
+            },
+            theme: state ? darkTheme : lightTheme,
+            home: FutureBuilder(
+              future: _fbApp,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  print("You have an error! ${snapshot.error.toString()}");
+                  return const Text("Something went wrong!");
+                } else if (snapshot.hasData) {
+                  if (Constants.rememberMe == true) {
+                    return const HomePage();
+                  } else {
+                    return const Authentication();
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+          );
         },
       ),
     );

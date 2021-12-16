@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import '../../constants.dart';
 import '../../services/sharedpreference.dart';
 import '../../services/fireauth.dart';
-import '/../widgets/alertdialog.dart';
+import '/../widgets/dialogbox.dart';
 
 class LogIn extends StatefulWidget {
   VoidCallback changeSignIn;
@@ -32,6 +32,7 @@ class _LogInState extends State<LogIn> {
         padding: const EdgeInsets.all(12),
         child: Column(children: <Widget>[
           TextField(
+            style: Theme.of(context).textTheme.headline1,
             cursorColor: const Color(0xFFA0A0A0),
             controller: _userName,
             inputFormatters: [
@@ -41,16 +42,13 @@ class _LogInState extends State<LogIn> {
               labelStyle: TextStyle(
                 color: Color(0xFFA0A0A0),
               ),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
               labelText: 'Email',
               hintText: "name.surname",
               suffixText: domain,
             ),
           ),
           TextField(
+            style: Theme.of(context).textTheme.headline1,
             cursorColor: const Color(0xFFA0A0A0),
             obscureText: eye,
             controller: _password,
@@ -72,10 +70,6 @@ class _LogInState extends State<LogIn> {
               labelStyle: const TextStyle(
                 color: Color(0xFFA0A0A0),
               ),
-              enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
-              focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD00001))),
               labelText: 'Password',
             ),
           ),
@@ -88,7 +82,7 @@ class _LogInState extends State<LogIn> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_userName.text.isEmpty || _password.text.isEmpty) {
-                      showAlertDialog(context, "Cannot Sign In",
+                      alertDialog(context, "Cannot Sign In",
                           "Please fill up all information");
                     } else {
                       String shouldNavigate = await FireAuth().signIn(
@@ -96,21 +90,15 @@ class _LogInState extends State<LogIn> {
                         password: _password.text,
                       );
                       if (shouldNavigate == "true") {
-                        if (rememberMe) {
-                          await SharedPreference.saveLoggingIn(true);
-                        } else {
-                          await SharedPreference.saveLoggingIn(false);
-                        }
+                        await SharedPreference.saveLoggingIn(rememberMe);
                         await setUpDate();
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/home', (route) => false);
                       } else {
-                        showAlertDialog(
-                            context, "Cannot Sign In", shouldNavigate);
+                        alertDialog(context, "Cannot Sign In", shouldNavigate);
                       }
                     }
                   },
-                  style: ElevatedButton.styleFrom(primary: Color(0xFFD00001)),
                   child: const Text("Sign In"),
                 ),
               ),
@@ -123,7 +111,6 @@ class _LogInState extends State<LogIn> {
                 child: Row(
                   children: [
                     Checkbox(
-                      checkColor: Colors.white,
                       value: rememberMe,
                       activeColor: const Color(0xFFD00001),
                       onChanged: (value) {
@@ -159,12 +146,10 @@ class _LogInState extends State<LogIn> {
   }
 
   Future<void> setUpDate() async {
-    await SharedPreference.saveUserName(_userName.text.split(".")[0]);
+    await SharedPreference.saveUserName(
+        _userName.text.replaceAll(".", " ").toLowerCase());
     await SharedPreference.saveUserId(FireAuth().currentUserID);
-    await SharedPreference.saveUserEmail(_userName.text + domain);
-    Constants.myName = await SharedPreference.getUserName();
-    Constants.email = await SharedPreference.getUserName();
-    Constants.uid = await SharedPreference.getUserId();
-    Constants.rememberMe = await SharedPreference.getUserLoggedIn();
+    await SharedPreference.saveUserEmail(_userName.text.toLowerCase() + domain);
+    Constants.getUpConstants();
   }
 }

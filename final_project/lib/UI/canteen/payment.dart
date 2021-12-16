@@ -1,7 +1,13 @@
 import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
+<<<<<<< HEAD
+=======
+import '/services/firestore.dart';
+
+>>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
 class Payments extends StatefulWidget {
   const Payments({Key? key}) : super(key: key);
   @override
@@ -16,6 +22,7 @@ class _PaymentsState extends State<Payments> {
   }
 
   Stream? student;
+<<<<<<< HEAD
 
   getStudent() async {
     FireStore().getStudentStream().then((value) {
@@ -25,6 +32,17 @@ class _PaymentsState extends State<Payments> {
     });
   }
 
+=======
+
+  getStudent() async {
+    FireStore().getStudentStream().then((value) {
+      setState(() {
+        student = value;
+      });
+    });
+  }
+
+>>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
   @override
   void initState() {
     getStudent();
@@ -82,6 +100,12 @@ class _PaymentsState extends State<Payments> {
             child: TextField(
               controller: balanceController,
               decoration: const InputDecoration(label: Text('balance')),
+<<<<<<< HEAD
+=======
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp("[- ]"))
+              ],
+>>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
             ),
           ),
           TextButton(

@@ -15,33 +15,29 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation> {
   TextEditingController message = TextEditingController();
   Stream? chatMessagesStream;
+  final ScrollController _scroller = ScrollController();
 
-  Widget chatMessageList() {
-    return StreamBuilder(
-      stream: chatMessagesStream,
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.data == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              return MessageTile(
-                message: snapshot.data.docs[index]["message"],
-                isSendByMe:
-                    snapshot.data.docs[index]["sendBy"] == Constants.myName,
-              );
-            },
-          );
-        }
-      },
-    );
+  String getName() {
+    return widget.chatRoomId.split(" ")[0].substring(0, 1).toUpperCase() +
+        widget.chatRoomId.split(" ")[0].substring(1) +
+        " " +
+        widget.chatRoomId.split(" ")[1].substring(0, 1).toUpperCase() +
+        widget.chatRoomId.split(" ")[1].substring(1);
   }
 
   sendMessage() {
     if (message.text.isNotEmpty) {
+      List<String> users = [widget.chatRoomId, Constants.myName];
+      Map<String, dynamic> chatRoomMap = {
+        "users": users,
+        "chatRoomId": widget.chatRoomId,
+      };
+      Map<String, dynamic> sendToChatRoomMap = {
+        "users": users,
+        "chatRoomId": Constants.myName,
+      };
+      FireStore()
+          .createChatRoom(widget.chatRoomId, chatRoomMap, sendToChatRoomMap);
       Map<String, dynamic> messageMap = {
         "message": message.text,
         "sendBy": Constants.myName,
@@ -50,6 +46,11 @@ class _ConversationState extends State<Conversation> {
       FireStore().addConversationMessages(widget.chatRoomId, messageMap);
       message.text = "";
     }
+  }
+
+  setPostion() async {
+    _scroller.animateTo(_scroller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   @override
@@ -64,43 +65,91 @@ class _ConversationState extends State<Conversation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/chat", (route) => false);
-          },
-        ),
-      ),
-      body: Stack(
-        children: [
-          chatMessageList(),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: Card(
-              elevation: 6,
-              child: TextField(
-                controller: message,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(8),
-                  suffixIcon: IconButton(
-                      onPressed: () {
-                        sendMessage();
-                      },
-                      icon: const Icon(Icons.send)),
-                  labelText: "Message ...",
-                  enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFD00001))),
-                  focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFD00001))),
-                ),
+    return StreamBuilder(
+      stream: chatMessagesStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.data == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(getName()),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/chat", (route) => false);
+                },
               ),
             ),
-          ),
-        ],
-      ),
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scroller,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.docs.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == snapshot.data.docs.length) {
+                          return const SizedBox(
+                            height: 20,
+                          );
+                        } else {
+                          return MessageTile(
+                            message: snapshot.data.docs[index]["message"],
+                            isSendByMe: snapshot.data.docs[index]["sendBy"] ==
+                                Constants.myName,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Card(
+                      elevation: 6,
+                      child: TextField(
+                        textAlignVertical: TextAlignVertical.center,
+                        keyboardType: TextInputType.multiline,
+                        scrollPadding: const EdgeInsets.only(top: 20),
+                        controller: message,
+                        onTap: () {
+                          setPostion();
+                        },
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.all(8),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setPostion();
+                                sendMessage();
+                              },
+                              icon: const Icon(Icons.send)),
+                          labelText: "Message ...",
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
