@@ -78,7 +78,7 @@ class _SignUpState extends State<SignUp> {
             FireStore().addStudent(student: s);
             await setUpDate();
             Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
+                context, '/navigationBar', (route) => false);
           } else {
             alertDialog(context, "Cannot Sign Up", signed);
           }

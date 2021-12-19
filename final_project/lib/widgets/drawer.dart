@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '/theme/cubit/theme_cubit.dart';
+import '../../services/sharedpreference.dart';
 
 Widget customDrawer(BuildContext context) {
   return BlocBuilder<ThemeCubit, bool>(
@@ -29,6 +30,17 @@ Widget customDrawer(BuildContext context) {
                 value: state,
                 onChanged: (value) {
                   BlocProvider.of<ThemeCubit>(context).toggleTheme(val: value);
+                },
+              ),
+              ElevatedButton(
+                child: const Text('SignOut'),
+                onPressed: () async {
+                  await SharedPreference.signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/',
+                    (route) => false,
+                  );
                 },
               ),
               ElevatedButton(

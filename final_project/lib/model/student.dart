@@ -8,8 +8,8 @@ class Student {
   final String? department;
   final String? status;
   final int? semester;
-  final double? wallet;
   final List<Map<String, String>>? courses;
+  final double? wallet;
 
   Student(
       {this.name,

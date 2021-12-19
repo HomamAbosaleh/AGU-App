@@ -1,3 +1,4 @@
+import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -43,10 +44,13 @@ class _PaymentsState extends State<Payments> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Amount of Money in Card: '),
+                Text(
+                  'Amount of Money in Card: ',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
                 const SizedBox(height: 5),
-                Text('${snapShot.data['wallet']}',
-                    style: const TextStyle(fontSize: 30)),
+                Text('${snapShot.data['wallet']} ₺',
+                    style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -85,7 +89,7 @@ class _PaymentsState extends State<Payments> {
               controller: balanceController,
               decoration: const InputDecoration(label: Text('balance')),
               inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp("[- ]"))
+                FilteringTextInputFormatter.allow(RegExp("[0-9]"))
               ],
             ),
           ),

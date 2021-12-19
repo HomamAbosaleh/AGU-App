@@ -1,3 +1,4 @@
+import 'package:final_project/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 import '/../widgets/appbar.dart';
@@ -13,7 +14,11 @@ class _CourseScheduleState extends State<CourseSchedule> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context),
+      drawer: customDrawer(context),
+      appBar: AppBar(
+        title: const Text('Courses'),
+        centerTitle: true,
+      ),
     );
   }
 }
