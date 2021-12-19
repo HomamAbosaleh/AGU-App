@@ -1,3 +1,4 @@
+import 'package:final_project/widgets/navigationbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            initialRoute: '/navigationBar',
             routes: {
               '/home': (context) => const HomePage(),
               '/faculties_page': (context) => const FacultiesPage(),
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
               '/food_menu/schedule': (context) => const Schedule(),
               '/food_menu': (context) => const Food(),
               '/courseSchedule': (context) => const CourseSchedule(),
+              '/navigationBar': (context) => const CustomNavigationbar(),
             },
             theme: state ? darkTheme : lightTheme,
             home: FutureBuilder(

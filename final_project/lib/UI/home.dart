@@ -1,4 +1,5 @@
 import 'package:final_project/services/firestore.dart';
+import 'package:final_project/widgets/navigationbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +24,8 @@ class _HomePageState extends State<HomePage> {
       builder: (context, AsyncSnapshot snapShot) {
         if (snapShot.hasData) {
           return Scaffold(
-            drawer: customDrawer(context),
             appBar: customAppBar(context),
+            drawer: customDrawer(context),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: SizedBox(
@@ -81,7 +82,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            bottomNavigationBar: const CustomBottomBar(),
+
+            // bottomNavigationBar: const CustomBottomBar(),
             // floatingActionButton: customFloatingButton(context),
           );
         } else {

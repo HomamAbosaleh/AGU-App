@@ -34,6 +34,9 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white,
   ),
   scaffoldBackgroundColor: Colors.white,
+  disabledColor: const Color(0xff969696),
+  shadowColor: const Color(0xff323232),
+  hoverColor: const Color(0xff0a0a0a),
   inputDecorationTheme: const InputDecorationTheme(
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
@@ -65,8 +68,21 @@ ThemeData lightTheme = ThemeData(
         letterSpacing: 0.5,
         color: Colors.black,
         fontSize: 18),
+    headline3: TextStyle(
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.black,
+        fontSize: 30),
+    headline4: TextStyle(
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 20),
     bodyText1: TextStyle(
-        fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFFD00001)),
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+      color: Color(0xFFD00001),
+    ),
   ),
 );
 
@@ -105,6 +121,9 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Color(0x95000000),
   ),
   scaffoldBackgroundColor: const Color(0xFF303030),
+  disabledColor: const Color(0xff646464),
+  shadowColor: Color(0x95000000), // container
+  hoverColor: Colors.white,
   canvasColor: const Color(0xff303030),
   hintColor: Colors.grey,
   inputDecorationTheme: const InputDecorationTheme(
@@ -145,7 +164,20 @@ ThemeData darkTheme = ThemeData(
         letterSpacing: 0.5,
         color: Colors.white,
         fontSize: 18),
+    headline3: TextStyle(
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 30),
+    headline4: TextStyle(
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 18),
     bodyText1: TextStyle(
-        fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFFD00001)),
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+      color: Color(0xFFD00001),
+    ),
   ),
 );

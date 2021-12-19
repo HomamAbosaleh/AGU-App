@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-<<<<<<< HEAD
-=======
 import '/services/firestore.dart';
 
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
 class Payments extends StatefulWidget {
   const Payments({Key? key}) : super(key: key);
   @override
@@ -22,7 +19,6 @@ class _PaymentsState extends State<Payments> {
   }
 
   Stream? student;
-<<<<<<< HEAD
 
   getStudent() async {
     FireStore().getStudentStream().then((value) {
@@ -32,17 +28,6 @@ class _PaymentsState extends State<Payments> {
     });
   }
 
-=======
-
-  getStudent() async {
-    FireStore().getStudentStream().then((value) {
-      setState(() {
-        student = value;
-      });
-    });
-  }
-
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
   @override
   void initState() {
     getStudent();
@@ -59,10 +44,13 @@ class _PaymentsState extends State<Payments> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Amount of Money in Card: '),
+                Text(
+                  'Amount of Money in Card: ',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
                 const SizedBox(height: 5),
-                Text('${snapShot.data['wallet']}',
-                    style: const TextStyle(fontSize: 30)),
+                Text('${snapShot.data['wallet']} ₺',
+                    style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -100,12 +88,9 @@ class _PaymentsState extends State<Payments> {
             child: TextField(
               controller: balanceController,
               decoration: const InputDecoration(label: Text('balance')),
-<<<<<<< HEAD
-=======
               inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp("[- ]"))
+                FilteringTextInputFormatter.allow(RegExp("[0-9]"))
               ],
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
             ),
           ),
           TextButton(

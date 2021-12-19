@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
-import 'package:final_project/UI/canteen/payment.dart';
-import 'package:final_project/model/meal.dart';
-=======
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
 import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +7,6 @@ class MealOfToday extends StatelessWidget {
   const MealOfToday({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-=======
     final List<Meal> meals = [
       Meal(
           mainDish: "Boiled Rice",
@@ -27,7 +18,6 @@ class MealOfToday extends StatelessWidget {
           CalSalad: 50,
           CalSoup: 100),
     ];
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
     Future s = FireStore().getStudent();
     Meal(CalMain: 15);
     return FutureBuilder(
@@ -47,110 +37,79 @@ class MealOfToday extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text('₺${snapShot.data['wallet']}',
-<<<<<<< HEAD
-                    style: TextStyle(fontSize: 30)),
-                const SizedBox(height: 25),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(top: 20),
-=======
-                    style: const TextStyle(fontSize: 30)),
+                    style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 25),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(top: 20),
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).shadowColor,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(70),
                         topRight: Radius.circular(70),
-<<<<<<< HEAD
-                        // bottomLeft: Radius.circular(50),
-                        // bottomRight: Radius.circular(50),
-=======
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
                       ),
-                      color: Color(0xF3000000),
                     ),
                     child: Column(
                       children: [
                         Container(
-<<<<<<< HEAD
-                          padding: EdgeInsets.symmetric(
-=======
                           padding: const EdgeInsets.symmetric(
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
                               vertical: 40, horizontal: 40),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Column(
                                 children: [
-                                  Text(
-                                    'Type',
-                                    style: TextStyle(
-                                        color: Colors.grey[700], fontSize: 30),
-                                  ),
+                                  Text('Type',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
                                   const SizedBox(height: 30),
                                   Text(meals[0].mainDish.toString(),
-<<<<<<< HEAD
-                                      style: TextStyle(fontSize: 20)),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                   const SizedBox(height: 10),
                                   Text(meals[0].secondDish.toString(),
-                                      style: TextStyle(fontSize: 20)),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                   const SizedBox(height: 10),
                                   Text(meals[0].soup.toString(),
-                                      style: TextStyle(fontSize: 20)),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                   const SizedBox(height: 10),
                                   Text(meals[0].salad.toString(),
-                                      style: TextStyle(fontSize: 20)),
-=======
-                                      style: const TextStyle(fontSize: 20)),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].secondDish.toString(),
-                                      style: const TextStyle(fontSize: 20)),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].soup.toString(),
-                                      style: const TextStyle(fontSize: 20)),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].salad.toString(),
-                                      style: const TextStyle(fontSize: 20)),
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                 ],
                               ),
                               Column(
                                 children: [
                                   Text('Calories',
-                                      style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontSize: 30)),
-<<<<<<< HEAD
-                                  SizedBox(height: 30),
-                                  Text(meals[0].CalMain.toString(),
-                                      style: TextStyle(fontSize: 20)),
-                                  SizedBox(height: 10),
-                                  Text(meals[0].CalSecond.toString(),
-                                      style: TextStyle(fontSize: 20)),
-                                  SizedBox(height: 10),
-                                  Text(meals[0].CalSoup.toString(),
-                                      style: TextStyle(fontSize: 20)),
-                                  SizedBox(height: 10),
-                                  Text(meals[0].CalSalad.toString(),
-                                      style: TextStyle(fontSize: 20)),
-=======
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
                                   const SizedBox(height: 30),
                                   Text(meals[0].CalMain.toString(),
-                                      style: const TextStyle(fontSize: 20)),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                   const SizedBox(height: 10),
                                   Text(meals[0].CalSecond.toString(),
-                                      style: const TextStyle(fontSize: 20)),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                   const SizedBox(height: 10),
                                   Text(meals[0].CalSoup.toString(),
-                                      style: const TextStyle(fontSize: 20)),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
                                   const SizedBox(height: 10),
                                   Text(meals[0].CalSalad.toString(),
-                                      style: const TextStyle(fontSize: 20)),
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
+                                      style:
+                                          Theme.of(context).textTheme.headline4)
                                 ],
                               )
                             ],

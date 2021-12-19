@@ -42,14 +42,6 @@ class FireStore {
         .doc(Constants.uid)
         .get();
   }
-<<<<<<< HEAD
-
-  Future getStudent() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .get();
-  }
 
   getStudentStream() async {
     return await _firebaseFirestore
@@ -58,23 +50,6 @@ class FireStore {
         .snapshots();
   }
 
-  void addMoney(double newBalance) async {
-    await _firebaseFirestore
-        .collection('student')
-        .doc(Constants.uid)
-        .update({'wallet': newBalance});
-  }
-
-  void addConversationMessages(String chatRoomId, messageMap) {
-=======
-  
-  getStudentStream() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .snapshots();
-  }
-  
   void addMoney(double newBalance) async {
     await _firebaseFirestore
         .collection('student')
@@ -111,7 +86,6 @@ class FireStore {
         }
       },
     );
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
     _firebaseFirestore
         .collection("student")
         .doc(Constants.uid)
@@ -191,22 +165,6 @@ class FireStore {
         .snapshots();
   }
 
-<<<<<<< HEAD
-  Future<void> addStudent({required Student student}) async {
-    String uid = FireAuth().currentUserID;
-    _firebaseFirestore.collection('student').doc(uid).set({
-      'name': '${student.name}',
-      'surname': '${student.surname}',
-      'email': '${student.email}',
-      'id': '${student.id}',
-      'status': '${student.status}',
-      'gpa': student.gpa,
-      'faculty': '${student.faculty}',
-      'department': '${student.department}',
-      'semester': '${student.semester}',
-      'courses': student.courses,
-      'wallet': student.wallet,
-=======
   getUser() async {
     List<String> l = [];
     await _firebaseFirestore.collection("student").get().then((value) {
@@ -218,7 +176,6 @@ class FireStore {
     });
     l.sort((a, b) {
       return a.compareTo(b);
->>>>>>> ea3d72b12fbd72b56c5c16151bfc4fd2f2ce3bbc
     });
     return l;
   }

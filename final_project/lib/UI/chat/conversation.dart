@@ -1,3 +1,4 @@
+import 'package:final_project/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -74,13 +75,14 @@ class _ConversationState extends State<Conversation> {
           );
         } else {
           return Scaffold(
+            drawer: customDrawer(context),
             appBar: AppBar(
               title: Text(getName()),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
-                      context, "/chat", (route) => false);
+                      context, "/navigationBar", (route) => false);
                 },
               ),
             ),

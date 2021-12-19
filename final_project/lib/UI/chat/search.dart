@@ -71,8 +71,15 @@ class _SearchState extends State<Search> {
     bool searching = search.text.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search Student"),
-      ),
+          automaticallyImplyLeading: false,
+          title: const Text("Search Student"),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+          )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(
