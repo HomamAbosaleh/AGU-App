@@ -75,16 +75,8 @@ class _ConversationState extends State<Conversation> {
           );
         } else {
           return Scaffold(
-            drawer: customDrawer(context),
             appBar: AppBar(
               title: Text(getName()),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/navigationBar", (route) => false);
-                },
-              ),
             ),
             body: SizedBox(
               height: MediaQuery.of(context).size.height,

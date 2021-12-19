@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/drawer.dart';
 
-class apiPage extends StatefulWidget {
-  const apiPage({Key? key}) : super(key: key);
+class ApiPage extends StatefulWidget {
+  const ApiPage({Key? key}) : super(key: key);
 
   @override
-  _apiPageState createState() => _apiPageState();
+  _ApiPageState createState() => _ApiPageState();
 }
 
-class _apiPageState extends State<apiPage> {
+class _ApiPageState extends State<ApiPage> {
   int currentInd = 0;
   final List<Widget> _apipages = <Widget>[
     Image.asset('images/agulocation.PNG'),

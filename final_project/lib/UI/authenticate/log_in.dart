@@ -93,7 +93,7 @@ class _LogInState extends State<LogIn> {
                         await SharedPreference.saveLoggingIn(rememberMe);
                         await setUpDate();
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
+                            context, '/navigationBar', (route) => false);
                       } else {
                         alertDialog(context, "Cannot Sign In", shouldNavigate);
                       }

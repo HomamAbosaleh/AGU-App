@@ -1,24 +1,21 @@
-import 'package:final_project/UI/api/apipage.dart';
-import 'package:final_project/UI/canteen/food_menu.dart';
-import 'package:final_project/UI/chat/chatrooms.dart';
-import 'package:final_project/UI/courses/courses.dart';
-import 'package:final_project/UI/home.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/drawer.dart';
-
 import 'package:flutter/cupertino.dart';
 
-import '../widgets/appbar.dart';
+import '../../widgets/drawer.dart';
+import '/UI/api/apipage.dart';
+import '/UI/canteen/food_menu.dart';
+import '/UI/chat/chatrooms.dart';
+import '/UI/courses/courses.dart';
+import '/UI/home.dart';
 
-class CustomNavigationbar extends StatefulWidget {
-  const CustomNavigationbar({Key? key}) : super(key: key);
+class CustomNavigationBar extends StatefulWidget {
+  const CustomNavigationBar({Key? key}) : super(key: key);
 
   @override
-  _CustomNavigationbarState createState() => _CustomNavigationbarState();
+  _CustomNavigationBarState createState() => _CustomNavigationBarState();
 }
 
-class _CustomNavigationbarState extends State<CustomNavigationbar> {
-  @override
+class _CustomNavigationBarState extends State<CustomNavigationBar> {
   int currentIndex = 2;
   void onItemTapped(int index) {
     setState(() {
@@ -30,9 +27,11 @@ class _CustomNavigationbarState extends State<CustomNavigationbar> {
     Food(),
     CourseSchedule(),
     HomePage(),
-    apiPage(),
+    ApiPage(),
     Chat(),
   ];
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: customDrawer(context),
@@ -54,7 +53,7 @@ class _CustomNavigationbarState extends State<CustomNavigationbar> {
           BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: "Food"),
           BottomNavigationBarItem(icon: Icon(Icons.book), label: "Courses"),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: "People"),
-          BottomNavigationBarItem(icon: Icon(Icons.wifi), label: "Wifi"),
+          BottomNavigationBarItem(icon: Icon(Icons.wifi), label: "API"),
           BottomNavigationBarItem(icon: Icon(Icons.chat_rounded), label: "Chat")
         ],
       ),

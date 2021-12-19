@@ -54,6 +54,7 @@ class SharedPreference {
   static Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    Constants.rememberMe = false;
     await FireAuth().signOut();
   }
 }
