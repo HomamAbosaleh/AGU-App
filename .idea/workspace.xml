@@ -9,17 +9,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/log_in.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/log_in.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/sign_up.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/sign_up.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/chat/chatrooms.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/chat/chatrooms.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/chat/conversation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/chat/conversation.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/services/sharedpreference.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/services/sharedpreference.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/bottombar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/bottombar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/drawer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/drawer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/widgets/navigationbar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/widgets/navigationbar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/new_login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/new_login.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
