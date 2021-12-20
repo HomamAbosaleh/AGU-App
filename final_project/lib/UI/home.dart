@@ -1,10 +1,10 @@
-import 'package:final_project/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '/services/firestore.dart';
+import '/widgets/navigationbar.dart';
 import '../../widgets/drawer.dart';
 import '../widgets/appbar.dart';
-import '../widgets/bottombar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  Future student = FireStore().getStudent();
+  Future? student = FireStore().getStudent();
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -23,8 +24,8 @@ class _HomePageState extends State<HomePage> {
       builder: (context, AsyncSnapshot snapShot) {
         if (snapShot.hasData) {
           return Scaffold(
-            drawer: customDrawer(context),
             appBar: customAppBar(context),
+            drawer: customDrawer(context),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: SizedBox(
@@ -81,8 +82,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            bottomNavigationBar: const CustomBottomBar(),
-            // floatingActionButton: customFloatingButton(context),
           );
         } else {
           return const Center(

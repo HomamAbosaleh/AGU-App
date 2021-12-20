@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../model/department.dart';
 import '../model/faculty.dart';
@@ -41,14 +42,14 @@ class FireStore {
         .doc(Constants.uid)
         .get();
   }
-  
+
   getStudentStream() async {
     return await _firebaseFirestore
         .collection("student")
         .doc(Constants.uid)
         .snapshots();
   }
-  
+
   void addMoney(double newBalance) async {
     await _firebaseFirestore
         .collection('student')

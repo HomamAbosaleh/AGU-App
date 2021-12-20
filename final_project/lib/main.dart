@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '/widgets/navigationbar.dart';
+import '/../widgets/dialogbox.dart';
 import 'theme/theme.dart';
 import 'theme/cubit/theme_cubit.dart';
 import 'UI/courses/courses.dart';
@@ -46,17 +48,18 @@ class MyApp extends StatelessWidget {
               '/food_menu/schedule': (context) => const Schedule(),
               '/food_menu': (context) => const Food(),
               '/courseSchedule': (context) => const CourseSchedule(),
+              '/navigationBar': (context) => const CustomNavigationBar(),
             },
             theme: state ? darkTheme : lightTheme,
             home: FutureBuilder(
               future: _fbApp,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  print("You have an error! ${snapshot.error.toString()}");
-                  return const Text("Something went wrong!");
+                  return alertDialog(
+                      context, "Error", snapshot.error.toString());
                 } else if (snapshot.hasData) {
                   if (Constants.rememberMe == true) {
-                    return const HomePage();
+                    return const CustomNavigationBar();
                   } else {
                     return const Authentication();
                   }

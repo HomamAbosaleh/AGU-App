@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '/widgets/drawer.dart';
 import '../../services/firestore.dart';
 import 'conversation.dart';
 
@@ -54,15 +55,10 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: customDrawer(context),
       appBar: AppBar(
         title: const Text("Chat Rooms"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/home", (route) => false);
-          },
-        ),
+        centerTitle: true,
       ),
       body: chatRoomList(),
       floatingActionButton: FloatingActionButton(
@@ -140,12 +136,11 @@ class ChatRoomTile extends StatelessWidget {
       },
       child: InkWell(
         onTap: () {
-          Navigator.pushAndRemoveUntil(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Conversation(chatRoomId: userName),
             ),
-            (route) => false,
           );
         },
         child: Container(
