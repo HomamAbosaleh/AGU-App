@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../model/meal.dart';
 import '../model/department.dart';
 import '../model/faculty.dart';
 import '../constants.dart';
@@ -10,6 +11,37 @@ import 'fireauth.dart';
 class FireStore {
   static final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
+
+  // Canteen
+
+  Future getTodayMeal() async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Map mealDictionary = {};
+    await _firebaseFirestore.collection("foodMenu").get().then((value) {
+      for (var element in value.docs) {
+        if (element.data().containsKey(date)) {
+          mealDictionary = element.get(date);
+        }
+      }
+    });
+    return mealDictionary.isEmpty ? null : mealDictionary;
+  }
+
+  getStudentStream() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .snapshots();
+  }
+
+  void addMoney(double newBalance) async {
+    await _firebaseFirestore
+        .collection('student')
+        .doc(Constants.uid)
+        .update({'wallet': newBalance});
+  }
+
+  // Faculty page
 
   Future<List<Faculty>> getFaculties() async {
     List<Faculty> f = [];
@@ -36,6 +68,8 @@ class FireStore {
         .get();
   }
 
+  // Main page
+
   Future getStudent() async {
     return await _firebaseFirestore
         .collection("student")
@@ -43,19 +77,7 @@ class FireStore {
         .get();
   }
 
-  getStudentStream() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .snapshots();
-  }
-
-  void addMoney(double newBalance) async {
-    await _firebaseFirestore
-        .collection('student')
-        .doc(Constants.uid)
-        .update({'wallet': newBalance});
-  }
+  // Sign up
 
   Future<void> addStudent({required Student student}) async {
     String uid = FireAuth().currentUserID;
@@ -73,6 +95,8 @@ class FireStore {
       'wallet': student.wallet,
     });
   }
+
+  // Chatroom
 
   void createChatRoom(sendToName, chatRoomMap, sendToChatRoomMap) async {
     var sendToId;

@@ -1,133 +1,149 @@
-import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 
-import '/../model/meal.dart';
+import '/services/firestore.dart';
 
 class MealOfToday extends StatelessWidget {
   const MealOfToday({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
-    final List<Meal> meals = [
-      Meal(
-          mainDish: "Boiled Rice",
-          secondDish: "Fried Chicken",
-          soup: "Mercemek Çorbası",
-          salad: "Akdeniz Salata",
-          CalMain: 500,
-          CalSecond: 450,
-          CalSalad: 50,
-          CalSoup: 100),
+    List names = [
+      {"dish": "mainDish", "cal": "mainCal"},
+      {"dish": "sideDish", "cal": "sideCal"},
+      {"dish": "soup", "cal": "soupCal"},
+      {"dish": "appetiser", "cal": "appetiserCal"}
     ];
-    Future s = FireStore().getStudent();
-    Meal(CalMain: 15);
-    return FutureBuilder(
-      future: s,
-      builder: (context, AsyncSnapshot snapShot) {
-        if (snapShot.hasData) {
-          return Container(
-            // padding: EdgeInsets.all(5),
-            alignment: Alignment.center,
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 15),
-                Text(
-                  "Current Balance",
-                  style: TextStyle(
-                      color: Colors.grey[700], fontSize: 16, letterSpacing: 3),
-                ),
-                const SizedBox(height: 5),
-                Text('₺${snapShot.data['wallet']}',
-                    style: Theme.of(context).textTheme.headline3),
-                const SizedBox(height: 25),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).shadowColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(70),
-                        topRight: Radius.circular(70),
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          FutureBuilder(
+            future: FireStore().getStudent(),
+            builder: (context, AsyncSnapshot snapShot) {
+              if (snapShot.hasData) {
+                return ListTile(
+                  contentPadding: const EdgeInsets.all(8),
+                  title: Text(
+                    "Current Balance",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 16,
+                        letterSpacing: 3),
+                  ),
+                  subtitle: Text('₺${snapShot.data['wallet']}',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline3),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          FutureBuilder(
+            future: FireStore().getTodayMeal(),
+            builder: (context, AsyncSnapshot snapShot) {
+              if (snapShot.connectionState == ConnectionState.done) {
+                if (snapShot.hasData) {
+                  return Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 20),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).shadowColor,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(70),
+                          topRight: Radius.circular(70),
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 40, horizontal: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(
+                            MediaQuery.of(context).size.width - 380,
+                            30,
+                            MediaQuery.of(context).size.width - 380,
+                            50),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
                                 children: [
                                   Text('Type',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText1),
-                                  const SizedBox(height: 30),
-                                  Text(meals[0].mainDish.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].secondDish.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].soup.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].salad.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
+                                  ListView.builder(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    shrinkWrap: true,
+                                    itemCount: 4,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 8, 8, 0),
+                                        child: Text(
+                                            snapShot.data[names[index]["dish"]],
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline4),
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
-                              Column(
+                            ),
+                            Expanded(
+                              child: Column(
                                 children: [
                                   Text('Calories',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText1),
-                                  const SizedBox(height: 30),
-                                  Text(meals[0].CalMain.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].CalSecond.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].CalSoup.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].CalSalad.toString(),
-                                      style:
-                                          Theme.of(context).textTheme.headline4)
+                                  ListView.builder(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    shrinkWrap: true,
+                                    itemCount: 4,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 8, 8, 0),
+                                        child: Text(
+                                            snapShot.data[names[index]["cal"]]
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline4),
+                                      );
+                                    },
+                                  ),
                                 ],
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+                  );
+                } else {
+                  return Center(
+                    child: Text(
+                      "Dining Hall Is Closed Today",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  );
+                }
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
