@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b42adc5-c639-4c84-844e-dbd7eb6c7070" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/new_login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/new_login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final_project/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/services/http.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
