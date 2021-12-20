@@ -33,6 +33,8 @@ ThemeData lightTheme = ThemeData(
     ),
     backgroundColor: Colors.white,
   ),
+  bottomNavigationBarTheme:
+      const BottomNavigationBarThemeData(backgroundColor: Colors.white),
   scaffoldBackgroundColor: Colors.white,
   disabledColor: const Color(0xff969696),
   shadowColor: const Color(0xff323232),
@@ -109,6 +111,8 @@ ThemeData darkTheme = ThemeData(
   bottomAppBarTheme: const BottomAppBarTheme(
     color: Color(0xF3000000),
   ),
+  bottomNavigationBarTheme:
+      const BottomNavigationBarThemeData(backgroundColor: Colors.white),
   appBarTheme: const AppBarTheme(
     titleTextStyle: TextStyle(
       fontSize: 22,
