@@ -15,7 +15,7 @@ class ApiPage extends StatefulWidget {
 }
 
 class _ApiPageState extends State<ApiPage> {
-  int currentInd = 0;
+  int currentInd = 1;
   final List<Widget> _apipagenames = <Widget>[
     const Text('University Location'),
     const Text('Currency Exchange'),

@@ -15,7 +15,7 @@ class Weather extends StatelessWidget {
             child: Card(
               child: Column(
                 children: [
-                  Text(snapshot.data),
+                  Text(snapshot.data.toString()),
                 ],
               ),
             ),
