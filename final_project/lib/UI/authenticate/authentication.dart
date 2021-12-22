@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/drawer.dart';
-import 'sign_up.dart';
-import 'log_in.dart';
 import '../../widgets/appbar.dart';
+import '../../widgets/drawer.dart';
+import 'new_login.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({Key? key}) : super(key: key);
@@ -38,13 +37,21 @@ class AuthenticationState extends State<Authentication> {
             margin: const EdgeInsets.all(30),
             child: Column(
               children: [
-                inSignIn
-                    ? LogIn(
-                        changeSignIn: changeSignIn,
-                      )
-                    : SignUp(
-                        changeSignIn: changeSignIn,
-                      ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewLoginScreen()));
+                    },
+                    child: Text('test')),
+                // inSignIn
+                //     ? LogIn(
+                //         changeSignIn: changeSignIn,
+                //       )
+                //     : SignUp(
+                //         changeSignIn: changeSignIn,
+                //       ),
               ],
             ),
           ),
