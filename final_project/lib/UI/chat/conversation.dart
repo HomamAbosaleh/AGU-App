@@ -1,4 +1,3 @@
-import 'package:final_project/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,8 +36,7 @@ class _ConversationState extends State<Conversation> {
         "users": users,
         "chatRoomId": Constants.myName,
       };
-      FireStore()
-          .createChatRoom(widget.chatRoomId, chatRoomMap, sendToChatRoomMap);
+      FireStore().createChatRoom(widget.chatRoomId, chatRoomMap, sendToChatRoomMap);
       Map<String, dynamic> messageMap = {
         "message": message.text,
         "sendBy": Constants.myName,
@@ -96,8 +94,7 @@ class _ConversationState extends State<Conversation> {
                         } else {
                           return MessageTile(
                             message: snapshot.data.docs[index]["message"],
-                            isSendByMe: snapshot.data.docs[index]["sendBy"] ==
-                                Constants.myName,
+                            isSendByMe: snapshot.data.docs[index]["sendBy"] == Constants.myName,
                           );
                         }
                       },
@@ -151,14 +148,12 @@ class _ConversationState extends State<Conversation> {
 class MessageTile extends StatelessWidget {
   final String message;
   final bool isSendByMe;
-  const MessageTile({Key? key, required this.message, required this.isSendByMe})
-      : super(key: key);
+  const MessageTile({Key? key, required this.message, required this.isSendByMe}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-          left: isSendByMe ? 0 : 24, right: isSendByMe ? 24 : 0),
+      padding: EdgeInsets.only(left: isSendByMe ? 0 : 24, right: isSendByMe ? 24 : 0),
       width: MediaQuery.of(context).size.width,
       alignment: isSendByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -172,8 +167,8 @@ class MessageTile extends StatelessWidget {
                         const Color(0xff2A75BC),
                       ]
                     : [
-                        const Color(0x1AFFFFFF),
-                        const Color(0x1AFFFFFF),
+                        Colors.red,
+                        Colors.redAccent,
                       ]),
             borderRadius: isSendByMe
                 ? const BorderRadius.only(

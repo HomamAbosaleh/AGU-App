@@ -13,6 +13,21 @@ ThemeData lightTheme = ThemeData(
     800: Color(0xffa0a0a0),
     900: Color(0xff969696),
   }),
+  colorScheme: const ColorScheme(
+    primary: Color(0xFF9e2326),
+    primaryVariant: Color(0xFFd2373b),
+    secondary: Color(0xFF8E8E8E),
+    secondaryVariant: Color(0xFFB8B8B8),
+    background: Colors.white,
+    surface: Color(0xFF8E8E8E),
+    onBackground: Color(0xFF8E8E8E),
+    error: Colors.redAccent,
+    onError: Colors.redAccent,
+    onPrimary: Colors.white,
+    onSecondary: Color(0xFFd2373b),
+    onSurface: Color(0xFFd2373b),
+    brightness: Brightness.light,
+  ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Color(0xFFD00001),
   ),
@@ -36,17 +51,25 @@ ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   disabledColor: const Color(0xff969696),
   shadowColor: const Color(0xff323232),
-  hoverColor: const Color(0xff0a0a0a),
-  inputDecorationTheme: const InputDecorationTheme(
-    enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: Color(0xFFD00001),
-      ),
+  hoverColor: Colors.black,
+  inputDecorationTheme: InputDecorationTheme(
+    fillColor: Colors.white,
+    labelStyle: const TextStyle(
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.grey, fontSize: 15),
+    hintStyle: const TextStyle(
+      color: gPrimaryGreyColor,
     ),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: Color(0xFFD00001),
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: rSecondaryRedColor,
       ),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: rSecondaryRedColor,
+      ),
+      borderRadius: BorderRadius.circular(30),
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -59,25 +82,14 @@ ThemeData lightTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     headline1: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.black,
-        fontSize: 16),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.black, fontSize: 16),
     headline2: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.black,
-        fontSize: 18),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.black, fontSize: 18),
     headline3: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.black,
-        fontSize: 30),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.black, fontSize: 30),
     headline4: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.white,
-        fontSize: 20),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 16),
+    headline5: TextStyle(fontSize: 48, fontFamily: 'Roboto', color: rSecondaryRedColor),
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,
@@ -99,12 +111,28 @@ ThemeData darkTheme = ThemeData(
     800: Color(0xff0a0a0a),
     900: Color(0xff000000),
   }),
+  colorScheme: const ColorScheme(
+    primary: Color(0xFFd2373b),
+    primaryVariant: Color(0xFF9e2326),
+    secondary: Color(0xFFB8B8B8),
+    secondaryVariant: Color(0xFF8E8E8E),
+    background: Color(0xFF303030),
+    surface: Colors.white,
+    onBackground: Color(0xFF8E8E8E),
+    error: Colors.redAccent,
+    onError: Colors.redAccent,
+    onPrimary: Colors.white,
+    onSecondary: Colors.white,
+    onSurface: Color(0xff282828),
+    brightness: Brightness.light,
+  ),
+  fontFamily: 'Roboto',
   cardColor: const Color(0xff424242),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Color(0xFFD00001),
   ),
   iconTheme: const IconThemeData(
-    color: Color(0xFFD7D6D6),
+    color: Color(0xFF6C6969),
   ),
   bottomAppBarTheme: const BottomAppBarTheme(
     color: Color(0xF3000000),
@@ -126,22 +154,25 @@ ThemeData darkTheme = ThemeData(
   hoverColor: Colors.white,
   canvasColor: const Color(0xff303030),
   hintColor: Colors.grey,
-  inputDecorationTheme: const InputDecorationTheme(
-    fillColor: Colors.white,
-    labelStyle: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.grey,
-        fontSize: 15),
-    enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: Color(0xFFD00001),
-      ),
+  inputDecorationTheme: InputDecorationTheme(
+    //fillColor: Colors.black38,
+    fillColor: Color(0xFF303030),
+    labelStyle: const TextStyle(
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 15),
+    hintStyle: const TextStyle(
+      color: Colors.white,
     ),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: Color(0xFFD00001),
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: Colors.white,
       ),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: Colors.white,
+      ),
+      borderRadius: BorderRadius.circular(30),
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -155,25 +186,14 @@ ThemeData darkTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     headline1: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.white,
-        fontSize: 16),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 16),
     headline2: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.white,
-        fontSize: 18),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 18),
     headline3: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.white,
-        fontSize: 30),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 30),
     headline4: TextStyle(
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
-        color: Colors.white,
-        fontSize: 18),
+        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 18),
+    headline5: TextStyle(fontSize: 48, fontFamily: 'Roboto', color: Colors.white),
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,
@@ -181,3 +201,10 @@ ThemeData darkTheme = ThemeData(
     ),
   ),
 );
+
+const rPrimaryRedColor = Color(0xFFd2373b);
+const rSecondaryRedColor = Color(0xFF9e2326);
+const rDarkerRedColor = Color(0xFF571315);
+
+const gPrimaryGreyColor = Color(0xFFB8B8B8);
+const gSecondaryGreyColor = Color(0xFF8E8E8E);
