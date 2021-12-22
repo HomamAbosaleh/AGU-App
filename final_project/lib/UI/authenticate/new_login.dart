@@ -59,8 +59,8 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
               left: 20,
               child: IconButton(
                 onPressed: () {
-                  BlocProvider.of<ThemeCubit>(context)
-                      .toggleTheme(val: !BlocProvider.of<ThemeCubit>(context).state);
+                  BlocProvider.of<ThemeCubit>(context).toggleTheme(
+                      val: !BlocProvider.of<ThemeCubit>(context).state);
                 },
                 icon: const Icon(
                   FontAwesomeIcons.adjust,
@@ -140,7 +140,7 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
   }
 
   void _scrollToTop() {
-    _scrollController.animateTo(0, duration: Duration(seconds: 1), curve: Curves.linear);
+    _scrollController.animateTo(0,
+        duration: Duration(seconds: 1), curve: Curves.linear);
   }
 }
->>>>>>> 6fd5ba5ec3687f0c794db088b3a1279f567c448d
