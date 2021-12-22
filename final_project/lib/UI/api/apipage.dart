@@ -3,6 +3,7 @@ import 'package:final_project/UI/api/location.dart';
 import 'package:final_project/UI/api/weather.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../widgets/drawer.dart';
 
 class ApiPage extends StatefulWidget {
@@ -14,11 +15,6 @@ class ApiPage extends StatefulWidget {
 
 class _ApiPageState extends State<ApiPage> {
   int currentInd = 0;
-  final List<Widget> _apipages = <Widget>[
-    Image.asset('images/agulocation.PNG'),
-    Image.asset('images/dolartotl.PNG'),
-    Image.asset('images/kayseriweather.PNG')
-  ];
   final List<Widget> _apipagenames = <Widget>[
     const Text('University Location'),
     const Text('Currency Exchange'),

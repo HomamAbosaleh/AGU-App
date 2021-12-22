@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '/widgets/navigationbar.dart';
 import '/../widgets/dialogbox.dart';
+import 'UI/authenticate/new_login.dart';
 import 'theme/theme.dart';
 import 'theme/cubit/theme_cubit.dart';
 import 'UI/courses/courses.dart';
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
                   if (Constants.rememberMe == true) {
                     return const CustomNavigationBar();
                   } else {
-                    return const Authentication();
+                    return const NewLoginScreen();
                   }
                 } else {
                   return const Center(
