@@ -1,14 +1,10 @@
-import 'package:final_project/services/fireauth.dart';
-import 'package:final_project/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/customtextstyle.dart';
-import '../../services/sharedpreference.dart';
-import '../constants.dart';
+import '/services/firestore.dart';
+import '/widgets/navigationbar.dart';
+import '../../widgets/drawer.dart';
 import '../widgets/appbar.dart';
-import '../widgets/bottombar.dart';
-import '../widgets/floatingbutton.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,72 +14,81 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future s = FireStore().getStudent();
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  Future? student = FireStore().getStudent();
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: s,
-        builder: (context, AsyncSnapshot snapShot){
-          if(snapShot.hasData){
-            return Scaffold(
-              backgroundColor: const Color(0xFF181515),
-              appBar: customAppBar(context),
-              body: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0,10.0,0.0,0.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Center(
-                          child: CircleAvatar(
-                            radius: 60,
-                          ),
+      future: student,
+      builder: (context, AsyncSnapshot snapShot) {
+        if (snapShot.hasData) {
+          return Scaffold(
+            appBar: customAppBar(context),
+            drawer: customDrawer(context),
+            body: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 0.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Center(
+                        child: CircleAvatar(
+                          radius: 60,
                         ),
-                          Text("Name",style: TextStyle(fontSize: 17),textAlign: TextAlign.left,),
-                           Text(snapShot.data["name"]+" "+
-                            snapShot.data["surname"]+'\n',style: customTextStyle(),
-                          ),
-                          Text("Student ID",style: TextStyle(fontSize: 17),textAlign: TextAlign.left,),
-                          Text(
-                                snapShot.data["id"]+'\n',style: customTextStyle(),
-                        ),
-                       Text("Department",style: TextStyle(fontSize: 17),),
-                          Text(
-                            snapShot.data["department"].toString()+'\n',style: customTextStyle(),
-                        ),
-                         Text("GPA",style: TextStyle(fontSize: 17),),
-                           Text(
-                                snapShot.data["gpa"].toString()+'\n',style: customTextStyle(),
-                        ),
-                        // ElevatedButton(
-                        //   onPressed: () async {
-                        //     await SharedPreference.signOut();
-                        //     Constants.rememberMe = false;
-                        //     Navigator.pushNamedAndRemoveUntil(
-                        //       context,
-                        //       '/',
-                        //       (route) => false,
-                        //     );
-                        //   },
-                        //   child: const Text("Sign Out"),
-                        // ),
-                      ],
-                    ),
+                      ),
+                      Text(
+                        "Name",
+                        style: Theme.of(context).textTheme.headline1,
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        capitalize(snapShot.data["name"]) +
+                            " " +
+                            capitalize(snapShot.data["surname"]) +
+                            '\n',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      Text(
+                        "Student ID",
+                        style: Theme.of(context).textTheme.headline1,
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        snapShot.data["id"] + '\n',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      Text(
+                        "Department",
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      Text(
+                        snapShot.data["department"].toString() + '\n',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      Text(
+                        "GPA",
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      Text(
+                        snapShot.data["gpa"].toString() + '\n',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              bottomNavigationBar: customBottomBar(),
-             // floatingActionButton: customFloatingButton(context),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
+      },
     );
   }
 }

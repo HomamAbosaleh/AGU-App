@@ -4,11 +4,9 @@ class FireAuth {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String get currentUserID => _firebaseAuth.currentUser!.uid;
 
-  Future<String> signIn(
-      {required String email, required String password}) async {
+  Future<String> signIn({required String email, required String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return "true";
     } on FirebaseAuthException catch (e) {
       return e.message!;
@@ -17,11 +15,9 @@ class FireAuth {
     }
   }
 
-  Future<String> signUp(
-      {required String email, required String password}) async {
+  Future<String> signUp({required String email, required String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       return "true";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -36,11 +32,12 @@ class FireAuth {
     }
   }
 
-  Future resetPass(String email) async {
+  Future<String> resetPass(String email) async {
     try {
-      return await _firebaseAuth.sendPasswordResetEmail(email: email);
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return "0";
     } catch (error) {
-      print(error.toString());
+      return error.toString();
     }
   }
 

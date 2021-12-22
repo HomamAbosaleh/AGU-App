@@ -7,7 +7,7 @@ import '../../services/fireauth.dart';
 import '/../services/firestore.dart';
 import '/../model/department.dart';
 import '/../model/faculty.dart';
-import '/../widgets/alertdialog.dart';
+import '/../widgets/dialogbox.dart';
 import '/../model/student.dart';
 
 class SignUp extends StatefulWidget {
@@ -19,6 +19,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool rememberMe = false;
+  static const String domain = "@agu.edu.tr";
+  static const int _nameControllerNumber = 0;
+  static const int _surnameControllerNumber = 1;
+  static const int _emailControllerNumber = 2;
+  static const int _idControllerNumber = 3;
+  static const int _passwordControllerNumber = 4;
+  static const int _confPasswordControllerNumber = 5;
   final formKey = GlobalKey<FormState>();
   Faculty? faculty;
   Department? department;
@@ -31,37 +39,53 @@ class _SignUpState extends State<SignUp> {
 
   signMeUp(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      if (faculty == null ||
-          department == null ||
-          semester == null ||
-          status == null) {
-        showAlertDialog(context, "Incomplete Information",
-            "Please fill in all information");
-      } else if (controller[4].text != controller[5].text) {
-        showAlertDialog(
-            context, "Password Incorrect", "Please check your password");
-      } else {
-        String signed = await FireAuth().signUp(
-          email: controller[2].text + "@agu.edu.tr",
-          password: controller[4].text,
-        );
-        if (signed == "true") {
-          Student s = Student(
-              name: controller[0].text,
-              surname: controller[1].text,
-              gpa: 0.00,
-              id: controller[3].text,
-              email: controller[2].text + "@agu.edu.tr",
-              faculty: faculty!.name,
-              department: department!.name,
-              semester: semester,
-              status: status);
-          FireStore().addStudent(student: s);
-          await setUpDate();
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      if (controller[_idControllerNumber].text.length == 10) {
+        if (controller[_nameControllerNumber].text.isEmpty ||
+            controller[_surnameControllerNumber].text.isEmpty ||
+            controller[_emailControllerNumber].text.isEmpty ||
+            controller[_idControllerNumber].text.isEmpty ||
+            controller[_passwordControllerNumber].text.isEmpty ||
+            controller[_confPasswordControllerNumber].text.isEmpty ||
+            faculty == null ||
+            department == null ||
+            semester == null ||
+            status == null) {
+          alertDialog(context, "Incomplete Information",
+              "Please fill in all the fields");
+        } else if (controller[_passwordControllerNumber].text !=
+            controller[_confPasswordControllerNumber].text) {
+          alertDialog(
+              context, "Password Incorrect", "Please check your password");
         } else {
-          showAlertDialog(context, "Cannot Sign Up", signed);
+          String signed = await FireAuth().signUp(
+            email: controller[_emailControllerNumber].text + domain,
+            password: controller[_passwordControllerNumber].text,
+          );
+          if (signed == "true") {
+            Student s = Student(
+                name: controller[_nameControllerNumber].text.toLowerCase(),
+                surname:
+                    controller[_surnameControllerNumber].text.toLowerCase(),
+                gpa: 0.00,
+                id: controller[_idControllerNumber].text,
+                email: controller[_emailControllerNumber].text.toLowerCase() +
+                    domain,
+                faculty: faculty!.name,
+                department: department!.name,
+                semester: semester,
+                status: status,
+                wallet: 0.00);
+            FireStore().addStudent(student: s);
+            await setUpDate();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/navigationBar', (route) => false);
+          } else {
+            alertDialog(context, "Cannot Sign Up", signed);
+          }
         }
+      } else {
+        alertDialog(context, "Incomplete Information",
+            "Student number must be 10 digits");
       }
     }
   }
@@ -91,12 +115,12 @@ class _SignUpState extends State<SignUp> {
                             if (index == 4) {
                               return dropDownList(snapshot);
                             } else {
-                              return customTextFormField(controller, index);
+                              return customTextFormField(
+                                  context, controller, index);
                             }
                           },
                         ),
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
                             onPressed: () {
                               signMeUp(context);
                             },
@@ -110,7 +134,10 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () {
                   widget.changeSignIn();
                 },
-                child: const Text('Go back',style: TextStyle(color: Colors.red),),
+                child: const Text(
+                  'Go back',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ],
           );
@@ -126,7 +153,7 @@ class _SignUpState extends State<SignUp> {
   Widget dropDownList(AsyncSnapshot snapshot) {
     return Column(
       children: [
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
           isExpanded: true,
           value: faculty,
           items: snapshot.data
@@ -141,7 +168,7 @@ class _SignUpState extends State<SignUp> {
             });
           },
         ),
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
           isExpanded: true,
           value: department,
           items: departments
@@ -154,14 +181,15 @@ class _SignUpState extends State<SignUp> {
             });
           },
         ),
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
           isExpanded: true,
           value: semester,
           items: List.generate(
             8,
             (index) => DropdownMenuItem(
               value: index + 1,
-              child: Text((index + 1).toString()),
+              child: Text((index + 1).toString(),
+                  style: Theme.of(context).textTheme.headline1),
             ),
           ),
           hint: const Text("Semester"),
@@ -171,11 +199,16 @@ class _SignUpState extends State<SignUp> {
             });
           },
         ),
-        DropdownButton<dynamic>(
+        DropdownButtonFormField<dynamic>(
           isExpanded: true,
           value: status,
           items: ["Graduate", "Undergraduate"]
-              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              .map((e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(
+                    e,
+                    style: Theme.of(context).textTheme.headline1,
+                  )))
               .toList(),
           hint: const Text("Status"),
           onChanged: (value) {
@@ -189,18 +222,24 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> setUpDate() async {
-    Constants.myName = controller[0].text;
-    Constants.email = controller[2].text + "@agu.edu.tr";
-    Constants.uid = await FireAuth().currentUserID;
-    Constants.rememberMe = false;
+    await Constants.setUpConstants(
+        controller[_emailControllerNumber]
+            .text
+            .replaceAll(".", " ")
+            .toLowerCase(),
+        controller[_emailControllerNumber].text + domain,
+        FireAuth().currentUserID,
+        rememberMe);
+  }
+
+  DropdownMenuItem<dynamic> dropDownBuilder(item) {
+    return DropdownMenuItem(
+        value: item,
+        child: Text(item.name, style: Theme.of(context).textTheme.headline1));
   }
 }
 
-DropdownMenuItem<dynamic> dropDownBuilder(item) {
-  return DropdownMenuItem(value: item, child: Text(item.name));
-}
-
-Widget customTextFormField(controller, int index) {
+Widget customTextFormField(context, controller, int index) {
   final Map properties = {
     0: {
       "label": "Name",
@@ -223,7 +262,7 @@ Widget customTextFormField(controller, int index) {
       "label": "Student ID",
       "Filter": FilteringTextInputFormatter.allow(RegExp("[0-9]")),
       "controller": controller[3],
-      "maxLength": 10,
+      "maxLength": LengthLimitingTextInputFormatter(10),
     },
     5: {
       "label": "Password",
@@ -237,23 +276,18 @@ Widget customTextFormField(controller, int index) {
     },
   };
   return TextFormField(
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return "This field cannot be empty";
-      }
-    },
-    maxLength: properties[index]["maxLength"],
+    style: Theme.of(context).textTheme.headline1,
+    focusNode: FocusNode(canRequestFocus: false),
     cursorColor: const Color(0xFFA0A0A0),
     obscureText: index >= 5 ? true : false,
-    inputFormatters: [properties[index]["Filter"]],
+    inputFormatters: [
+      properties[index]["Filter"],
+      properties[index]["maxLength"] ?? LengthLimitingTextInputFormatter(100),
+    ],
     controller: properties[index]["controller"],
     decoration: InputDecoration(
         hintText: properties[index]["hint"] ?? "",
         labelText: properties[index]["label"],
-        enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFD00001))),
-        focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFD00001))),
         suffixText: properties[index]["suffix"] ?? ""),
   );
 }

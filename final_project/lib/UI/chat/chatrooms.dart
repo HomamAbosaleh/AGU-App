@@ -1,6 +1,7 @@
-import 'package:final_project/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '/widgets/drawer.dart';
 import '../../services/firestore.dart';
 import 'conversation.dart';
 
@@ -27,11 +28,8 @@ class _ChatState extends State<Chat> {
             itemCount: snapshot.data.docs.length,
             itemBuilder: (context, index) {
               return ChatRoomTile(
-                userName: snapshot.data.docs[index]["chatRoomId"]
-                    .toString()
-                    .replaceAll("_", "")
-                    .replaceAll(Constants.myName, ""),
-                chatRoomId: snapshot.data.docs[index]["chatRoomId"],
+                userName: snapshot.data.docs[index]["chatRoomId"],
+                snapshot: snapshot.data.docs[index],
               );
             },
           );
@@ -57,14 +55,10 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: customDrawer(context),
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/home", (route) => false);
-          },
-        ),
+        title: const Text("Chat Rooms"),
+        centerTitle: true,
       ),
       body: chatRoomList(),
       floatingActionButton: FloatingActionButton(
@@ -79,40 +73,96 @@ class _ChatState extends State<Chat> {
 
 class ChatRoomTile extends StatelessWidget {
   final String userName;
-  final String chatRoomId;
-  const ChatRoomTile(
-      {Key? key, required this.userName, required this.chatRoomId})
-      : super(key: key);
+  final DocumentSnapshot snapshot;
+  const ChatRoomTile({
+    Key? key,
+    required this.userName,
+    required this.snapshot,
+  }) : super(key: key);
+
+  String getName() {
+    return userName.split(" ")[0].substring(0, 1).toUpperCase() +
+        userName.split(" ")[0].substring(1) +
+        " " +
+        userName.split(" ")[1].substring(0, 1).toUpperCase() +
+        userName.split(" ")[1].substring(1);
+  }
+
+  String getAbbreviation() {
+    return userName.split(" ")[0].substring(0, 1).toUpperCase() +
+        userName.split(" ")[1].substring(0, 1).toUpperCase();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Conversation(chatRoomId: chatRoomId),
+    bool? answer;
+    return Dismissible(
+      key: ValueKey(userName),
+      background: Container(
+        padding: const EdgeInsets.only(right: 20),
+        color: Theme.of(context).errorColor,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.black,
+        ),
+        alignment: Alignment.centerRight,
+      ),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (BuildContext ctx) => AlertDialog(
+            title: const Text("Verification"),
+            content: Text("Do you want to delete your chat with ${getName()}?"),
+            actions: [
+              TextButton(
+                child: const Text("No"),
+                onPressed: () {
+                  Navigator.of(ctx).pop(false); // dismiss dialog
+                },
+              ),
+              TextButton(
+                child: const Text("Yes"),
+                onPressed: () {
+                  Navigator.of(ctx).pop(true); // dismiss dialog
+                },
+              ),
+            ],
           ),
         );
       },
-      child: Container(
-        color: Colors.black26,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Row(
-          children: [
-            Container(
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(40)),
-              child: Text(userName.substring(0, 1).toUpperCase()),
+      onDismissed: (direction) async {
+        FireStore().deleteChatRoom(snapshot);
+      },
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Conversation(chatRoomId: userName),
             ),
-            const SizedBox(
-              width: 8,
-            ),
-            Text(userName),
-          ],
+          );
+        },
+        child: Container(
+          color: Colors.black26,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(40)),
+                child: Text(getAbbreviation()),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(getName()),
+            ],
+          ),
         ),
       ),
     );

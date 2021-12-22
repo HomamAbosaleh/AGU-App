@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../model/department.dart';
 import '../model/faculty.dart';
@@ -35,53 +36,25 @@ class FireStore {
         .get();
   }
 
-  createChatRoom(String? chatRoomId, chatRoomMap) {
-    _firebaseFirestore
-        .collection("chatRoom")
-        .doc(chatRoomId)
-        .set(chatRoomMap)
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
-
-  getUser(String name) async {
-    return await _firebaseFirestore
-        .collection("student")
-        .where("name", isEqualTo: name)
-        .get();
-  }
   Future getStudent() async {
     return await _firebaseFirestore
-        .collection("student").doc(Constants.uid)
+        .collection("student")
+        .doc(Constants.uid)
         .get();
   }
 
-  void addConversationMessages(String chatRoomId, messageMap) {
-    _firebaseFirestore
-        .collection("chatRoom")
-        .doc(chatRoomId)
-        .collection("chats")
-        .add(messageMap)
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
-
-  getConversationMessages(String chatRoomId) async {
+  getStudentStream() async {
     return await _firebaseFirestore
-        .collection("chatRoom")
-        .doc(chatRoomId)
-        .collection("chats")
-        .orderBy("time", descending: false)
+        .collection("student")
+        .doc(Constants.uid)
         .snapshots();
   }
 
-  getChatRooms() async {
-    return await _firebaseFirestore
-        .collection("chatRoom")
-        .where("users", arrayContains: Constants.myName)
-        .snapshots();
+  void addMoney(double newBalance) async {
+    await _firebaseFirestore
+        .collection('student')
+        .doc(Constants.uid)
+        .update({'wallet': newBalance});
   }
 
   Future<void> addStudent({required Student student}) async {
@@ -97,6 +70,113 @@ class FireStore {
       'department': '${student.department}',
       'semester': '${student.semester}',
       'courses': student.courses,
+      'wallet': student.wallet,
     });
+  }
+
+  void createChatRoom(sendToName, chatRoomMap, sendToChatRoomMap) async {
+    var sendToId;
+    await _firebaseFirestore.collection("student").get().then(
+      (value) {
+        for (var element in value.docs) {
+          if ((element["name"] + " " + element["surname"]) == sendToName) {
+            sendToId = element.id;
+            break;
+          }
+        }
+      },
+    );
+    _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .collection("chatRooms")
+        .doc(sendToName)
+        .set(chatRoomMap);
+    _firebaseFirestore
+        .collection("student")
+        .doc(sendToId)
+        .collection("chatRooms")
+        .doc(Constants.myName)
+        .set(sendToChatRoomMap);
+  }
+
+  void deleteChatRoom(snapshot) async {
+    _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .collection("chatRooms")
+        .doc(snapshot.id)
+        .collection("chats")
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        element.reference.delete();
+      }
+    });
+    await _firebaseFirestore.runTransaction((transaction) async {
+      transaction.delete(snapshot.reference);
+    });
+  }
+
+  void addConversationMessages(String chatRoomId, messageMap) async {
+    var sendToId;
+    await _firebaseFirestore.collection("student").get().then(
+      (value) {
+        for (var element in value.docs) {
+          if ((element["name"] + " " + element["surname"]) == chatRoomId) {
+            sendToId = element.id;
+            break;
+          }
+        }
+      },
+    );
+    _firebaseFirestore
+        .collection("student")
+        .doc(sendToId)
+        .collection("chatRooms")
+        .doc(Constants.myName)
+        .collection("chats")
+        .add(messageMap);
+    _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .collection("chatRooms")
+        .doc(chatRoomId)
+        .collection("chats")
+        .add(messageMap);
+  }
+
+  getConversationMessages(String chatRoomId) async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .collection("chatRooms")
+        .doc(chatRoomId)
+        .collection("chats")
+        .orderBy("time", descending: false)
+        .snapshots();
+  }
+
+  getChatRooms() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .collection("chatRooms")
+        .snapshots();
+  }
+
+  getUser() async {
+    List<String> l = [];
+    await _firebaseFirestore.collection("student").get().then((value) {
+      for (var element in value.docs) {
+        if ((element["name"] + " " + element["surname"]) != Constants.myName) {
+          l.add(element["name"] + " " + element["surname"]);
+        }
+      }
+    });
+    l.sort((a, b) {
+      return a.compareTo(b);
+    });
+    return l;
   }
 }

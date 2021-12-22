@@ -1,3 +1,4 @@
+import 'package:final_project/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/fireauth.dart';
 
@@ -6,6 +7,7 @@ class SharedPreference {
   static String userNameKey = "USERNAMEKEY";
   static String userEmailKey = "USEREMAILKEY";
   static String userId = "USERIDKEY";
+  static String userTheme = "THEMEKEY";
 
   // saving data to sharedPreferences
   static Future<void> saveLoggingIn(bool isLoggedIn) async {
@@ -52,6 +54,7 @@ class SharedPreference {
   static Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    Constants.rememberMe = false;
     await FireAuth().signOut();
   }
 }

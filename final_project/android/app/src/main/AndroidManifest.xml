@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.final_project">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
-        android:label="AGU App"
+        android:label="AGÜ"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
