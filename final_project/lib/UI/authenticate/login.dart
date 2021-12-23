@@ -1,22 +1,22 @@
-import 'package:final_project/services/fireauth.dart';
-import 'package:final_project/services/sharedpreference.dart';
-import 'package:final_project/theme/theme.dart';
-import 'package:final_project/widgets/dialogbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '/services/fireauth.dart';
+import '/services/sharedpreference.dart';
+import '/theme/theme.dart';
+import '/widgets/dialogbox.dart';
 import '../../constants.dart';
 
-class LoginPart extends StatefulWidget {
-  final Function changeSignIn;
-  const LoginPart({Key? key, required this.changeSignIn}) : super(key: key);
+class LogIn extends StatefulWidget {
+  final Function changeLogIn;
+  const LogIn({Key? key, required this.changeLogIn}) : super(key: key);
 
   @override
-  _LoginPartState createState() => _LoginPartState();
+  _LogInState createState() => _LogInState();
 }
 
-class _LoginPartState extends State<LoginPart> {
+class _LogInState extends State<LogIn> {
   final _userName = TextEditingController();
   final _password = TextEditingController();
   bool eye = true;
@@ -72,7 +72,9 @@ class _LoginPartState extends State<LoginPart> {
             padding: const EdgeInsets.symmetric(horizontal: 26),
             child: TextField(
               focusNode: focus1,
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
+              ],
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
@@ -80,9 +82,12 @@ class _LoginPartState extends State<LoginPart> {
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
               decoration: InputDecoration(
-                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                icon: Icon(Icons.email, color: Theme.of(context).colorScheme.surface),
+                enabledBorder:
+                    Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder:
+                    Theme.of(context).inputDecorationTheme.focusedBorder,
+                icon: Icon(Icons.email,
+                    color: Theme.of(context).colorScheme.surface),
                 filled: true,
                 suffixText: domain,
                 hintText: 'Username',
@@ -107,9 +112,12 @@ class _LoginPartState extends State<LoginPart> {
               obscureText: eye,
               controller: _password,
               decoration: InputDecoration(
-                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                icon: Icon(Icons.vpn_key_sharp, color: Theme.of(context).colorScheme.surface),
+                enabledBorder:
+                    Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder:
+                    Theme.of(context).inputDecorationTheme.focusedBorder,
+                icon: Icon(Icons.vpn_key_sharp,
+                    color: Theme.of(context).colorScheme.surface),
                 suffixIcon: IconButton(
                   onPressed: () {
                     eye = !eye;
@@ -167,7 +175,7 @@ class _LoginPartState extends State<LoginPart> {
                       onPressed: () {
                         focus1.unfocus();
                         focus2.unfocus();
-                        widget.changeSignIn('forgPass');
+                        widget.changeLogIn('forgPass');
                       },
                       child: const Text(
                         'Forget password?',
@@ -188,7 +196,8 @@ class _LoginPartState extends State<LoginPart> {
                   focus1.unfocus();
                   focus2.unfocus();
                   if (_userName.text.isEmpty || _password.text.isEmpty) {
-                    alertDialog(context, "Cannot Sign In", "Please fill up all information");
+                    alertDialog(context, "Cannot Sign In",
+                        "Please fill up all information");
                   } else {
                     String shouldNavigate = await FireAuth().signIn(
                       email: _userName.text + domain,
@@ -210,8 +219,10 @@ class _LoginPartState extends State<LoginPart> {
                 },
                 style: ElevatedButton.styleFrom(
                   primary: rPrimaryRedColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
                 child: const Text("Sign In"),
               ),
@@ -222,12 +233,14 @@ class _LoginPartState extends State<LoginPart> {
                 onPressed: () {
                   focus1.unfocus();
                   focus2.unfocus();
-                  widget.changeSignIn('signUp');
+                  widget.changeLogIn('signUp');
                 },
                 style: ElevatedButton.styleFrom(
                   primary: rPrimaryRedColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
                 child: const Text("Sign Up"),
               ),
@@ -262,7 +275,8 @@ class _LoginPartState extends State<LoginPart> {
   }
 
   Future<void> setUpDate() async {
-    await SharedPreference.saveUserName(_userName.text.replaceAll(".", " ").toLowerCase());
+    await SharedPreference.saveUserName(
+        _userName.text.replaceAll(".", " ").toLowerCase());
     await SharedPreference.saveUserId(FireAuth().currentUserID);
     await SharedPreference.saveUserEmail(_userName.text.toLowerCase() + domain);
     Constants.getUpConstants();
