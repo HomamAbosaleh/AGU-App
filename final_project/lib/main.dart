@@ -7,11 +7,9 @@ import 'package:path_provider/path_provider.dart';
 
 import '/widgets/navigationbar.dart';
 import '/../widgets/dialogbox.dart';
-import 'UI/authenticate/new_login.dart';
 import 'theme/theme.dart';
-import 'theme/cubit/theme_cubit.dart';
+import 'theme/theme_cubit.dart';
 import 'UI/courses/courses.dart';
-import 'UI/authenticate/authentication.dart';
 import 'UI/canteen/food_menu.dart';
 import 'UI/chat/chatrooms.dart';
 import 'UI/chat/search.dart';
@@ -19,6 +17,7 @@ import 'UI/faculties and departments/faculties_page.dart';
 import 'UI/home.dart';
 import 'UI/canteen/schedule.dart';
 import 'constants.dart';
+import 'UI/authenticate/authentication.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +61,7 @@ class MyApp extends StatelessWidget {
                   if (Constants.rememberMe == true) {
                     return const CustomNavigationBar();
                   } else {
-                    return const NewLoginScreen();
+                    return const Authentication();
                   }
                 } else {
                   return const Center(
