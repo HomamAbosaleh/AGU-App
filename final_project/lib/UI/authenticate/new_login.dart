@@ -1,9 +1,7 @@
 import 'package:final_project/services/fireauth.dart';
 import 'package:final_project/services/sharedpreference.dart';
-import 'package:final_project/widgets/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants.dart';
 
@@ -21,6 +19,24 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
   Icon eyeIcon = const Icon(Icons.remove_red_eye_outlined);
   static const String domain = "@agu.edu.tr";
   bool rememberMe = false;
+
+  late ScrollController _scrollController;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0, duration: Duration(seconds: 1), curve: Curves.linear);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +79,8 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 26),
                   child: TextField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
-                    ],
-                    style: const TextStyle(
+                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
+                    style: TextStyle(
                       fontFamily: 'Roboto',
                       color: rSecondaryRedColor,
                     ),
@@ -74,7 +88,7 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                     controller: _userName,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
+                        borderSide: BorderSide(
                           color: rSecondaryRedColor,
                         ),
                         borderRadius: BorderRadius.circular(30),
@@ -121,8 +135,7 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                         ),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      icon: const Icon(Icons.vpn_key_sharp,
-                          color: gSecondaryGreyColor),
+                      icon: const Icon(Icons.vpn_key_sharp, color: gSecondaryGreyColor),
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
@@ -194,8 +207,7 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_userName.text.isEmpty || _password.text.isEmpty) {
-                      showAlertDialog(context, "Cannot Sign In",
-                          "Please fill up all information");
+                      showAlertDialog(context, "Cannot Sign In", "Please fill up all information");
                     } else {
                       String shouldNavigate = await FireAuth().signIn(
                         email: _userName.text + domain,
@@ -208,11 +220,9 @@ class _NewLoginScreenState extends State<NewLoginScreen> {
                           await SharedPreference.saveLoggingIn(false);
                         }
                         await setUpDate();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                       } else {
-                        showAlertDialog(
-                            context, "Cannot Sign In", shouldNavigate);
+                        showAlertDialog(context, "Cannot Sign In", shouldNavigate);
                       }
                     }
                   },
