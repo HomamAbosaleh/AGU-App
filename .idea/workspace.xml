@@ -22,12 +22,43 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b42adc5-c639-4c84-844e-dbd7eb6c7070" name="Default Changelist" comment="Add course screen, edit course screen, adding admin property to student, add course for approval">
+    <list default="true" id="0b42adc5-c639-4c84-844e-dbd7eb6c7070" name="Default Changelist" comment="">
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/services/http.dart" beforeDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/final_project/fonts/Roboto-Black.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/fonts/Roboto-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/fonts/Roboto-Light.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/fonts/Roboto-Medium.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/fonts/Roboto-Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/fonts/Roboto-Thin.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/images/login background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/images/logo3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/images/whitelogo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/forget_password.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/login_part.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/signup_part.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/COMP205-repo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/COMP205-repo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/images/agulocation.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/images/dolartotl.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/images/foodmenu.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/images/kayseriweather.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/authentication.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/authentication.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/authenticate/new_login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/authenticate/new_login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/chat/conversation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/chat/conversation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/services/fireauth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/services/fireauth.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/lib/theme/theme.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/theme/theme.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/final_project/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.lock" afterDir="false" />
+>>>>>>> 6fd5ba5ec3687f0c794db088b3a1279f567c448d
+      <change beforePath="$PROJECT_DIR$/final_project/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +75,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="SadiksWork" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -75,7 +106,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -98,7 +129,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Flutter.main.dart" />
-        <item itemvalue="Flutter.main.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -111,21 +141,6 @@
       <option name="presentableId" value="Default" />
       <updated>1635966968934</updated>
     </task>
-    <task id="LOCAL-00001" summary="New signIn, singUp, and forgetPassword screen">
-      <created>1640132865827</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1640132865827</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Add course screen, edit course screen, adding admin property to student, add course for approval">
-      <created>1640385348618</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1640385348618</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -140,25 +155,16 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="New signIn, singUp, and forgetPassword screen" />
-    <MESSAGE value="Add course screen, edit course screen, adding admin property to student, add course for approval" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add course screen, edit course screen, adding admin property to student, add course for approval" />
-  </component>
   <component name="WindowStateProjectService">
     <state x="2453" y="366" key="#Dart" timestamp="1639913331129">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
     <state x="2453" y="366" key="#Dart/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1639913331129" />
-    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1640176052555">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2012" y="34" width="1736" height="856" key="AVDManager" timestamp="1640127600030">
+      <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
-    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1640176052555" />
-    <state x="92" y="92" width="1736" height="856" key="AVDManager" timestamp="1640348055902">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="92" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640348055902" />
-    <state x="92" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1640194900330" />
+    <state x="2012" y="34" width="1736" height="856" key="AVDManager/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640127600030" />
+    <state x="92" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1640084082542" />
     <state x="2467" y="211" key="AndroidProcessChooserDialog" timestamp="1639910427038">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
@@ -168,47 +174,35 @@
     </state>
     <state x="2660" y="216" key="FileChooserDialogImpl/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640124530775" />
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1640000911379" />
-    <state width="1899" height="230" key="GridCell.Tab.0.bottom" timestamp="1640385504537">
+    <state width="1899" height="230" key="GridCell.Tab.0.bottom" timestamp="1640132243715">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
-    <state width="1899" height="230" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385504537" />
-    <state width="1460" height="230" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1640213512058" />
-    <state width="1899" height="230" key="GridCell.Tab.0.center" timestamp="1640385504537">
+    <state width="1899" height="230" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640132243715" />
+    <state width="1899" height="230" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1640085620563" />
+    <state width="1899" height="230" key="GridCell.Tab.0.center" timestamp="1640132243714">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
-    <state width="1899" height="230" key="GridCell.Tab.0.center/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385504537" />
-    <state width="1460" height="230" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1640213512057" />
-    <state width="1899" height="230" key="GridCell.Tab.0.left" timestamp="1640385504537">
+    <state width="1899" height="230" key="GridCell.Tab.0.center/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640132243714" />
+    <state width="1899" height="230" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1640085620563" />
+    <state width="1899" height="230" key="GridCell.Tab.0.left" timestamp="1640132243713">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
-    <state width="1899" height="230" key="GridCell.Tab.0.left/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385504537" />
-    <state width="1460" height="230" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1640213512057" />
-    <state width="1899" height="230" key="GridCell.Tab.0.right" timestamp="1640385504537">
+    <state width="1899" height="230" key="GridCell.Tab.0.left/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640132243713" />
+    <state width="1899" height="230" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1640085620563" />
+    <state width="1899" height="230" key="GridCell.Tab.0.right" timestamp="1640132243714">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
-    <state width="1899" height="230" key="GridCell.Tab.0.right/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385504537" />
-    <state width="1460" height="230" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1640213512058" />
-    <state x="2104" y="27" key="MergeDialog" timestamp="1640385637697">
-      <screen x="1920" y="-58" width="1920" height="1040" />
+    <state width="1899" height="230" key="GridCell.Tab.0.right/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640132243714" />
+    <state width="1899" height="230" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1640085620563" />
+    <state x="461" y="164" key="SettingsEditor" timestamp="1640083196855">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="2104" y="27" key="MergeDialog/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385637697" />
-    <state x="2381" y="106" key="SettingsEditor" timestamp="1640385657997">
-      <screen x="1920" y="-58" width="1920" height="1040" />
-    </state>
-    <state x="2381" y="106" key="SettingsEditor/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385657997" />
+    <state x="2381" y="106" key="SettingsEditor/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1639947596664" />
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1640083196855" />
-    <state x="2472" y="194" key="Vcs.Push.Dialog.v2" timestamp="1640385372551">
-      <screen x="1920" y="-58" width="1920" height="1040" />
-    </state>
-    <state x="2472" y="194" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385372551" />
     <state x="2697" y="375" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1640128154476">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
     <state x="2697" y="375" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640128154476" />
-    <state x="2619" y="174" key="git4idea.branch.GitSmartOperationDialog" timestamp="1640385597379">
-      <screen x="1920" y="-58" width="1920" height="1040" />
-    </state>
-    <state x="2619" y="174" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040/1920.-58.1920.1040@1920.-58.1920.1040" timestamp="1640385597379" />
     <state x="2536" y="211" key="run.anything.popup" timestamp="1640120999379">
       <screen x="1920" y="-58" width="1920" height="1040" />
     </state>
