@@ -75,16 +75,18 @@ class _SignupPartState extends State<SignupPart> {
           );
           if (signed == "true") {
             Student s = Student(
-                name: controller[_nameControllerNumber].text.toLowerCase(),
-                surname: controller[_surnameControllerNumber].text.toLowerCase(),
-                gpa: 0.00,
-                id: controller[_idControllerNumber].text,
-                email: controller[_emailControllerNumber].text.toLowerCase() + domain,
-                faculty: faculty!.name,
-                department: department!.name,
-                semester: semester,
-                status: status,
-                wallet: 0.00);
+              name: controller[_nameControllerNumber].text.toLowerCase(),
+              surname: controller[_surnameControllerNumber].text.toLowerCase(),
+              gpa: 0.00,
+              id: controller[_idControllerNumber].text,
+              email: controller[_emailControllerNumber].text.toLowerCase() + domain,
+              faculty: faculty!.name,
+              department: department!.name,
+              semester: semester,
+              status: status,
+              wallet: 0.00,
+              admin: false,
+            );
             FireStore().addStudent(student: s);
             await setUpDate();
             Navigator.pushNamedAndRemoveUntil(context, '/navigationBar', (route) => false);
