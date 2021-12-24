@@ -87,7 +87,9 @@ class _SignUpState extends State<SignUp> {
                 department: department!.name,
                 semester: semester,
                 status: status,
-                wallet: 0.00);
+                wallet: 0.00,
+                admin: false,
+            );
             FireStore().addStudent(student: s);
             await setUpDate();
             Navigator.pushNamedAndRemoveUntil(
