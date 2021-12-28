@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '/theme/cubit/theme_cubit.dart';
+import '../theme/theme_cubit.dart';
 
 PreferredSizeWidget customAppBar(BuildContext context) {
   return AppBar(

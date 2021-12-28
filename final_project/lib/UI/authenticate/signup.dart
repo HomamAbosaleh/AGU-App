@@ -1,28 +1,27 @@
-import 'package:final_project/model/department.dart';
-import 'package:final_project/model/faculty.dart';
-import 'package:final_project/model/student.dart';
-import 'package:final_project/services/fireauth.dart';
-import 'package:final_project/services/firestore.dart';
-import 'package:final_project/theme/theme.dart';
-import 'package:final_project/widgets/dialogbox.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '/model/department.dart';
+import '/model/faculty.dart';
+import '/model/student.dart';
+import '/services/fireauth.dart';
+import '/services/firestore.dart';
+import '/theme/theme.dart';
+import '/widgets/dialogbox.dart';
 import '../../constants.dart';
 
-class SignupPart extends StatefulWidget {
-  final Function changeSignIn;
+class SignUp extends StatefulWidget {
   final ScrollController sController;
-
-  const SignupPart({Key? key, required this.changeSignIn, required this.sController})
+  final Function changeLogIn;
+  const SignUp({Key? key, required this.changeLogIn, required this.sController})
       : super(key: key);
 
   @override
-  _SignupPartState createState() => _SignupPartState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _SignupPartState extends State<SignupPart> {
+class _SignUpState extends State<SignUp> {
   bool rememberMe = false;
   static const String domain = "@agu.edu.tr";
   static const int _nameControllerNumber = 0;
@@ -64,10 +63,12 @@ class _SignupPartState extends State<SignupPart> {
             department == null ||
             semester == null ||
             status == null) {
-          alertDialog(context, "Incomplete Information", "Please fill in all the fields");
+          alertDialog(context, "Incomplete Information",
+              "Please fill in all the fields");
         } else if (controller[_passwordControllerNumber].text !=
             controller[_confPasswordControllerNumber].text) {
-          alertDialog(context, "Password Incorrect", "Please check your password");
+          alertDialog(
+              context, "Password Incorrect", "Please check your password");
         } else {
           String signed = await FireAuth().signUp(
             email: controller[_emailControllerNumber].text + domain,
@@ -76,38 +77,43 @@ class _SignupPartState extends State<SignupPart> {
           if (signed == "true") {
             Student s = Student(
                 name: controller[_nameControllerNumber].text.toLowerCase(),
-                surname: controller[_surnameControllerNumber].text.toLowerCase(),
+                surname:
+                    controller[_surnameControllerNumber].text.toLowerCase(),
                 gpa: 0.00,
                 id: controller[_idControllerNumber].text,
-                email: controller[_emailControllerNumber].text.toLowerCase() + domain,
+                email: controller[_emailControllerNumber].text.toLowerCase() +
+                    domain,
                 faculty: faculty!.name,
                 department: department!.name,
                 semester: semester,
                 status: status,
-                wallet: 0.00);
+                wallet: 0.00,
+                admin: false,
+            );
             FireStore().addStudent(student: s);
             await setUpDate();
-            Navigator.pushNamedAndRemoveUntil(context, '/navigationBar', (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/navigationBar', (route) => false);
           } else {
             alertDialog(context, "Cannot Sign Up", signed);
           }
         }
       } else {
-        alertDialog(context, "Incomplete Information", "Student number must be 10 digits");
+        alertDialog(context, "Incomplete Information",
+            "Student number must be 10 digits");
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: width,
-      child: FutureBuilder(
-        future: faculties,
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            return ListView(
+    return FutureBuilder(
+      future: faculties,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ListView(
               shrinkWrap: true,
               controller: widget.sController,
               children: [
@@ -126,19 +132,18 @@ class _SignupPartState extends State<SignupPart> {
                         const SizedBox(
                           height: 24,
                         ),
-                        SizedBox(
-                          child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: 7,
-                            itemBuilder: (context, index) {
-                              if (index == 4) {
-                                return dropDownList(snapshot, fNodes);
-                              } else {
-                                return customTextFormField(context, controller, index, fNodes);
-                              }
-                            },
-                          ),
+                        ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 7,
+                          itemBuilder: (context, index) {
+                            if (index == 4) {
+                              return dropDownList(snapshot, fNodes);
+                            } else {
+                              return customTextFormField(
+                                  context, controller, index, fNodes);
+                            }
+                          },
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
@@ -148,16 +153,18 @@ class _SignupPartState extends State<SignupPart> {
                           child: const Text("Submit"),
                           style: ElevatedButton.styleFrom(
                             primary: rPrimaryRedColor,
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 20),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
                           ),
                         ),
                         TextButton(
                           onPressed: () {
-                            fNodes.forEach((element) {
+                            fNodes.map((element) {
                               element.unfocus();
                             });
-                            widget.changeSignIn('signIn');
+                            widget.changeLogIn('signIn');
                           },
                           child: const Text(
                             'Go back',
@@ -169,23 +176,24 @@ class _SignupPartState extends State<SignupPart> {
                   ),
                 ),
               ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
   Widget dropDownList(AsyncSnapshot snapshot, List<FocusNode> fNodes) {
-    List<DropdownMenuItem<int>> semsters = List.generate(
+    List<DropdownMenuItem<int>> semesters = List.generate(
       8,
       (index) => DropdownMenuItem(
         value: index + 1,
-        child: Text((index + 1).toString(), style: Theme.of(context).textTheme.headline4),
+        child: Text((index + 1).toString(),
+            style: Theme.of(context).textTheme.headline4),
       ),
     );
     List<DropdownMenuItem<String>> statuses = ["Graduate", "Undergraduate"]
@@ -203,7 +211,9 @@ class _SignupPartState extends State<SignupPart> {
           focusNode: fNodes[4],
           isExpanded: true,
           value: faculty,
-          items: snapshot.data.map<DropdownMenuItem<dynamic>>(dropDownBuilder).toList(),
+          items: snapshot.data
+              .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
+              .toList(),
           hint: Text(
             "Faculty",
             style: TextStyle(
@@ -214,7 +224,8 @@ class _SignupPartState extends State<SignupPart> {
             return snapshot.data.map<Widget>((dynamic item) {
               return Text(
                 item.name,
-                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                    fontFamily: 'Roboto', fontWeight: FontWeight.w500),
               );
             }).toList();
           },
@@ -239,7 +250,9 @@ class _SignupPartState extends State<SignupPart> {
           focusNode: fNodes[5],
           isExpanded: true,
           value: department,
-          items: departments.map<DropdownMenuItem<dynamic>>(dropDownBuilder).toList(),
+          items: departments
+              .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
+              .toList(),
           hint: Text(
             "Department",
             style: TextStyle(
@@ -250,7 +263,8 @@ class _SignupPartState extends State<SignupPart> {
             return departments.map<Widget>((dynamic item) {
               return Text(
                 item.name,
-                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                    fontFamily: 'Roboto', fontWeight: FontWeight.w500),
               );
             }).toList();
           },
@@ -273,7 +287,7 @@ class _SignupPartState extends State<SignupPart> {
           focusNode: fNodes[6],
           isExpanded: true,
           value: semester,
-          items: semsters,
+          items: semesters,
           hint: Text(
             "Semester",
             style: TextStyle(
@@ -282,10 +296,11 @@ class _SignupPartState extends State<SignupPart> {
             ),
           ),
           selectedItemBuilder: (BuildContext context) {
-            return semsters.map<Widget>((dynamic item) {
+            return semesters.map<Widget>((dynamic item) {
               return Text(
                 item.value.toString(),
-                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                    fontFamily: 'Roboto', fontWeight: FontWeight.w500),
               );
             }).toList();
           },
@@ -346,7 +361,10 @@ class _SignupPartState extends State<SignupPart> {
 
   Future<void> setUpDate() async {
     await Constants.setUpConstants(
-        controller[_emailControllerNumber].text.replaceAll(".", " ").toLowerCase(),
+        controller[_emailControllerNumber]
+            .text
+            .replaceAll(".", " ")
+            .toLowerCase(),
         controller[_emailControllerNumber].text + domain,
         FireAuth().currentUserID,
         rememberMe);
@@ -360,7 +378,8 @@ class _SignupPartState extends State<SignupPart> {
   }
 }
 
-Widget customTextFormField(context, controller, int index, List<FocusNode> fNodes) {
+Widget customTextFormField(
+    context, controller, int index, List<FocusNode> fNodes) {
   final Map properties = {
     0: {
       "fNode": fNodes[0],
@@ -424,7 +443,8 @@ Widget customTextFormField(context, controller, int index, List<FocusNode> fNode
         obscureText: index >= 5 ? true : false,
         inputFormatters: [
           properties[index]["Filter"],
-          properties[index]["maxLength"] ?? LengthLimitingTextInputFormatter(100),
+          properties[index]["maxLength"] ??
+              LengthLimitingTextInputFormatter(100),
         ],
         controller: properties[index]["controller"],
         decoration: InputDecoration(

@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:final_project/model/course.dart';
 
+import '../constants.dart';
 import '../model/department.dart';
 import '../model/faculty.dart';
-import '../constants.dart';
 import '../model/student.dart';
 import 'fireauth.dart';
 
 class FireStore {
-  static final FirebaseFirestore _firebaseFirestore =
-      FirebaseFirestore.instance;
+  static final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<List<Faculty>> getFaculties() async {
     List<Faculty> f = [];
@@ -20,7 +19,7 @@ class FireStore {
             name: element.id,
             departments: List.generate(
               element.get("Departments").length,
-              (index) => Department(name: element.get("Departments")[index]),
+              (index) => Department.withA(element.get("Departments")[index]),
             ),
           ),
         );
@@ -30,24 +29,43 @@ class FireStore {
   }
 
   Future getDepartments(String departmentName) {
-    return _firebaseFirestore
-        .collection('departments')
-        .doc(departmentName)
-        .get();
+    return _firebaseFirestore.collection('departments').doc(departmentName).get();
+  }
+
+  Future getAllDepartments() async {
+    List<Department> deps = [];
+    await _firebaseFirestore.collection("departments").get().then((e) {
+      for (var element in e.docs) {
+        deps.add(
+          Department.withA(element.id.toString()),
+        );
+      }
+    });
+    return deps;
   }
 
   Future getStudent() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .get();
+    return await _firebaseFirestore.collection("student").doc(Constants.uid).get();
   }
 
   getStudentStream() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .snapshots();
+    return await _firebaseFirestore.collection("student").doc(Constants.uid).snapshots();
+  }
+
+  getCourses() async {
+    return await _firebaseFirestore.collection('courses').get();
+  }
+
+  getCoursesToApprove() async {
+    return await _firebaseFirestore.collection('coursesToBeAdded').snapshots();
+  }
+
+  Future getCourseToApprove(String uid) async {
+    if (uid.isEmpty) {
+      return 0;
+    }
+    final course = await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
+    return course;
   }
 
   void addMoney(double newBalance) async {
@@ -71,7 +89,57 @@ class FireStore {
       'semester': '${student.semester}',
       'courses': student.courses,
       'wallet': student.wallet,
+      'admin': student.admin,
     });
+  }
+
+  Future<int> addCourseToBeApproved({required Course course}) async {
+    try {
+      Map<String, dynamic> courseToBeAdd = {
+        'code': course.code,
+        'name': course.name,
+        'credit': course.credit,
+        'ects': course.ects,
+        'department': course.department,
+        'locations': course.locations,
+        'labLocations': course.labLocations,
+        'instructors': course.instructors,
+        'sentBy': Constants.myName,
+        'time': DateTime.now().toString(),
+      };
+      String uid = Constants.myName + course.code + courseToBeAdd['time'];
+      _firebaseFirestore.collection('coursesToBeAdded').doc(uid).set(courseToBeAdd);
+      return 1;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<int> addCourse({required Course course}) async {
+    bool addible = true;
+    await _firebaseFirestore.collection('courses').get().then((e) => {
+          e.docs.forEach((element) {
+            if (element.id == course.code) {
+              addible = false;
+            }
+          })
+        });
+    if (addible) {
+      Map<String, dynamic> courseToBeAdd = {
+        'code': course.code,
+        'name': course.name,
+        'credit': course.credit,
+        'ects': course.ects,
+        'department': course.department,
+        'locations': course.locations,
+        'labLocations': course.labLocations,
+        'instructors': course.instructors,
+      };
+      _firebaseFirestore.collection('courses').doc(course.code).set(courseToBeAdd);
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   void createChatRoom(sendToName, chatRoomMap, sendToChatRoomMap) async {

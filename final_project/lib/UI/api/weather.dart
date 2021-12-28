@@ -5,8 +5,8 @@ class Weather extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Center(child: Text('Weather')),
+    return const Center(
+      child: Text("Weather"),
     );
   }
 }
