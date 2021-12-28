@@ -1,0 +1,1536 @@
+Index: final_project/lib/UI/api/weather.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'package:flutter/material.dart';\r\n\r\nimport '../../services/http.dart';\r\n\r\nclass Weather extends StatelessWidget {\r\n  const Weather({Key? key}) : super(key: key);\r\n\r\n  @override\r\n  Widget build(BuildContext context) {\r\n    return FutureBuilder(\r\n      future: Http().getWeatherByLocation(),\r\n      builder: (context, AsyncSnapshot snapshot) {\r\n        if (snapshot.hasData) {\r\n          return Center(\r\n            child: Card(\r\n              child: Column(\r\n                children: [\r\n                  Text(snapshot.data.toString()),\r\n                ],\r\n              ),\r\n            ),\r\n          );\r\n        } else {\r\n          return const Center(\r\n            child: CircularProgressIndicator(),\r\n          );\r\n        }\r\n      },\r\n    );\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/UI/api/weather.dart	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/lib/UI/api/weather.dart	(date 1640141593692)
+@@ -1,3 +1,4 @@
++import 'package:final_project/main.dart';
+ import 'package:flutter/material.dart';
+ 
+ import '../../services/http.dart';
+@@ -11,12 +12,62 @@
+       future: Http().getWeatherByLocation(),
+       builder: (context, AsyncSnapshot snapshot) {
+         if (snapshot.hasData) {
+-          return Center(
+-            child: Card(
+-              child: Column(
+-                children: [
+-                  Text(snapshot.data.toString()),
+-                ],
++          return SingleChildScrollView(
++            child: Center(
++              child: SizedBox(
++                width: 500,
++                height: 475,
++                child: Card(
++                  color: Colors.black87,
++                  child: Column(
++                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
++                    children: [
++                      Padding(
++                        padding: const EdgeInsets.all(20),
++                        child: Text(snapshot.data.locationName, style: TextStyle(fontFamily: "Font/Comfortaa-Regular.ttf", color: Colors.white,fontSize: 30 ),),
++                      ),
++                      SizedBox(height: 10),
++                      Text(snapshot.data.temperature.toString()+"°",style: Theme.of(context).textTheme.headline3),
++                      SizedBox(height: 10),
++                      Text("Feels Like: "+snapshot.data.feelsLike.toString()+"°",style: Theme.of(context).textTheme.headline2),
++                      SizedBox(height: 10),
++                      Row(
++                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
++                        children: [
++                          Text("Wind Speed",style: Theme.of(context).textTheme.headline2),
++                          Text("Humidity",style: Theme.of(context).textTheme.headline2)
++                        ],
++                      ),
++                      Row(
++                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
++                        children: [
++                          Text(snapshot.data.windSpeed.toString(),style: Theme.of(context).textTheme.headline2),
++                          Text(snapshot.data.humidity.toString()+"%",style: Theme.of(context).textTheme.headline2)
++                        ],
++                      ),
++                      SizedBox(height: 10),
++                      Row(
++                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
++
++                        children: [
++                          Text("min", style: Theme.of(context).textTheme.headline2),
++                          Text("max", style: Theme.of(context).textTheme.headline2),
++                        ],
++                      ),
++                      Row(
++                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
++                        children: [
++                          Text(snapshot.data.lowTemp.toString(), style: Theme.of(context).textTheme.headline1),
++                          Text(snapshot.data.highTemp.toString(), style: Theme.of(context).textTheme.headline1),
++                        ]
++                      ),
++                      SizedBox(height: 10),
++                      Text("Visibility: "+snapshot.data.visibility.toString(),style: Theme.of(context).textTheme.headline2),
++                      SizedBox(height: 10),
++                      Text("Pressure: "+snapshot.data.pressure.toString(),style: Theme.of(context).textTheme.headline2),
++                    ],
++                  ),
++                ),
+               ),
+             ),
+           );
+@@ -29,3 +80,4 @@
+     );
+   }
+ }
++
+Index: final_project/lib/services/http.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'dart:convert';\r\nimport 'package:http/http.dart' as http;\r\nimport 'package:geolocator/geolocator.dart';\r\n\r\n// Weather\r\nconst String openWeatherURL = 'api.openweathermap.org';\r\nconst String weatherURL = '/data/2.5/weather';\r\nconst String weatherApi = \"5a5fb541a4bd5913526ebccef75718ab\";\r\n\r\n//Currency\r\nconst String openExchangeURL = 'openexchangerates.org';\r\nconst String currencyURL = '/api/latest.json';\r\nconst String currencyURL1 = '/api/currencies.json';\r\nconst String currencyApi = \"779adfbc70d64a92a923fff4a52fa037\";\r\n\r\nclass Http {\r\n  Future getWeatherByLocation() async {\r\n    Position position = await Geolocator.getLastKnownPosition() ??\r\n        await Geolocator.getCurrentPosition(\r\n            desiredAccuracy: LocationAccuracy.low);\r\n\r\n    final queryParameters = {\r\n      'lat': position.latitude.toString(),\r\n      'lon': position.longitude.toString(),\r\n      'units': 'metric',\r\n      'appid': weatherApi,\r\n    };\r\n\r\n    final uri = Uri.https(openWeatherURL, weatherURL, queryParameters);\r\n\r\n    final response = await http.get(uri);\r\n\r\n    return jsonDecode(response.body);\r\n  }\r\n\r\n  Future getWeatherByCity(String city) async {\r\n    final queryParameters = {\r\n      'q': city,\r\n      'units': 'metric',\r\n      'appid': weatherApi,\r\n    };\r\n\r\n    final uri = Uri.https(openWeatherURL, weatherURL, queryParameters);\r\n\r\n    final response = await http.get(uri);\r\n\r\n    return jsonDecode(response.body);\r\n  }\r\n\r\n  getCurrency() async {\r\n    final queryParameters = {\r\n      \"app_id\": currencyApi,\r\n    };\r\n\r\n    final uri = Uri.https(openExchangeURL, currencyURL, queryParameters);\r\n\r\n    final response = await http.get(uri);\r\n\r\n    print((jsonDecode(response.body))[\"rates\"][\"TRY\"]);\r\n  }\r\n\r\n  Future getCurrencies() async {\r\n    final queryParameters = {\r\n      \"app_id\": currencyApi,\r\n    };\r\n\r\n    final uri = Uri.https(openExchangeURL, currencyURL1, queryParameters);\r\n\r\n    final response = await http.get(uri);\r\n\r\n    return jsonDecode(response.body);\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/services/http.dart	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/lib/services/http.dart	(date 1640125763304)
+@@ -1,7 +1,8 @@
+ import 'dart:convert';
++import 'package:final_project/main.dart';
+ import 'package:http/http.dart' as http;
+ import 'package:geolocator/geolocator.dart';
+-
++import '../model/weather.dart';
+ // Weather
+ const String openWeatherURL = 'api.openweathermap.org';
+ const String weatherURL = '/data/2.5/weather';
+@@ -15,6 +16,7 @@
+ 
+ class Http {
+   Future getWeatherByLocation() async {
++    Weather weather;
+     Position position = await Geolocator.getLastKnownPosition() ??
+         await Geolocator.getCurrentPosition(
+             desiredAccuracy: LocationAccuracy.low);
+@@ -30,7 +32,12 @@
+ 
+     final response = await http.get(uri);
+ 
+-    return jsonDecode(response.body);
++    final json = jsonDecode(response.body);
++    weather = Weather(humidity: json["main"]["humidity"], highTemp: (json["main"]["temp_max"]).toInt(), feelsLike: (json["main"]["feels_like"]).toInt(),
++        locationName: json["name"], lowTemp: (json["main"]["temp_min"]).toInt(), pressure: json["main"]["pressure"],
++        temperature: (json["main"]["temp"]).toInt(), visibility: json["visibility"], windSpeed: json["wind"]["speed"]);
++    return weather;
++
+   }
+ 
+   Future getWeatherByCity(String city) async {
+Index: final_project/pubspec.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>name: final_project\r\ndescription: A new Flutter project.\r\n\r\n# The following line prevents the package from being accidentally published to\r\n# pub.dev using `flutter pub publish`. This is preferred for private packages.\r\npublish_to: \"none\" # Remove this line if you wish to publish to pub.dev\r\n\r\n# The following defines the version and build number for your application.\r\n# A version number is three numbers separated by dots, like 1.2.43\r\n# followed by an optional build number separated by a +.\r\n# Both the version and the builder number may be overridden in flutter\r\n# build by specifying --build-name and --build-number, respectively.\r\n# In Android, build-name is used as versionName while build-number used as versionCode.\r\n# Read more about Android versioning at https://developer.android.com/studio/publish/versioning\r\n# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.\r\n# Read more about iOS versioning at\r\n# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html\r\nversion: 1.0.0+1\r\n\r\nenvironment:\r\n  sdk: \">=2.12.0 <3.0.0\"\r\n\r\n# Dependencies specify other packages that your package needs in order to work.\r\n# To automatically upgrade your package dependencies to the latest versions\r\n# consider running `flutter pub upgrade --major-versions`. Alternatively,\r\n# dependencies can be manually updated by changing the version numbers below to\r\n# the latest version available on pub.dev. To see which dependencies have newer\r\n# versions available, run `flutter pub outdated`.\r\ndependencies:\r\n  flutter:\r\n    sdk: flutter\r\n  getwidget: ^2.0.4\r\n\r\n  #Firebase dependencies\r\n  firebase_core: ^1.8.0\r\n  firebase_database: ^8.0.1\r\n  cloud_firestore: ^2.5.4\r\n\r\n  #Authenticaion\r\n  firebase_auth: ^3.1.4\r\n  shared_preferences: ^2.0.8\r\n\r\n  #Theme\r\n  flutter_bloc: ^8.0.0\r\n  hydrated_bloc: ^8.0.0\r\n  path_provider: ^2.0.8\r\n\r\n  #APIs\r\n  #Premission\r\n  permission_handler: ^8.3.0\r\n\r\n  #RequstingData\r\n  http: ^0.13.4\r\n\r\n  #Location\r\n  geolocator: ^8.0.1\r\n  google_maps_flutter: ^2.1.1\r\n\r\n\r\n\r\n  # The following adds the Cupertino Icons font to your application.\r\n  # Use with the CupertinoIcons class for iOS style icons.\r\n  cupertino_icons: ^1.0.2\r\n\r\ndev_dependencies:\r\n  flutter_test:\r\n    sdk: flutter\r\n\r\n  # The \"flutter_lints\" package below contains a set of recommended lints to\r\n  # encourage good coding practices. The lint set provided by the package is\r\n  # activated in the `analysis_options.yaml` file located at the root of your\r\n  # package. See that file for information about deactivating specific lint\r\n  # rules and activating additional ones.\r\n  flutter_lints: ^1.0.0\r\n  flutter_launcher_icons: ^0.9.0\r\n# For information on the generic Dart part of this file, see the\r\n# following page: https://dart.dev/tools/pub/pubspec\r\n\r\n# The following section is specific to Flutter.\r\nflutter:\r\n  # The following line ensures that the Material Icons font is\r\n  # included with your application, so that you can use the icons in\r\n  # the material Icons class.\r\n  uses-material-design: true\r\n\r\n  # To add assets to your application, add an assets section, like this:\r\n  assets:\r\n    - images/\r\n\r\n  # An image asset can refer to one or more resolution-specific \"variants\", see\r\n  # https://flutter.dev/assets-and-images/#resolution-aware.\r\n\r\n  # For details regarding adding assets from package dependencies, see\r\n  # https://flutter.dev/assets-and-images/#from-packages\r\n\r\n  # To add custom fonts to your application, add a fonts section here,\r\n  # in this \"flutter\" section. Each entry in this list should have a\r\n  # \"family\" key with the font family name, and a \"fonts\" key with a\r\n  # list giving the asset and other descriptors for the font. For\r\n  # example:\r\n  # fonts:\r\n  #   - family: Schyler\r\n  #     fonts:\r\n  #       - asset: fonts/Schyler-Regular.ttf\r\n  #       - asset: fonts/Schyler-Italic.ttf\r\n  #         style: italic\r\n  #   - family: Trajan Pro\r\n  #     fonts:\r\n  #       - asset: fonts/TrajanPro.ttf\r\n  #       - asset: fonts/TrajanPro_Bold.ttf\r\n  #         weight: 700\r\n  #\r\n  # For details regarding fonts from package dependencies,\r\n  # see https://flutter.dev/custom-fonts/#from-packages\r\nflutter_icons:\r\n  image_path: \"images/transparentBackgroundLogo.png\"\r\n  android: true\r\n  ios: true\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/pubspec.yaml	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/pubspec.yaml	(date 1640140638027)
+@@ -97,19 +97,26 @@
+   # in this "flutter" section. Each entry in this list should have a
+   # "family" key with the font family name, and a "fonts" key with a
+   # list giving the asset and other descriptors for the font. For
+-  # example:
+-  # fonts:
+-  #   - family: Schyler
+-  #     fonts:
+-  #       - asset: fonts/Schyler-Regular.ttf
+-  #       - asset: fonts/Schyler-Italic.ttf
+-  #         style: italic
+-  #   - family: Trajan Pro
+-  #     fonts:
+-  #       - asset: fonts/TrajanPro.ttf
+-  #       - asset: fonts/TrajanPro_Bold.ttf
+-  #         weight: 700
+-  #
++    # example:
++
++    - family: Comfortaa
++      fonts:
++      - asset: Font/Comfortaa-Bold.ttf
++      - asset: Font/Comfortaa-Light.ttf
++      - asset: Font/Comfortaa-SemiBold.ttf
++      - asset: Font/Comfortaa-Regular.ttf
++
++    - family: Schyler
++      fonts:
++        - asset: fonts/Schyler-Regular.ttf
++        - asset: fonts/Schyler-Italic.ttf
++          style: italic
++    - family: Trajan Pro
++      fonts:
++        - asset: fonts/TrajanPro.ttf
++        - asset: fonts/TrajanPro_Bold.ttf
++          weight: 700
++
+   # For details regarding fonts from package dependencies,
+   # see https://flutter.dev/custom-fonts/#from-packages
+ flutter_icons:
+Index: final_project/lib/UI/api/apipage.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'package:flutter/cupertino.dart';\r\nimport 'package:flutter/material.dart';\r\nimport 'package:permission_handler/permission_handler.dart';\r\n\r\nimport '/UI/api/currency.dart';\r\nimport '/UI/api/location.dart';\r\nimport '/UI/api/weather.dart';\r\nimport '../../widgets/drawer.dart';\r\n\r\nclass ApiPage extends StatefulWidget {\r\n  const ApiPage({Key? key}) : super(key: key);\r\n\r\n  @override\r\n  _ApiPageState createState() => _ApiPageState();\r\n}\r\n\r\nclass _ApiPageState extends State<ApiPage> {\r\n  int currentInd = 1;\r\n  final List<Widget> _apipagenames = <Widget>[\r\n    const Text('University Location'),\r\n    const Text('Currency Exchange'),\r\n    const Text('Kayseri Weather'),\r\n  ];\r\n\r\n  void getPermissions() async {\r\n    await Permission.location.request();\r\n  }\r\n\r\n  @override\r\n  void initState() {\r\n    getPermissions();\r\n    super.initState();\r\n  }\r\n\r\n  @override\r\n  Widget build(BuildContext context) {\r\n    return DefaultTabController(\r\n      length: 3,\r\n      child: Scaffold(\r\n        drawer: customDrawer(context),\r\n        appBar: AppBar(\r\n          title: _apipagenames.elementAt(currentInd),\r\n          centerTitle: true,\r\n          bottom: TabBar(\r\n              labelColor: Theme.of(context).hoverColor,\r\n              indicatorColor: Theme.of(context).hoverColor,\r\n              unselectedLabelColor: Theme.of(context).disabledColor,\r\n              tabs: const [\r\n                Tab(icon: Icon(Icons.location_on_rounded)),\r\n                Tab(icon: Icon(Icons.attach_money)),\r\n                Tab(icon: Icon(Icons.cloud)),\r\n              ]),\r\n        ),\r\n        body: const TabBarView(children: [\r\n          Location(),\r\n          Currency(),\r\n          Weather(),\r\n        ]),\r\n      ),\r\n    );\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/UI/api/apipage.dart	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/lib/UI/api/apipage.dart	(date 1640124357689)
+@@ -35,7 +35,7 @@
+   @override
+   Widget build(BuildContext context) {
+     return DefaultTabController(
+-      length: 3,
++      length: 2,
+       child: Scaffold(
+         drawer: customDrawer(context),
+         appBar: AppBar(
+@@ -46,13 +46,13 @@
+               indicatorColor: Theme.of(context).hoverColor,
+               unselectedLabelColor: Theme.of(context).disabledColor,
+               tabs: const [
+-                Tab(icon: Icon(Icons.location_on_rounded)),
++                //Tab(icon: Icon(Icons.location_on_rounded)),
+                 Tab(icon: Icon(Icons.attach_money)),
+                 Tab(icon: Icon(Icons.cloud)),
+               ]),
+         ),
+         body: const TabBarView(children: [
+-          Location(),
++         // Location(),
+           Currency(),
+           Weather(),
+         ]),
+Index: .idea/libraries/Dart_SDK.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"libraryTable\">\r\n  <library name=\"Dart SDK\">\r\n    <CLASSES>\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/async\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/cli\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/collection\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/convert\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/core\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/developer\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/ffi\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/html\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/indexed_db\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/io\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/isolate\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/js\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/js_util\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/math\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/mirrors\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/svg\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/typed_data\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/web_audio\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/web_gl\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/dart-sdk/lib/web_sql\" />\r\n    </CLASSES>\r\n    <JAVADOC />\r\n    <SOURCES />\r\n  </library>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Dart_SDK.xml	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ .idea/libraries/Dart_SDK.xml	(date 1640110863368)
+@@ -1,26 +1,26 @@
+ <component name="libraryTable">
+   <library name="Dart SDK">
+     <CLASSES>
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/async" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/cli" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/collection" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/convert" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/core" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/developer" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/ffi" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/html" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/indexed_db" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/io" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/isolate" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/js" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/js_util" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/math" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/mirrors" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/svg" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/typed_data" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/web_audio" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/web_gl" />
+-      <root url="file://E:/Programming/flutter/bin/cache/dart-sdk/lib/web_sql" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/async" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/cli" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/collection" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/convert" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/core" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/developer" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/ffi" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/html" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/indexed_db" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/io" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/isolate" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/js" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/js_util" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/math" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/mirrors" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/svg" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/typed_data" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/web_audio" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/web_gl" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/dart-sdk/lib/web_sql" />
+     </CLASSES>
+     <JAVADOC />
+     <SOURCES />
+Index: final_project/lib/theme/theme.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'package:flutter/material.dart';\r\n\r\nThemeData lightTheme = ThemeData(\r\n  primarySwatch: const MaterialColor(0xffff0000, <int, Color>{\r\n    50: Color(0xfff0f0f0),\r\n    100: Color(0xffe6e6e6),\r\n    200: Color(0xffdcdcdc),\r\n    300: Color(0xffd2d2d2),\r\n    400: Color(0xffc8c8c8),\r\n    500: Color(0xffbebebe),\r\n    600: Color(0xffb4b4b4),\r\n    700: Color(0xffaaaaaa),\r\n    800: Color(0xffa0a0a0),\r\n    900: Color(0xff969696),\r\n  }),\r\n  floatingActionButtonTheme: const FloatingActionButtonThemeData(\r\n    backgroundColor: Color(0xFFD00001),\r\n  ),\r\n  iconTheme: const IconThemeData(\r\n    color: Color(0xFF6C6969),\r\n  ),\r\n  bottomAppBarTheme: const BottomAppBarTheme(\r\n    color: Colors.white,\r\n  ),\r\n  appBarTheme: const AppBarTheme(\r\n    titleTextStyle: TextStyle(\r\n      fontSize: 22,\r\n      fontWeight: FontWeight.w600,\r\n      color: Colors.black,\r\n    ),\r\n    iconTheme: IconThemeData(\r\n      color: Colors.black,\r\n    ),\r\n    backgroundColor: Colors.white,\r\n  ),\r\n  scaffoldBackgroundColor: Colors.white,\r\n  disabledColor: const Color(0xff969696),\r\n  shadowColor: const Color(0xff323232),\r\n  hoverColor: const Color(0xff0a0a0a),\r\n  inputDecorationTheme: const InputDecorationTheme(\r\n    enabledBorder: UnderlineInputBorder(\r\n      borderSide: BorderSide(\r\n        color: Color(0xFFD00001),\r\n      ),\r\n    ),\r\n    focusedBorder: UnderlineInputBorder(\r\n      borderSide: BorderSide(\r\n        color: Color(0xFFD00001),\r\n      ),\r\n    ),\r\n  ),\r\n  elevatedButtonTheme: ElevatedButtonThemeData(\r\n    style: ButtonStyle(\r\n      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),\r\n    ),\r\n  ),\r\n  checkboxTheme: CheckboxThemeData(\r\n    checkColor: MaterialStateProperty.all<Color>(Colors.white),\r\n  ),\r\n  textTheme: const TextTheme(\r\n    headline1: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.black,\r\n        fontSize: 16),\r\n    headline2: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.black,\r\n        fontSize: 18),\r\n    headline3: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.black,\r\n        fontSize: 30),\r\n    headline4: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.white,\r\n        fontSize: 20),\r\n    bodyText1: TextStyle(\r\n      fontSize: 28,\r\n      fontWeight: FontWeight.bold,\r\n      color: Color(0xFFD00001),\r\n    ),\r\n  ),\r\n);\r\n\r\nThemeData darkTheme = ThemeData(\r\n  primarySwatch: const MaterialColor(0xffff0000, <int, Color>{\r\n    50: Color(0xff646464),\r\n    100: Color(0xff5a5a5a),\r\n    200: Color(0xff505050),\r\n    300: Color(0xff464646),\r\n    400: Color(0xff323232),\r\n    500: Color(0xff282828),\r\n    600: Color(0xff1e1e1e),\r\n    700: Color(0xff141414),\r\n    800: Color(0xff0a0a0a),\r\n    900: Color(0xff000000),\r\n  }),\r\n  cardColor: const Color(0xff424242),\r\n  floatingActionButtonTheme: const FloatingActionButtonThemeData(\r\n    backgroundColor: Color(0xFFD00001),\r\n  ),\r\n  iconTheme: const IconThemeData(\r\n    color: Color(0xFFD7D6D6),\r\n  ),\r\n  bottomAppBarTheme: const BottomAppBarTheme(\r\n    color: Color(0xF3000000),\r\n  ),\r\n  appBarTheme: const AppBarTheme(\r\n    titleTextStyle: TextStyle(\r\n      fontSize: 22,\r\n      fontWeight: FontWeight.w600,\r\n      color: Colors.white,\r\n    ),\r\n    iconTheme: IconThemeData(\r\n      color: Colors.white,\r\n    ),\r\n    backgroundColor: Color(0x95000000),\r\n  ),\r\n  scaffoldBackgroundColor: const Color(0xFF303030),\r\n  disabledColor: const Color(0xff646464),\r\n  shadowColor: Color(0x95000000), // container\r\n  hoverColor: Colors.white,\r\n  canvasColor: const Color(0xff303030),\r\n  hintColor: Colors.grey,\r\n  inputDecorationTheme: const InputDecorationTheme(\r\n    fillColor: Colors.white,\r\n    labelStyle: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.grey,\r\n        fontSize: 15),\r\n    enabledBorder: UnderlineInputBorder(\r\n      borderSide: BorderSide(\r\n        color: Color(0xFFD00001),\r\n      ),\r\n    ),\r\n    focusedBorder: UnderlineInputBorder(\r\n      borderSide: BorderSide(\r\n        color: Color(0xFFD00001),\r\n      ),\r\n    ),\r\n  ),\r\n  elevatedButtonTheme: ElevatedButtonThemeData(\r\n    style: ButtonStyle(\r\n      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),\r\n    ),\r\n  ),\r\n  checkboxTheme: CheckboxThemeData(\r\n    fillColor: MaterialStateProperty.all<Color>(const Color(0xffc7c7c7)),\r\n    checkColor: MaterialStateProperty.all<Color>(Colors.white),\r\n  ),\r\n  textTheme: const TextTheme(\r\n    headline1: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.white,\r\n        fontSize: 16),\r\n    headline2: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.white,\r\n        fontSize: 18),\r\n    headline3: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.white,\r\n        fontSize: 30),\r\n    headline4: TextStyle(\r\n        fontWeight: FontWeight.normal,\r\n        letterSpacing: 0.5,\r\n        color: Colors.white,\r\n        fontSize: 18),\r\n    bodyText1: TextStyle(\r\n      fontSize: 28,\r\n      fontWeight: FontWeight.bold,\r\n      color: Color(0xFFD00001),\r\n    ),\r\n  ),\r\n);\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/theme/theme.dart	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/lib/theme/theme.dart	(date 1640139165861)
+@@ -1,3 +1,5 @@
++import 'dart:ui';
++
+ import 'package:flutter/material.dart';
+ 
+ ThemeData lightTheme = ThemeData(
+@@ -153,6 +155,7 @@
+     fillColor: MaterialStateProperty.all<Color>(const Color(0xffc7c7c7)),
+     checkColor: MaterialStateProperty.all<Color>(Colors.white),
+   ),
++
+   textTheme: const TextTheme(
+     headline1: TextStyle(
+         fontWeight: FontWeight.normal,
+@@ -181,3 +184,13 @@
+     ),
+   ),
+ );
++/*ThemeData weather = ThemeData(
++  textTheme: const TextTheme(
++    headline1: TextStyle(
++      fontWeight: FontWeight.normal,
++      letterSpacing: 0.5,
++      color:
++    ),
++  ),
++),
++*/
+\ No newline at end of file
+Index: final_project/lib/model/weather.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/model/weather.dart	(date 1640125597790)
++++ final_project/lib/model/weather.dart	(date 1640125597790)
+@@ -0,0 +1,23 @@
++class Weather {
++  final int humidity;
++  final int temperature;
++  final int highTemp;
++  final int lowTemp;
++  final int visibility;
++  final int pressure;
++  final int feelsLike;
++  final double windSpeed;
++  final String locationName;
++
++  Weather({
++    required this.humidity,
++    required this.temperature,
++    required this.highTemp,
++    required this.lowTemp,
++    required this.visibility,
++    required this.pressure,
++    required this.feelsLike,
++    required this.locationName,
++    required this.windSpeed,
++});
++}
+\ No newline at end of file
+Index: final_project/lib/UI/canteen/schedule.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'package:flutter/material.dart';\r\n\r\nclass Schedule extends StatefulWidget {\r\n  const Schedule({Key? key}) : super(key: key);\r\n\r\n  @override\r\n  _ScheduleState createState() => _ScheduleState();\r\n}\r\n\r\nclass _ScheduleState extends State<Schedule> {\r\n  @override\r\n  Widget build(BuildContext context) {\r\n    return Center(\r\n      child: Column(\r\n        mainAxisAlignment: MainAxisAlignment.center,\r\n        children: const [\r\n          Text('Monday,December 10'),\r\n          Text('Main Dish: Lahmacun'),\r\n          Text('Second Dish: Iskembe Corbasi'),\r\n          Text('Salad: Salad'),\r\n          Text('Fruit: Apple')\r\n        ],\r\n      ),\r\n    );\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/UI/canteen/schedule.dart	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/lib/UI/canteen/schedule.dart	(date 1640122737473)
+@@ -13,12 +13,12 @@
+     return Center(
+       child: Column(
+         mainAxisAlignment: MainAxisAlignment.center,
+-        children: const [
+-          Text('Monday,December 10'),
+-          Text('Main Dish: Lahmacun'),
+-          Text('Second Dish: Iskembe Corbasi'),
+-          Text('Salad: Salad'),
+-          Text('Fruit: Apple')
++        children:  [
++          Text('Monday,December 10',style: Theme.of(context).textTheme.headline2),
++          Text('Main Dish: Lahmacun',style: Theme.of(context).textTheme.headline2),
++          Text('Second Dish: Iskembe Corbasi',style: Theme.of(context).textTheme.headline2),
++          Text('Salad: Salad',style: Theme.of(context).textTheme.headline2),
++          Text('Fruit: Apple',style: Theme.of(context).textTheme.headline2)
+         ],
+       ),
+     );
+Index: final_project/lib/UI/api/location.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'dart:async';\r\n\r\nimport 'package:flutter/material.dart';\r\nimport 'package:google_maps_flutter/google_maps_flutter.dart';\r\n\r\nclass Location extends StatefulWidget {\r\n  const Location({Key? key}) : super(key: key);\r\n  @override\r\n  State<Location> createState() => LocationState();\r\n}\r\n\r\nclass LocationState extends State<Location> {\r\n  final Completer<GoogleMapController> _controller = Completer();\r\n\r\n  static const CameraPosition _kGooglePlex = CameraPosition(\r\n    target: LatLng(37.42796133580664, -122.085749655962),\r\n    zoom: 14.4746,\r\n  );\r\n\r\n  static const CameraPosition _kLake = CameraPosition(\r\n      bearing: 192.8334901395799,\r\n      target: LatLng(37.43296265331129, -122.08832357078792),\r\n      tilt: 59.440717697143555,\r\n      zoom: 19.151926040649414);\r\n\r\n  @override\r\n  Widget build(BuildContext context) {\r\n    return Scaffold(\r\n      body: GoogleMap(\r\n        mapType: MapType.hybrid,\r\n        initialCameraPosition: _kGooglePlex,\r\n        onMapCreated: (GoogleMapController controller) {\r\n          _controller.complete(controller);\r\n        },\r\n      ),\r\n      floatingActionButton: FloatingActionButton.extended(\r\n        onPressed: _goToTheLake,\r\n        label: const Text('To the lake!'),\r\n        icon: const Icon(Icons.directions_boat),\r\n      ),\r\n    );\r\n  }\r\n\r\n  Future<void> _goToTheLake() async {\r\n    final GoogleMapController controller = await _controller.future;\r\n    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- final_project/lib/UI/api/location.dart	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ final_project/lib/UI/api/location.dart	(date 1640124212116)
+@@ -1,48 +1,48 @@
+-import 'dart:async';
+-
+-import 'package:flutter/material.dart';
+-import 'package:google_maps_flutter/google_maps_flutter.dart';
+-
+-class Location extends StatefulWidget {
+-  const Location({Key? key}) : super(key: key);
+-  @override
+-  State<Location> createState() => LocationState();
+-}
+-
+-class LocationState extends State<Location> {
+-  final Completer<GoogleMapController> _controller = Completer();
+-
+-  static const CameraPosition _kGooglePlex = CameraPosition(
+-    target: LatLng(37.42796133580664, -122.085749655962),
+-    zoom: 14.4746,
+-  );
+-
+-  static const CameraPosition _kLake = CameraPosition(
+-      bearing: 192.8334901395799,
+-      target: LatLng(37.43296265331129, -122.08832357078792),
+-      tilt: 59.440717697143555,
+-      zoom: 19.151926040649414);
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Scaffold(
+-      body: GoogleMap(
+-        mapType: MapType.hybrid,
+-        initialCameraPosition: _kGooglePlex,
+-        onMapCreated: (GoogleMapController controller) {
+-          _controller.complete(controller);
+-        },
+-      ),
+-      floatingActionButton: FloatingActionButton.extended(
+-        onPressed: _goToTheLake,
+-        label: const Text('To the lake!'),
+-        icon: const Icon(Icons.directions_boat),
+-      ),
+-    );
+-  }
+-
+-  Future<void> _goToTheLake() async {
+-    final GoogleMapController controller = await _controller.future;
+-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+-  }
+-}
++// import 'dart:async';
++//
++// import 'package:flutter/material.dart';
++// import 'package:google_maps_flutter/google_maps_flutter.dart';
++//
++// class Location extends StatefulWidget {
++//   const Location({Key? key}) : super(key: key);
++//   @override
++//   State<Location> createState() => LocationState();
++// }
++//
++// class LocationState extends State<Location> {
++//   final Completer<GoogleMapController> _controller = Completer();
++//
++//   static const CameraPosition _kGooglePlex = CameraPosition(
++//     target: LatLng(37.42796133580664, -122.085749655962),
++//     zoom: 14.4746,
++//   );
++//
++//   static const CameraPosition _kLake = CameraPosition(
++//       bearing: 192.8334901395799,
++//       target: LatLng(37.43296265331129, -122.08832357078792),
++//       tilt: 59.440717697143555,
++//       zoom: 19.151926040649414);
++//
++//   @override
++//   Widget build(BuildContext context) {
++//     return Scaffold(
++//     /*  body: GoogleMap(
++//         mapType: MapType.hybrid,
++//         initialCameraPosition: _kGooglePlex,
++//         onMapCreated: (GoogleMapController controller) {
++//           _controller.complete(controller);
++//         },
++//       ),
++//       floatingActionButton: FloatingActionButton.extended(
++//         onPressed: _goToTheLake,
++//         label: const Text('To the lake!'),
++//         icon: const Icon(Icons.directions_boat),
++//       ),*/
++//     );
++//   }
++//
++//   Future<void> _goToTheLake() async {
++//     final GoogleMapController controller = await _controller.future;
++//     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
++//   }
++// }
+Index: .idea/libraries/Dart_Packages.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"libraryTable\">\r\n  <library name=\"Dart Packages\" type=\"DartPackagesLibraryType\">\r\n    <properties>\r\n      <option name=\"packageNameToDirsMap\">\r\n        <entry key=\"archive\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.6/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"args\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"async\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"bloc\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"boolean_selector\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"characters\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"charcode\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"clock\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"cloud_firestore\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"cloud_firestore_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"cloud_firestore_web\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"collection\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"crypto\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"cupertino_icons\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"fake_async\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"ffi\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"file\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_auth\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.3.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_auth_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.1.9/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_auth_web\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-3.3.5/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_core\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_core_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_core_web\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_database\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.2.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_database_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_platform_interface-0.1.0+4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"firebase_database_web\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.1.2+1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/packages/flutter/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter_bloc\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter_launcher_icons\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter_lints\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter_plugin_android_lifecycle\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter_test\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/packages/flutter_test/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"flutter_web_plugins\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/packages/flutter_web_plugins/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"geolocator\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"geolocator_android\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"geolocator_apple\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.0.0+2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"geolocator_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-3.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"geolocator_web\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.1.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"getwidget\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/getwidget-2.0.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"google_maps_flutter\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"google_maps_flutter_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.3/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"hive\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.0.5/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"http\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"http_parser\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"hydrated_bloc\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hydrated_bloc-8.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"image\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"intl\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"js\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"lints\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"matcher\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"meta\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"nested\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.8/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider_android\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.9/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider_ios\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.7/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider_linux\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider_macos\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"path_provider_windows\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"permission_handler\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"permission_handler_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"petitparser\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"platform\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"plugin_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"process\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"provider\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_android\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_ios\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.0.8/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_linux\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.3/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_macos\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_platform_interface\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_web\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"shared_preferences_windows\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.3/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"sky_engine\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/bin/cache/pkg/sky_engine/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"source_span\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"stack_trace\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"stream_channel\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"stream_transform\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"string_scanner\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"synchronized\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"term_glyph\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"test_api\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"typed_data\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"vector_math\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"win32\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.3.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"xdg_directories\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"xml\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"yaml\">\r\n          <value>\r\n            <list>\r\n              <option value=\"E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib\" />\r\n            </list>\r\n          </value>\r\n        </entry>\r\n      </option>\r\n    </properties>\r\n    <CLASSES>\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.6/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.3.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.1.9/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-3.3.5/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.2.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_platform_interface-0.1.0+4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.1.2+1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.0.0+2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-3.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.1.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/getwidget-2.0.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.3/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.0.5/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hydrated_bloc-8.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.8/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.9/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.7/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.0.8/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.3/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.3/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.3.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/bin/cache/pkg/sky_engine/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/packages/flutter/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/packages/flutter_test/lib\" />\r\n      <root url=\"file://E:/Programming/flutter/packages/flutter_web_plugins/lib\" />\r\n    </CLASSES>\r\n    <JAVADOC />\r\n    <SOURCES />\r\n  </library>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Dart_Packages.xml	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ .idea/libraries/Dart_Packages.xml	(date 1640110939613)
+@@ -5,726 +5,726 @@
+         <entry key="archive">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.6/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.6/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="args">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="async">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="bloc">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="boolean_selector">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="characters">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="charcode">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="clock">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="cloud_firestore">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="cloud_firestore_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="cloud_firestore_web">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="collection">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="crypto">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="cupertino_icons">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="fake_async">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="ffi">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="file">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_auth">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.3.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.3.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_auth_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.1.9/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.1.9/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_auth_web">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-3.3.5/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-3.3.5/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_core">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_core_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_core_web">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_database">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.2.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.2.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_database_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_platform_interface-0.1.0+4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_platform_interface-0.1.0+4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="firebase_database_web">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.1.2+1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.1.2+1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/packages/flutter/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/packages/flutter/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter_bloc">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter_launcher_icons">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter_lints">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter_plugin_android_lifecycle">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter_test">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/packages/flutter_test/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/packages/flutter_test/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="flutter_web_plugins">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/packages/flutter_web_plugins/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/packages/flutter_web_plugins/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="geolocator">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="geolocator_android">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="geolocator_apple">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.0.0+2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.0.0+2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="geolocator_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-3.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-3.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="geolocator_web">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.1.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.1.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="getwidget">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/getwidget-2.0.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/getwidget-2.0.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="google_maps_flutter">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="google_maps_flutter_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.3/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.3/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="hive">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.0.5/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.0.5/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="http">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="http_parser">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="hydrated_bloc">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hydrated_bloc-8.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/hydrated_bloc-8.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="image">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="intl">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="js">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="lints">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="matcher">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="meta">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="nested">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.8/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.8/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider_android">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.9/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.9/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider_ios">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.7/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.7/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider_linux">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider_macos">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="path_provider_windows">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="permission_handler">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="permission_handler_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="petitparser">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="platform">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="plugin_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="process">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="provider">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_android">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_ios">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.0.8/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.0.8/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_linux">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.3/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.3/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_macos">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_platform_interface">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_web">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="shared_preferences_windows">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.3/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.3/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="sky_engine">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/bin/cache/pkg/sky_engine/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/bin/cache/pkg/sky_engine/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="source_span">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="stack_trace">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="stream_channel">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="stream_transform">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="string_scanner">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="synchronized">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="term_glyph">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="test_api">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="typed_data">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="vector_math">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="win32">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.3.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.3.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="xdg_directories">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="xml">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib" />
+             </list>
+           </value>
+         </entry>
+         <entry key="yaml">
+           <value>
+             <list>
+-              <option value="E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib" />
++              <option value="$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib" />
+             </list>
+           </value>
+         </entry>
+       </option>
+     </properties>
+     <CLASSES>
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.6/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.3.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.1.9/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-3.3.5/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.2.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_platform_interface-0.1.0+4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.1.2+1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.0.0+2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-3.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.1.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/getwidget-2.0.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.3/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.0.5/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/hydrated_bloc-8.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.8/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.9/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.7/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.0.8/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.3/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.3/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.3.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib" />
+-      <root url="file://E:/Programming/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib" />
+-      <root url="file://E:/Programming/flutter/bin/cache/pkg/sky_engine/lib" />
+-      <root url="file://E:/Programming/flutter/packages/flutter/lib" />
+-      <root url="file://E:/Programming/flutter/packages/flutter_test/lib" />
+-      <root url="file://E:/Programming/flutter/packages/flutter_web_plugins/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.6/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.5.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.4.10/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.5/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.3.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.1.9/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-3.3.5/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.10.6/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.2.3/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.5.3/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.2.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_platform_interface-0.1.0+4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.1.2+1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.9.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_apple-2.0.0+2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-3.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.1.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/getwidget-2.0.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.3/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.0.5/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/hydrated_bloc-8.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.8/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.9/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.7/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.7.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.4.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.0.8/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.3/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.3/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.3.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/bin/cache/pkg/sky_engine/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/packages/flutter/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/packages/flutter_test/lib" />
++      <root url="file://$PROJECT_DIR$/../../../flutter/flutter/packages/flutter_web_plugins/lib" />
+     </CLASSES>
+     <JAVADOC />
+     <SOURCES />
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"NONE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"0b42adc5-c639-4c84-844e-dbd7eb6c7070\" name=\"Default Changelist\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/ios/Runner/AppDelegate.swift\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/ios/Runner/AppDelegate.swift\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/lib/UI/api/currency.dart\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/lib/UI/api/currency.dart\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/lib/UI/api/location.dart\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/lib/UI/api/location.dart\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/lib/UI/api/weather.dart\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/lib/UI/api/weather.dart\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/lib/services/http.dart\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/lib/services/http.dart\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/pubspec.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/pubspec.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/final_project/pubspec.yaml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/final_project/pubspec.yaml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"device_and_snapshot_combo_box_target[C:\\Users\\Hammam\\.android\\avd\\Nexus_6_API_28_9.avd]\" />\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Dart File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"20QBUmFsGfSsfWe9Ld9yhXLYqZh\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"Git.Branch.Popup.ShowAllRemotes\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"dart.analysis.tool.window.visible\" value=\"false\" />\r\n    <property name=\"io.flutter.reload.alreadyRun\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\r\n    <property name=\"project.structure.last.edited\" value=\"Modules\" />\r\n    <property name=\"project.structure.proportion\" value=\"0.15\" />\r\n    <property name=\"project.structure.side.proportion\" value=\"0.2\" />\r\n    <property name=\"run.code.analysis.last.selected.profile\" value=\"pProject Default\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"preferences.pluginManager\" />\r\n    <property name=\"show.migrate.to.gradle.popup\" value=\"false\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Hammam\\COMP205-repo\\final_project\\lib\\UI\\canteen\" />\r\n      <recent name=\"C:\\Users\\Hammam\\COMP205-repo\\final_project\\lib\\theme\" />\r\n      <recent name=\"C:\\Users\\Hammam\\COMP205-repo\\final_project\\lib\\UI\\chat\" />\r\n      <recent name=\"C:\\Users\\Hammam\\COMP205-repo\\final_project\\lib\\UI\\authenticate\" />\r\n      <recent name=\"C:\\Users\\Hammam\\COMP205-repo\\final_project\\lib\\UI\\yemekhane\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"main.dart\" type=\"FlutterRunConfigurationType\" factoryName=\"Flutter\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"filePath\" value=\"$PROJECT_DIR$/final_project/lib/main.dart\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Flutter.main.dart\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"0b42adc5-c639-4c84-844e-dbd7eb6c7070\" name=\"Default Changelist\" comment=\"\" />\r\n      <created>1635966968934</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1635966968934</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision 76433897d3392a7db582dfdea6ef2cc9af2efa64)
++++ .idea/workspace.xml	(date 1640141155579)
+@@ -3,18 +3,41 @@
+   <component name="AutoImportSettings">
+     <option name="autoReloadType" value="NONE" />
+   </component>
++  <component name="BranchesTreeState">
++    <expand>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++    </expand>
++    <select />
++  </component>
+   <component name="ChangeListManager">
+     <list default="true" id="0b42adc5-c639-4c84-844e-dbd7eb6c7070" name="Default Changelist" comment="">
++      <change afterPath="$PROJECT_DIR$/final_project/Font/Comfortaa-Bold.ttf" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/final_project/Font/Comfortaa-Light.ttf" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/final_project/Font/Comfortaa-Medium.ttf" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/final_project/Font/Comfortaa-Regular.ttf" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/final_project/Font/Comfortaa-SemiBold.ttf" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/final_project/lib/model/weather.dart" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/final_project/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/ios/Runner/AppDelegate.swift" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/apipage.dart" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/currency.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/currency.dart" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/location.dart" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/api/weather.dart" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/final_project/lib/UI/canteen/schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/UI/canteen/schedule.dart" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/final_project/lib/services/http.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/services/http.dart" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/final_project/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/final_project/lib/theme/theme.dart" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/lib/theme/theme.dart" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/final_project/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/final_project/pubspec.yaml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -22,7 +45,6 @@
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Hammam\.android\avd\Nexus_6_API_28_9.avd]" />
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+@@ -59,21 +81,21 @@
+     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+     <property name="dart.analysis.tool.window.visible" value="false" />
+     <property name="io.flutter.reload.alreadyRun" value="true" />
+-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
++    <property name="last_opened_file_path" value="$PROJECT_DIR$/../AndroidStudioProjects/comp205lab7" />
+     <property name="project.structure.last.edited" value="Modules" />
+     <property name="project.structure.proportion" value="0.15" />
+     <property name="project.structure.side.proportion" value="0.2" />
+     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
++    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+     <property name="show.migrate.to.gradle.popup" value="false" />
+   </component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
++      <recent name="C:\Users\Ahmad\COMP205-repo\final_project\Font" />
+       <recent name="C:\Users\Hammam\COMP205-repo\final_project\lib\UI\canteen" />
+       <recent name="C:\Users\Hammam\COMP205-repo\final_project\lib\theme" />
+       <recent name="C:\Users\Hammam\COMP205-repo\final_project\lib\UI\chat" />
+       <recent name="C:\Users\Hammam\COMP205-repo\final_project\lib\UI\authenticate" />
+-      <recent name="C:\Users\Hammam\COMP205-repo\final_project\lib\UI\yemekhane" />
+     </key>
+   </component>
+   <component name="RunManager">
+@@ -98,4 +120,58 @@
+     </task>
+     <servers />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++    <option name="oldMeFiltersMigrated" value="true" />
++  </component>
++  <component name="WindowStateProjectService">
++    <state x="223" y="67" width="1089" height="727" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1640110852751">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state x="223" y="67" width="1089" height="727" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1640110852751" />
++    <state x="351" y="217" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1640137913957">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state x="351" y="217" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1640137913957" />
++    <state x="554" y="169" key="FileChooserDialogImpl" timestamp="1640140907040">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state x="554" y="169" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1640140907040" />
++    <state width="1500" height="247" key="GridCell.Tab.0.bottom" timestamp="1640140536645">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state width="1500" height="247" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1640140536645" />
++    <state width="1500" height="247" key="GridCell.Tab.0.center" timestamp="1640140536645">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state width="1500" height="247" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1640140536645" />
++    <state width="1500" height="247" key="GridCell.Tab.0.left" timestamp="1640140536645">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state width="1500" height="247" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1640140536645" />
++    <state width="1500" height="247" key="GridCell.Tab.0.right" timestamp="1640140536645">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state width="1500" height="247" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1640140536645" />
++    <state x="277" y="57" key="SettingsEditor" timestamp="1640110862957">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1640110862957" />
++    <state x="425" y="187" width="672" height="677" key="run.anything.popup" timestamp="1640112354274">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state x="425" y="187" width="672" height="677" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1640112354274" />
++    <state x="241" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1640125760365">
++      <screen x="0" y="0" width="1536" height="824" />
++    </state>
++    <state x="241" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1640125760365" />
++  </component>
+ </project>
+\ No newline at end of file
