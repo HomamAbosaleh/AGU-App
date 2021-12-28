@@ -14,8 +14,7 @@ import '../../constants.dart';
 class SignUp extends StatefulWidget {
   final ScrollController sController;
   final Function changeLogIn;
-  const SignUp({Key? key, required this.changeLogIn, required this.sController})
-      : super(key: key);
+  const SignUp({Key? key, required this.changeLogIn, required this.sController}) : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -63,12 +62,10 @@ class _SignUpState extends State<SignUp> {
             department == null ||
             semester == null ||
             status == null) {
-          alertDialog(context, "Incomplete Information",
-              "Please fill in all the fields");
+          alertDialog(context, "Incomplete Information", "Please fill in all the fields");
         } else if (controller[_passwordControllerNumber].text !=
             controller[_confPasswordControllerNumber].text) {
-          alertDialog(
-              context, "Password Incorrect", "Please check your password");
+          alertDialog(context, "Password Incorrect", "Please check your password");
         } else {
           String signed = await FireAuth().signUp(
             email: controller[_emailControllerNumber].text + domain,
@@ -76,31 +73,27 @@ class _SignUpState extends State<SignUp> {
           );
           if (signed == "true") {
             Student s = Student(
-                name: controller[_nameControllerNumber].text.toLowerCase(),
-                surname:
-                    controller[_surnameControllerNumber].text.toLowerCase(),
-                gpa: 0.00,
-                id: controller[_idControllerNumber].text,
-                email: controller[_emailControllerNumber].text.toLowerCase() +
-                    domain,
-                faculty: faculty!.name,
-                department: department!.name,
-                semester: semester,
-                status: status,
-                wallet: 0.00,
-                admin: false,
+              name: controller[_nameControllerNumber].text.toLowerCase(),
+              surname: controller[_surnameControllerNumber].text.toLowerCase(),
+              gpa: 0.00,
+              id: controller[_idControllerNumber].text,
+              email: controller[_emailControllerNumber].text.toLowerCase() + domain,
+              faculty: faculty!.name,
+              department: department!.name,
+              semester: semester,
+              status: status,
+              wallet: 0.00,
+              admin: false,
             );
             FireStore().addStudent(student: s);
             await setUpDate();
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/navigationBar', (route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, '/navigationBar', (route) => false);
           } else {
             alertDialog(context, "Cannot Sign Up", signed);
           }
         }
       } else {
-        alertDialog(context, "Incomplete Information",
-            "Student number must be 10 digits");
+        alertDialog(context, "Incomplete Information", "Student number must be 10 digits");
       }
     }
   }
@@ -140,8 +133,7 @@ class _SignUpState extends State<SignUp> {
                             if (index == 4) {
                               return dropDownList(snapshot, fNodes);
                             } else {
-                              return customTextFormField(
-                                  context, controller, index, fNodes);
+                              return customTextFormField(context, controller, index, fNodes);
                             }
                           },
                         ),
@@ -153,10 +145,8 @@ class _SignUpState extends State<SignUp> {
                           child: const Text("Submit"),
                           style: ElevatedButton.styleFrom(
                             primary: rPrimaryRedColor,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 20),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
+                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           ),
                         ),
                         TextButton(
@@ -192,8 +182,7 @@ class _SignUpState extends State<SignUp> {
       8,
       (index) => DropdownMenuItem(
         value: index + 1,
-        child: Text((index + 1).toString(),
-            style: Theme.of(context).textTheme.headline4),
+        child: Text((index + 1).toString(), style: Theme.of(context).textTheme.headline4),
       ),
     );
     List<DropdownMenuItem<String>> statuses = ["Graduate", "Undergraduate"]
@@ -211,9 +200,7 @@ class _SignUpState extends State<SignUp> {
           focusNode: fNodes[4],
           isExpanded: true,
           value: faculty,
-          items: snapshot.data
-              .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
-              .toList(),
+          items: snapshot.data.map<DropdownMenuItem<dynamic>>(dropDownBuilder).toList(),
           hint: Text(
             "Faculty",
             style: TextStyle(
@@ -224,8 +211,7 @@ class _SignUpState extends State<SignUp> {
             return snapshot.data.map<Widget>((dynamic item) {
               return Text(
                 item.name,
-                style: const TextStyle(
-                    fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
               );
             }).toList();
           },
@@ -250,9 +236,7 @@ class _SignUpState extends State<SignUp> {
           focusNode: fNodes[5],
           isExpanded: true,
           value: department,
-          items: departments
-              .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
-              .toList(),
+          items: departments.map<DropdownMenuItem<dynamic>>(dropDownBuilder).toList(),
           hint: Text(
             "Department",
             style: TextStyle(
@@ -263,8 +247,7 @@ class _SignUpState extends State<SignUp> {
             return departments.map<Widget>((dynamic item) {
               return Text(
                 item.name,
-                style: const TextStyle(
-                    fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
               );
             }).toList();
           },
@@ -299,8 +282,7 @@ class _SignUpState extends State<SignUp> {
             return semesters.map<Widget>((dynamic item) {
               return Text(
                 item.value.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
               );
             }).toList();
           },
@@ -361,10 +343,7 @@ class _SignUpState extends State<SignUp> {
 
   Future<void> setUpDate() async {
     await Constants.setUpConstants(
-        controller[_emailControllerNumber]
-            .text
-            .replaceAll(".", " ")
-            .toLowerCase(),
+        controller[_emailControllerNumber].text.replaceAll(".", " ").toLowerCase(),
         controller[_emailControllerNumber].text + domain,
         FireAuth().currentUserID,
         rememberMe);
@@ -378,8 +357,7 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-Widget customTextFormField(
-    context, controller, int index, List<FocusNode> fNodes) {
+Widget customTextFormField(context, controller, int index, List<FocusNode> fNodes) {
   final Map properties = {
     0: {
       "fNode": fNodes[0],
@@ -443,8 +421,7 @@ Widget customTextFormField(
         obscureText: index >= 5 ? true : false,
         inputFormatters: [
           properties[index]["Filter"],
-          properties[index]["maxLength"] ??
-              LengthLimitingTextInputFormatter(100),
+          properties[index]["maxLength"] ?? LengthLimitingTextInputFormatter(100),
         ],
         controller: properties[index]["controller"],
         decoration: InputDecoration(
