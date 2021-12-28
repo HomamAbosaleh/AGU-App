@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '/UI/api/currency.dart';
 import '/UI/api/location.dart';
@@ -21,6 +22,16 @@ class _ApiPageState extends State<ApiPage> {
     const Text('Kayseri Weather'),
   ];
 
+  void getPermissions() async {
+    await Permission.location.request();
+  }
+
+  @override
+  void initState() {
+    getPermissions();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -40,7 +51,7 @@ class _ApiPageState extends State<ApiPage> {
                 Tab(icon: Icon(Icons.cloud)),
               ]),
         ),
-        body: const TabBarView(children: [
+        body: TabBarView(children: [
           Location(),
           Currency(),
           Weather(),
