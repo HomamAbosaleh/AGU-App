@@ -50,7 +50,7 @@ class LocationState extends State<Location> {
         position: LatLng(38.73718838595613, 35.4740012891398),
         infoWindow: InfoWindow(
           title: 'Buyuk Ambar Building',
-          snippet: 'AKA BA Building or first home ',
+          snippet: 'AKA BA Building',
         )
     ),
     Marker(
