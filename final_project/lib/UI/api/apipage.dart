@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '/UI/api/currency.dart';
-import '/UI/api/location.dart';
-import '/UI/api/weather.dart';
+import 'currency.dart';
+import 'location.dart';
+import 'weather.dart';
 import '../../widgets/drawer.dart';
 
 class ApiPage extends StatefulWidget {
