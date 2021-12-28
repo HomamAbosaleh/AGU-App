@@ -52,8 +52,8 @@ class _ApiPageState extends State<ApiPage> {
               ]),
         ),
         body: TabBarView(children: [
-          Location(),
-          Currency(),
+          const Location(),
+          const Currency(),
           Weather(),
         ]),
       ),

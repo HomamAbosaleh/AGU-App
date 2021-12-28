@@ -1,21 +1,21 @@
-import 'package:final_project/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '/theme/theme.dart';
 import '../../services/http.dart';
 
 class Weather extends StatelessWidget {
   Weather({Key? key}) : super(key: key);
 
-  var weatherinfo = Http().getWeatherByLocation();
+  final weatherInfo = Http().getWeatherByLocation();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return FutureBuilder(
-      future: weatherinfo,
+      future: weatherInfo,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data);
@@ -35,11 +35,11 @@ class Weather extends StatelessWidget {
                      children: [
                        Text(snapshot.data.locationName, style: Theme.of(context).textTheme.headline3),
                        Icon(Http().getWeatherIcon(snapshot.data.weatherID),size: 50,color: Theme.of(context).appBarTheme.iconTheme!.color),
-                       SizedBox(height: 5),
+                       const SizedBox(height: 5),
                        Text(snapshot.data.temperature.toString()+"°",style: Theme.of(context).textTheme.headline3),
-                       SizedBox(height: 5),
+                       const SizedBox(height: 5),
                        Text("Feels Like: "+snapshot.data.feelsLike.toString()+"°",style: Theme.of(context).textTheme.headline1),
-                       SizedBox(height: 5),
+                       const SizedBox(height: 5),
                      ],
                    ),
                  ),
@@ -53,7 +53,7 @@ class Weather extends StatelessWidget {
                              Row(
                                  children: [
                                    Text("Min ", style: Theme.of(context).textTheme.headline2),
-                                   Icon(FontAwesomeIcons.temperatureLow,color: Colors.blue),
+                                   const Icon(FontAwesomeIcons.temperatureLow,color: Colors.blue),
                                  ]
                              ),
                              Text(snapshot.data.lowTemp.toString()+"°", style: Theme.of(context).textTheme.headline1),
@@ -80,14 +80,14 @@ class Weather extends StatelessWidget {
                              Row(
                                  children: [
                                    Text("Max ", style: Theme.of(context).textTheme.headline2),
-                                   Icon(FontAwesomeIcons.temperatureHigh,color: rPrimaryRedColor)
+                                   const Icon(FontAwesomeIcons.temperatureHigh,color: rPrimaryRedColor)
                                  ]
                              ),
                              Text(snapshot.data.highTemp.toString()+"°", style: Theme.of(context).textTheme.headline1),
                              Row(
                                  children: [
                                    Text("Humidity ",style: Theme.of(context).textTheme.headline1),
-                                   Icon(FontAwesomeIcons.tint,color: Colors.blue)
+                                   const Icon(FontAwesomeIcons.tint,color: Colors.blue)
                                  ]
                              ),
                              Text(snapshot.data.humidity.toString()+"%", style: Theme.of(context).textTheme.headline2),
@@ -103,7 +103,7 @@ class Weather extends StatelessWidget {
                        ],
                      ),
                    ),
-                   SizedBox(height: 15)
+                   const SizedBox(height: 15)
                  ],
                ),
              ),

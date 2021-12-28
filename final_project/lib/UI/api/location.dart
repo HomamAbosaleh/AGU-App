@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../services/http.dart';
-import 'package:final_project/theme/theme.dart';
+
 
 class Location extends StatefulWidget {
   const Location({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class Location extends StatefulWidget {
 class LocationState extends State<Location> {
   final Completer<GoogleMapController> _controller = Completer();
   bool isData = false;
-  Set<Marker> _markers = {};
+  Set<Marker> markers = {};
 
   void getLocation() async {
     Position position = await Http().getLocation();
@@ -38,14 +37,14 @@ class LocationState extends State<Location> {
 
   late CameraPosition _kGooglePlex;
 
-  static const CameraPosition _Agu = CameraPosition(
+  static const CameraPosition agu = CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(38.73719850955575, 35.47356217597683),
       tilt: 30.440717697143555,
       zoom: 16.151926040649414
   );
 
-  List<Marker> markerList = [
+  List<Marker> markerList = const [
     Marker(
         markerId: MarkerId('id-1'),
         position: LatLng(38.73718838595613, 35.4740012891398),
@@ -80,9 +79,9 @@ class LocationState extends State<Location> {
     ),
   ];
 
-  void _onMapCreated(GoogleMapController){
+  void _onMapCreated(googleMapController){
     setState(() {
-      _markers.addAll(markerList);
+      markers.addAll(markerList);
     });
   }
 
@@ -91,9 +90,9 @@ class LocationState extends State<Location> {
     return Scaffold(
       body: isData == false ? const Center(child: CircularProgressIndicator(),) : GoogleMap(
         mapType: MapType.hybrid,
-        initialCameraPosition: _Agu,
+        initialCameraPosition: agu,
         onMapCreated: _onMapCreated,
-        markers: _markers,
+        markers: markers,
       ),
    /*   floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(0.0,0.0,245.0,5.0),
@@ -108,7 +107,7 @@ class LocationState extends State<Location> {
 
   Future<void> _goToAgu() async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_Agu));
+    controller.animateCamera(CameraUpdate.newCameraPosition(agu));
   }
   Future<Position> locationGet() async {
     var currentLocation;
