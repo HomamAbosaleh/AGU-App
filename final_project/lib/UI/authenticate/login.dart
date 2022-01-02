@@ -77,6 +77,7 @@ class _LogInState extends State<LogIn> {
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 16,
               ),
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
@@ -89,6 +90,7 @@ class _LogInState extends State<LogIn> {
                 hintText: 'Username',
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryVariant,
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -103,6 +105,7 @@ class _LogInState extends State<LogIn> {
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 16,
               ),
               cursorColor: gPrimaryGreyColor,
               obscureText: eye,
@@ -122,6 +125,7 @@ class _LogInState extends State<LogIn> {
                 hintText: 'Password',
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryVariant,
+                  fontSize: 16,
                 ),
               ),
             ),

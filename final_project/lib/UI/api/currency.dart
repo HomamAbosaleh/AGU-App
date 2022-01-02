@@ -24,9 +24,14 @@ class _CurrencyState extends State<Currency> {
                 children: [
                   DropdownButtonFormField(
                     value: currency,
-                    items: snapshot.data.keys
-                        .map<DropdownMenuItem<Object>>(dropDownBuilder)
-                        .toList(),
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                    items:
+                        snapshot.data.keys.map<DropdownMenuItem<Object>>(dropDownBuilder).toList(),
                     onChanged: (value) {
                       setState(() {
                         currency = value;

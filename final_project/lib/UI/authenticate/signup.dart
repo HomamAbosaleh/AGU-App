@@ -211,7 +211,11 @@ class _SignUpState extends State<SignUp> {
             return snapshot.data.map<Widget>((dynamic item) {
               return Text(
                 item.name,
-                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
               );
             }).toList();
           },
@@ -229,6 +233,7 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(
             fontFamily: 'Roboto',
             color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 16,
           ),
         ),
         const SizedBox(height: 7),
@@ -247,7 +252,11 @@ class _SignUpState extends State<SignUp> {
             return departments.map<Widget>((dynamic item) {
               return Text(
                 item.name,
-                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
               );
             }).toList();
           },
@@ -263,6 +272,7 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(
             fontFamily: 'Roboto',
             color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 16,
           ),
         ),
         const SizedBox(height: 7),
@@ -282,7 +292,11 @@ class _SignUpState extends State<SignUp> {
             return semesters.map<Widget>((dynamic item) {
               return Text(
                 item.value.toString(),
-                style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
               );
             }).toList();
           },
@@ -298,6 +312,7 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(
             fontFamily: 'Roboto',
             color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 16,
           ),
         ),
         const SizedBox(height: 7),
@@ -319,6 +334,7 @@ class _SignUpState extends State<SignUp> {
                 style: const TextStyle(
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w500,
+                  fontSize: 16,
                 ),
               );
             }).toList();
@@ -335,6 +351,7 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(
             fontFamily: 'Roboto',
             color: Theme.of(context).colorScheme.onSecondary,
+            fontSize: 16,
           ),
         ),
       ],
@@ -416,6 +433,7 @@ Widget customTextFormField(context, controller, int index, List<FocusNode> fNode
           fontFamily: 'Roboto',
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.w500,
+          fontSize: 16,
         ),
         cursorColor: Theme.of(context).colorScheme.primary,
         obscureText: index >= 5 ? true : false,
@@ -431,6 +449,7 @@ Widget customTextFormField(context, controller, int index, List<FocusNode> fNode
             hintStyle: TextStyle(
               color: Theme.of(context).colorScheme.secondaryVariant,
               fontWeight: FontWeight.w400,
+              fontSize: 16,
             ),
             suffixText: properties[index]["suffix"] ?? ""),
       ),
