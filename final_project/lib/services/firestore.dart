@@ -30,6 +30,19 @@ class FireStore {
     return f;
   }
 
+  Future getTodayMeal() async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Map mealDictionary = {};
+    await _firebaseFirestore.collection("foodMenu").get().then((value) {
+      for (var element in value.docs) {
+        if (element.data().containsKey(date)) {
+          mealDictionary = element.get(date);
+        }
+      }
+    });
+    return mealDictionary.isEmpty ? null : mealDictionary;
+  }
+
   Future getDepartments(String departmentName) {
     return _firebaseFirestore
         .collection('departments')
