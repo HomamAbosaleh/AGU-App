@@ -57,7 +57,10 @@ ThemeData lightTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     fillColor: Colors.white,
     labelStyle: const TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.grey, fontSize: 15),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.grey,
+        fontSize: 15),
     hintStyle: const TextStyle(
       color: gPrimaryGreyColor,
     ),
@@ -84,14 +87,27 @@ ThemeData lightTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     headline1: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.black, fontSize: 16),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.black,
+        fontSize: 16),
     headline2: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.black, fontSize: 18),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.black,
+        fontSize: 18),
     headline3: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.black, fontSize: 30),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.black,
+        fontSize: 30),
     headline4: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 16),
-    headline5: TextStyle(fontSize: 48, fontFamily: 'Roboto', color: rSecondaryRedColor),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 16),
+    headline5: TextStyle(
+        fontSize: 48, fontFamily: 'Roboto', color: rSecondaryRedColor),
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,
@@ -162,7 +178,10 @@ ThemeData darkTheme = ThemeData(
     //fillColor: Colors.black38,
     fillColor: Color(0xFF303030),
     labelStyle: const TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 15),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 15),
     hintStyle: const TextStyle(
       color: Colors.white,
     ),
@@ -190,14 +209,27 @@ ThemeData darkTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     headline1: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 16),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 16),
     headline2: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 18),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 18),
     headline3: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 30),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 30),
     headline4: TextStyle(
-        fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Colors.white, fontSize: 18),
-    headline5: TextStyle(fontSize: 48, fontFamily: 'Roboto', color: Colors.white),
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 18),
+    headline5:
+        TextStyle(fontSize: 48, fontFamily: 'Roboto', color: Colors.white),
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,
