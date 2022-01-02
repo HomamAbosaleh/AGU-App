@@ -36,11 +36,12 @@ class FireAuth {
     }
   }
 
-  Future resetPass(String email) async {
+  Future<String> resetPass(String email) async {
     try {
-      return await _firebaseAuth.sendPasswordResetEmail(email: email);
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return "0";
     } catch (error) {
-      print(error.toString());
+      return error.toString();
     }
   }
 

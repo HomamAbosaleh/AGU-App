@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '/theme/cubit/theme_cubit.dart';
+import '../theme/theme_cubit.dart';
 import '../../services/sharedpreference.dart';
 
 Widget customDrawer(BuildContext context) {
