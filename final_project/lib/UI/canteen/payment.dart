@@ -58,7 +58,7 @@ class _PaymentsState extends State<Payments> {
                         (states) => Colors.white),
                   ),
                   onPressed: () {
-                    showBottomSheet(
+                    showModalBottomSheet(
                         context: context,
                         builder: (context) => buildSheet(snapShot));
                   },
