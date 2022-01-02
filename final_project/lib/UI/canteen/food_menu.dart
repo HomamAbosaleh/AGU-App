@@ -20,7 +20,7 @@ class _FoodState extends State<Food> {
   }
 
   final pages = [
-    const MealOfToday(),
+    MealOfToday(),
     const Schedule(),
     const Payments(),
   ];
@@ -50,47 +50,13 @@ class _FoodState extends State<Food> {
                 Tab(icon: Icon(Icons.account_balance_wallet))
               ]),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            MealOfToday(),
             Schedule(),
+            MealOfToday(),
             Payments(),
           ],
         ),
-        // body: pages[currentIndex],
-        // bottomNavigationBar: SingleChildScrollView(
-        //   child: BottomNavigationBar(
-        //     currentIndex: currentIndex,
-        //     onTap: _onItemTapped,
-        //     iconSize: 30,
-        //     selectedFontSize: 15,
-        //     selectedIconTheme:
-        //         const IconThemeData(color: Color(0xFFD00001), size: 40),
-        //     selectedItemColor: const Color(0xFFD00001),
-        //     selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        //     unselectedIconTheme: const IconThemeData(
-        //       color: Color(0xFFD7D6D6),
-        //     ),
-        //     unselectedItemColor: const Color(0xFFD7D6D6),
-        //     items: const <BottomNavigationBarItem>[
-        //       BottomNavigationBarItem(
-        //         icon: Icon(Icons.access_time),
-        //         label: 'Today\'s meal',
-        //       ),
-        //       BottomNavigationBarItem(
-        //         icon: Icon(
-        //           Icons.date_range_rounded,
-        //         ),
-        //         label: 'Food Schedule',
-        //       ),
-        //       BottomNavigationBarItem(
-        //           icon: Icon(
-        //             Icons.account_balance_wallet,
-        //           ),
-        //           label: 'Food Payments'),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }
