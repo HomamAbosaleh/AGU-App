@@ -1,17 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import '../../services/http.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../services/http.dart';
 
 class Location extends StatefulWidget {
   const Location({Key? key}) : super(key: key);
   @override
   State<Location> createState() => LocationState();
 }
-
 
 class LocationState extends State<Location> {
   final Completer<GoogleMapController> _controller = Completer();
@@ -30,7 +29,7 @@ class LocationState extends State<Location> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getLocation();
   }
@@ -41,8 +40,7 @@ class LocationState extends State<Location> {
       bearing: 192.8334901395799,
       target: LatLng(38.73719850955575, 35.47356217597683),
       tilt: 30.440717697143555,
-      zoom: 16.151926040649414
-  );
+      zoom: 16.151926040649414);
 
   List<Marker> markerList = const [
     Marker(
@@ -51,15 +49,11 @@ class LocationState extends State<Location> {
         infoWindow: InfoWindow(
           title: 'Buyuk Ambar Building',
           snippet: 'AKA BA Building',
-        )
-    ),
+        )),
     Marker(
       markerId: MarkerId('id-2'),
       position: LatLng(38.736946996532865, 35.473508676889814),
-      infoWindow: InfoWindow(
-          title: 'Steel Building',
-          snippet: 'A and B building'
-      ),
+      infoWindow: InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
     ),
     Marker(
         markerId: MarkerId('id-3'),
@@ -67,8 +61,7 @@ class LocationState extends State<Location> {
         infoWindow: InfoWindow(
           title: 'Fabrika Building',
           snippet: 'F building',
-        )
-    ),
+        )),
     Marker(
       markerId: MarkerId('id-4'),
       position: LatLng(38.74041456900319, 35.47494951684609),
@@ -79,7 +72,7 @@ class LocationState extends State<Location> {
     ),
   ];
 
-  void _onMapCreated(googleMapController){
+  void _onMapCreated(googleMapController) {
     setState(() {
       markers.addAll(markerList);
     });
@@ -88,13 +81,29 @@ class LocationState extends State<Location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isData == false ? const Center(child: CircularProgressIndicator(),) : GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: agu,
-        onMapCreated: _onMapCreated,
-        markers: markers,
-      ),
-   /*   floatingActionButton: Padding(
+      body: isData == false
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text(
+                      'Please leave and come back to this page if it\'s your first time loading the app',
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                ],
+              ),
+            )
+          : GoogleMap(
+              mapType: MapType.hybrid,
+              initialCameraPosition: agu,
+              onMapCreated: _onMapCreated,
+              markers: markers,
+            ),
+      /*   floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(0.0,0.0,245.0,5.0),
         child: FloatingActionButton.extended(
           onPressed: _goToAgu,
@@ -109,11 +118,11 @@ class LocationState extends State<Location> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(agu));
   }
+
   Future<Position> locationGet() async {
     var currentLocation;
     try {
-      currentLocation = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
+      currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     } catch (e) {
       currentLocation = null;
     }
