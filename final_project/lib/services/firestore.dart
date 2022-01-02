@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/model/course.dart';
+import 'package:intl/intl.dart';
 
+import '../model/course.dart';
 import '../constants.dart';
 import '../model/department.dart';
 import '../model/faculty.dart';
