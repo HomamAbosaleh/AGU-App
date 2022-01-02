@@ -71,7 +71,7 @@ class LocationState extends State<Location> {
     ),
     Marker(
       markerId: MarkerId('id-4'),
-      position: LatLng(38.740409749084975, 35.47555554794697),
+      position: LatLng(38.74041456900319, 35.47494951684609),
       infoWindow: InfoWindow(
         title: 'Resarch Building',
         snippet: 'Lab Building',

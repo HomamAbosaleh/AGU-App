@@ -42,11 +42,11 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         iconSize: 30,
         selectedFontSize: 15,
         selectedIconTheme:
-            const IconThemeData(color: Color(0xFFD00001), size: 40),
+            const IconThemeData(color: Color(0xFFD00501), size: 40),
         selectedItemColor: const Color(0xFFD00001),
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedIconTheme: const IconThemeData(
-          color: Color(0xFFD7D6D6),
+          color: Color(0xff646464),
         ),
         unselectedItemColor: const Color(0xFFD7D6D6),
         items: const <BottomNavigationBarItem>[
