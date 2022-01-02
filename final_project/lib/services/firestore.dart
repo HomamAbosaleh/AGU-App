@@ -67,6 +67,19 @@ class FireStore {
     final course = await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
     return course;
   }
+  
+  Future getTodayMeal() async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Map mealDictionary = {};
+    await _firebaseFirestore.collection("foodMenu").get().then((value) {
+      for (var element in value.docs) {
+        if (element.data().containsKey(date)) {
+          mealDictionary = element.get(date);
+        }
+      }
+    });
+    return mealDictionary.isEmpty ? null : mealDictionary;
+  }
 
   void addMoney(double newBalance) async {
     await _firebaseFirestore
