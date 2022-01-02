@@ -41,7 +41,7 @@ class _EvaluateCourseScreenState extends State<EvaluateCourseScreen> {
             );
           }
           if (snapshot.data.docs.length == 0) {
-            return Center(
+            return const Center(
               child: Text(
                 'No courses to approve!',
                 style: TextStyle(fontSize: 36),
@@ -49,7 +49,6 @@ class _EvaluateCourseScreenState extends State<EvaluateCourseScreen> {
             );
           } else {
             return ListView.builder(
-              //print(snapshot.data!.size);
               shrinkWrap: true,
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
