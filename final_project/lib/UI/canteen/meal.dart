@@ -1,125 +1,99 @@
-import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 
-import '/../model/meal.dart';
+import '/services/firestore.dart';
 
 class MealOfToday extends StatelessWidget {
-  const MealOfToday({Key? key}) : super(key: key);
+  MealOfToday({Key? key}) : super(key: key);
 
+  final List<String> days = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    final List<Meal> meals = [
-      Meal(
-          mainDish: "Boiled Rice",
-          secondDish: "Fried Chicken",
-          soup: "Mercemek Çorbası",
-          salad: "Akdeniz Salata",
-          CalMain: 500,
-          CalSecond: 450,
-          CalSalad: 50,
-          CalSoup: 100),
-    ];
-    Future s = FireStore().getStudent();
-    Meal(CalMain: 15);
     return FutureBuilder(
-      future: s,
+      future: FireStore().getStudent(),
       builder: (context, AsyncSnapshot snapShot) {
         if (snapShot.hasData) {
-          return Container(
-            // padding: EdgeInsets.all(5),
-            alignment: Alignment.center,
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 15),
-                Text(
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              title: ListTile(
+                contentPadding: const EdgeInsets.all(8),
+                title: Text(
                   "Current Balance",
-                  style: TextStyle(
-                      color: Colors.grey[700], fontSize: 16, letterSpacing: 3),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-                const SizedBox(height: 5),
-                Text('₺${snapShot.data['wallet']}',
+                subtitle: Text('₺${snapShot.data['wallet']}',
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline3),
-                const SizedBox(height: 25),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).shadowColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(70),
-                        topRight: Radius.circular(70),
-                      ),
+              ),
+            ),
+            body: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  height: 150,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Column(
+                    color: Theme.of(context).hoverColor,
+                    child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 40, horizontal: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                children: [
-                                  Text('Type',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1),
-                                  const SizedBox(height: 30),
-                                  Text(meals[0].mainDish.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].secondDish.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].soup.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].salad.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text('Calories',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1),
-                                  const SizedBox(height: 30),
-                                  Text(meals[0].CalMain.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].CalSecond.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].CalSoup.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  const SizedBox(height: 10),
-                                  Text(meals[0].CalSalad.toString(),
-                                      style:
-                                          Theme.of(context).textTheme.headline4)
-                                ],
-                              )
-                            ],
-                          ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Image(
+                              image: AssetImage('images/new_day.png'),
+                              width: 120,
+                              height: 120,
+                            ),
+                          ],
                         ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              days[index],
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            Text(
+                              'sdhgkdsjf sdhfgkjsd skdgsdf',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            Text(
+                              'sdhgkdsjf sdhfgkjsd skdgsdf',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            Text(
+                              'sdhgkdsjf sdhfgkjsd skdgsdf',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            Text(
+                              'sdhgkdsjf sdhfgkjsd skdgsdf',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ],
+                        )),
                       ],
                     ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           );
         } else {
