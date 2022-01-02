@@ -54,6 +54,7 @@ ThemeData lightTheme = ThemeData(
   disabledColor: const Color(0xff969696),
   shadowColor: const Color(0xff323232),
   hoverColor: Colors.black,
+  accentColor: const Color(0xff323232),
   inputDecorationTheme: InputDecorationTheme(
     fillColor: Colors.white,
     labelStyle: const TextStyle(
@@ -108,6 +109,23 @@ ThemeData lightTheme = ThemeData(
         fontSize: 16),
     headline5: TextStyle(
         fontSize: 48, fontFamily: 'Roboto', color: rSecondaryRedColor),
+    headline6: TextStyle(
+        // AppBar text of food menu (AMR)
+        fontWeight: FontWeight.normal,
+        letterSpacing: 3,
+        color: Color(0xff1e1e1e),
+        fontSize: 16),
+    subtitle1: TextStyle(
+        // Food inside the card (AMR)
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Colors.white,
+        fontSize: 20),
+    subtitle2: TextStyle(
+      fontWeight: FontWeight.normal,
+      color: Color(0xffb4b4b4),
+      fontSize: 14,
+    ),
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,
@@ -169,6 +187,7 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Color(0x95000000),
   ),
   scaffoldBackgroundColor: const Color(0xFF303030),
+  accentColor: Colors.white,
   disabledColor: const Color(0xff646464),
   shadowColor: Color(0x95000000), // container
   hoverColor: Colors.white,
@@ -230,6 +249,22 @@ ThemeData darkTheme = ThemeData(
         fontSize: 18),
     headline5:
         TextStyle(fontSize: 48, fontFamily: 'Roboto', color: Colors.white),
+    headline6: TextStyle(
+        // AppBar text of food menu (AMR)
+        fontWeight: FontWeight.normal,
+        letterSpacing: 3,
+        color: Color(0xffb4b4b4),
+        fontSize: 16),
+    subtitle1: TextStyle(
+        // Food inside the card (AMR)
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
+        fontSize: 20),
+    subtitle2: TextStyle(
+      fontWeight: FontWeight.normal,
+      color: Color(0xff141414),
+      fontSize: 14,
+    ),
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,

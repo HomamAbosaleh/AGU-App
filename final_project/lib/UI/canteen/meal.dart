@@ -46,7 +46,7 @@ class MealOfToday extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    color: Theme.of(context).hoverColor,
+                    color: Theme.of(context).accentColor,
                     child: Row(
                       children: [
                         const SizedBox(width: 10),
@@ -73,19 +73,19 @@ class MealOfToday extends StatelessWidget {
                             ),
                             Text(
                               'sdhgkdsjf sdhfgkjsd skdgsdf',
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
                               'sdhgkdsjf sdhfgkjsd skdgsdf',
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
                               'sdhgkdsjf sdhfgkjsd skdgsdf',
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
                               'sdhgkdsjf sdhfgkjsd skdgsdf',
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                           ],
                         )),
