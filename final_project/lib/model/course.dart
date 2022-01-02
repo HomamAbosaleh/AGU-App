@@ -5,9 +5,9 @@ class Course {
   String name = "";
   int credit = 0;
   int ects = 0;
-  List<String> locations = [""];
-  List<String> instructors = [""];
-  List<String> labLocations = [""];
+  List<dynamic> locations = [""];
+  List<dynamic> instructors = [""];
+  List<dynamic> labLocations = [""];
   String department = "";
   IconData iconName = Icons.clear;
   final Map _icons = {

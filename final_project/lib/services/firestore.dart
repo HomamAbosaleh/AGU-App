@@ -115,16 +115,25 @@ class FireStore {
     }
   }
 
+  Future<int> removeCourseToBeApproved({required String uid}) async {
+    try {
+      await _firebaseFirestore.collection("coursesToBeAdded").doc(uid).delete();
+      return 1;
+    } catch (e) {
+      return 0;
+    }
+  }
+
   Future<int> addCourse({required Course course}) async {
-    bool addible = true;
+    bool addable = true;
     await _firebaseFirestore.collection('courses').get().then((e) => {
           e.docs.forEach((element) {
             if (element.id == course.code) {
-              addible = false;
+              addable = false;
             }
           })
         });
-    if (addible) {
+    if (addable) {
       Map<String, dynamic> courseToBeAdd = {
         'code': course.code,
         'name': course.name,
