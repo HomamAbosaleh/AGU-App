@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import '../model/weather.dart';
+
 // Weather
 const String openWeatherURL = 'api.openweathermap.org';
 const String weatherURL = '/data/2.5/weather';
@@ -16,10 +17,9 @@ const String currencyURL1 = '/api/currencies.json';
 const String currencyApi = "779adfbc70d64a92a923fff4a52fa037";
 
 class Http {
-  Future <Position> getLocation() async{
-    return  await Geolocator.getLastKnownPosition() ??
-        await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best);
+  Future<Position> getLocation() async {
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
   }
 
   Future getWeatherByLocation() async {
@@ -38,11 +38,18 @@ class Http {
     final response = await http.get(uri);
 
     final json = jsonDecode(response.body);
-   weather = Weather(humidity: json["main"]["humidity"], highTemp: (json["main"]["temp_max"]).toInt(), feelsLike: (json["main"]["feels_like"]).toInt(),
-        locationName: json["name"], lowTemp: (json["main"]["temp_min"]).toInt(), pressure: json["main"]["pressure"],
-        temperature: (json["main"]["temp"]).toInt(), visibility: (json["visibility"]).toInt(), windSpeed: (json["wind"]["speed"]).toDouble(), weatherID: json["weather"][0]["id"]);
+    weather = Weather(
+        humidity: json["main"]["humidity"],
+        highTemp: (json["main"]["temp_max"]).toInt(),
+        feelsLike: (json["main"]["feels_like"]).toInt(),
+        locationName: json["name"],
+        lowTemp: (json["main"]["temp_min"]).toInt(),
+        pressure: json["main"]["pressure"],
+        temperature: (json["main"]["temp"]).toInt(),
+        visibility: (json["visibility"]).toInt(),
+        windSpeed: (json["wind"]["speed"]).toDouble(),
+        weatherID: json["weather"][0]["id"]);
     return weather;
-
   }
 
   Future getWeatherByCity(String city) async {
@@ -59,32 +66,24 @@ class Http {
     return jsonDecode(response.body);
   }
 
-  IconData getWeatherIcon(int condition){
-    if(condition < 300){
+  IconData getWeatherIcon(int condition) {
+    if (condition < 300) {
       return FontAwesomeIcons.cloudRain;
-    }
-    else if(condition < 400){
+    } else if (condition < 400) {
       return FontAwesomeIcons.cloudShowersHeavy;
-    }
-    else if(condition < 600){
+    } else if (condition < 600) {
       return FontAwesomeIcons.umbrella;
-    }
-    else if(condition < 700){
+    } else if (condition < 700) {
       return FontAwesomeIcons.snowflake;
-    }
-    else if(condition < 800){
+    } else if (condition < 800) {
       return FontAwesomeIcons.smog;
-    }
-    else if(condition == 800){
+    } else if (condition == 800) {
       return FontAwesomeIcons.sun;
-    }
-    else if(condition < 804){
+    } else if (condition < 804) {
       return FontAwesomeIcons.cloud;
-    }
-    else{
+    } else {
       return FontAwesomeIcons.question;
     }
-
   }
 
   getCurrency() async {

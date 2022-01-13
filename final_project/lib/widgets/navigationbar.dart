@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../widgets/drawer.dart';
 import '/UI/api/apipage.dart';
@@ -17,7 +18,19 @@ class CustomNavigationBar extends StatefulWidget {
 
 class _CustomNavigationBarState extends State<CustomNavigationBar> {
   int currentIndex = 2;
-  void onItemTapped(int index) {
+  void onItemTapped(int index) async {
+    if (index == 3) {
+      if (await Permission.location.isDenied) {
+        await Permission.location.request();
+      }
+      if (await Permission.location.isGranted) {
+        setState(() {
+          currentIndex = index;
+        });
+      }
+
+      return;
+    }
     setState(() {
       currentIndex = index;
     });
