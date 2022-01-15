@@ -100,7 +100,7 @@ class _ScheduleState extends State<Schedule> {
                                 alignment: const Alignment(-0.9, -0.2),
                                 child: Text(
                                   Mydishes[index].toString(),
-                                  style: Theme.of(context).textTheme.headline5,
+                                  style: Theme.of(context).textTheme.headline4,
                                 ),
                               ),
                             ),
