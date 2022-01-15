@@ -1,3 +1,4 @@
+import 'package:final_project/UI/localdb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -79,6 +80,20 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LocalDB()));
+              },
+              label: const Text(
+                'Tasks',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
               ),
             ),
