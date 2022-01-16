@@ -105,6 +105,12 @@ class _ConversationState extends State<Conversation> {
                     child: Card(
                       elevation: 6,
                       child: TextField(
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                         textAlignVertical: TextAlignVertical.center,
                         keyboardType: TextInputType.multiline,
                         scrollPadding: const EdgeInsets.only(top: 20),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/model/course.dart';
+import 'package:intl/intl.dart';
 
+import '../model/course.dart';
 import '../constants.dart';
 import '../model/department.dart';
 import '../model/faculty.dart';
@@ -8,8 +9,10 @@ import '../model/student.dart';
 import 'fireauth.dart';
 
 class FireStore {
-  static final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  static final FirebaseFirestore _firebaseFirestore =
+      FirebaseFirestore.instance;
 
+  // Courses and Faculties
   Future<List<Faculty>> getFaculties() async {
     List<Faculty> f = [];
     await _firebaseFirestore.collection("faculties").get().then((e) {
@@ -29,7 +32,10 @@ class FireStore {
   }
 
   Future getDepartments(String departmentName) {
-    return _firebaseFirestore.collection('departments').doc(departmentName).get();
+    return _firebaseFirestore
+        .collection('departments')
+        .doc(departmentName)
+        .get();
   }
 
   Future getAllDepartments() async {
@@ -44,14 +50,6 @@ class FireStore {
     return deps;
   }
 
-  Future getStudent() async {
-    return await _firebaseFirestore.collection("student").doc(Constants.uid).get();
-  }
-
-  getStudentStream() async {
-    return await _firebaseFirestore.collection("student").doc(Constants.uid).snapshots();
-  }
-
   getCourses() async {
     return await _firebaseFirestore.collection('courses').get();
   }
@@ -64,17 +62,76 @@ class FireStore {
     if (uid.isEmpty) {
       return 0;
     }
-    final course = await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
+    final course =
+        await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
     return course;
   }
 
-  void addMoney(double newBalance) async {
-    await _firebaseFirestore
-        .collection('student')
-        .doc(Constants.uid)
-        .update({'wallet': newBalance});
+  Future<int> addCourseToBeApproved({required Course course}) async {
+    try {
+      Map<String, dynamic> courseToBeAdd = {
+        'code': course.code,
+        'name': course.name,
+        'credit': course.credit,
+        'ects': course.ects,
+        'department': course.department,
+        'locations': course.locations,
+        'labLocations': course.labLocations,
+        'instructors': course.instructors,
+        'sentBy': Constants.myName,
+        'time': DateTime.now().toString(),
+      };
+      String uid = Constants.myName + course.code + courseToBeAdd['time'];
+      _firebaseFirestore
+          .collection('coursesToBeAdded')
+          .doc(uid)
+          .set(courseToBeAdd);
+      return 1;
+    } catch (e) {
+      return 0;
+    }
   }
 
+  Future<int> removeCourseToBeApproved({required String uid}) async {
+    try {
+      await _firebaseFirestore.collection("coursesToBeAdded").doc(uid).delete();
+      return 1;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<int> addCourse({required Course course}) async {
+    bool addable = true;
+    await _firebaseFirestore.collection('courses').get().then((e) => {
+          e.docs.forEach((element) {
+            if (element.id == course.code) {
+              addable = false;
+            }
+          })
+        });
+    if (addable) {
+      Map<String, dynamic> courseToBeAdd = {
+        'code': course.code,
+        'name': course.name,
+        'credit': course.credit,
+        'ects': course.ects,
+        'department': course.department,
+        'locations': course.locations,
+        'labLocations': course.labLocations,
+        'instructors': course.instructors,
+      };
+      _firebaseFirestore
+          .collection('courses')
+          .doc(course.code)
+          .set(courseToBeAdd);
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  // Sign Up
   Future<void> addStudent({required Student student}) async {
     String uid = FireAuth().currentUserID;
     _firebaseFirestore.collection('student').doc(uid).set({
@@ -93,55 +150,90 @@ class FireStore {
     });
   }
 
-  Future<int> addCourseToBeApproved({required Course course}) async {
-    try {
-      Map<String, dynamic> courseToBeAdd = {
-        'code': course.code,
-        'name': course.name,
-        'credit': course.credit,
-        'ects': course.ects,
-        'department': course.department,
-        'locations': course.locations,
-        'labLocations': course.labLocations,
-        'instructors': course.instructors,
-        'sentBy': Constants.myName,
-        'time': DateTime.now().toString(),
-      };
-      String uid = Constants.myName + course.code + courseToBeAdd['time'];
-      _firebaseFirestore.collection('coursesToBeAdded').doc(uid).set(courseToBeAdd);
-      return 1;
-    } catch (e) {
-      return 0;
-    }
+  // Canteen
+  Future getStudent() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .get();
   }
 
-  Future<int> addCourse({required Course course}) async {
-    bool addible = true;
-    await _firebaseFirestore.collection('courses').get().then((e) => {
-          e.docs.forEach((element) {
-            if (element.id == course.code) {
-              addible = false;
+  getStudentStream() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .snapshots();
+  }
+
+  Future getWeekSchedule() async {
+    final now = DateTime.now();
+    String today = DateFormat('yyyy-MM-dd').format(now);
+    String tomorrow = DateFormat('yyyy-MM-dd')
+        .format(DateTime(now.year, now.month, now.day + 1));
+    String dayAfterTomorrow = DateFormat('yyyy-MM-dd')
+        .format(DateTime(now.year, now.month, now.day + 2));
+    List weekList = [];
+    bool weekEnd = true;
+    await _firebaseFirestore.collection("foodMenu").get().then(
+      (value) {
+        for (var element in value.docs) {
+          if (element.data().containsKey(today)) {
+            element.data().forEach(
+              (key, value) {
+                weekList.add({"date": key, ...value});
+              },
+            );
+            weekEnd = false;
+          }
+        }
+      },
+    );
+    if (weekEnd) {
+      await _firebaseFirestore.collection("foodMenu").get().then(
+        (value) {
+          for (var element in value.docs) {
+            if (element.data().containsKey(tomorrow) ||
+                element.data().containsKey(dayAfterTomorrow)) {
+              element.data().forEach((key, value) {
+                weekList.add({"date": key, ...value});
+              });
             }
-          })
-        });
-    if (addible) {
-      Map<String, dynamic> courseToBeAdd = {
-        'code': course.code,
-        'name': course.name,
-        'credit': course.credit,
-        'ects': course.ects,
-        'department': course.department,
-        'locations': course.locations,
-        'labLocations': course.labLocations,
-        'instructors': course.instructors,
-      };
-      _firebaseFirestore.collection('courses').doc(course.code).set(courseToBeAdd);
-      return 1;
-    } else {
-      return 0;
+          }
+        },
+      );
     }
+    weekList.sort((a, b) {
+      return DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"]));
+    });
+    return weekList.isEmpty
+        ? null
+        : [
+            weekEnd,
+            weekList,
+          ];
   }
 
+  Future getTodayMeal() async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Map mealDictionary = {};
+    await _firebaseFirestore.collection("foodMenu").get().then((value) {
+      for (var element in value.docs) {
+        if (element.data().containsKey(date)) {
+          mealDictionary = element.get(date);
+        }
+      }
+    });
+    return mealDictionary.isEmpty ? null : mealDictionary;
+  }
+
+  void addMoney(double newBalance) async {
+    await _firebaseFirestore
+        .collection('student')
+        .doc(Constants.uid)
+        .update({'wallet': newBalance});
+  }
+
+  // Chatroom
   void createChatRoom(sendToName, chatRoomMap, sendToChatRoomMap) async {
     var sendToId;
     await _firebaseFirestore.collection("student").get().then(

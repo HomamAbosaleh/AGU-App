@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'UI/tasks.dart';
 import '/widgets/navigationbar.dart';
 import '/../widgets/dialogbox.dart';
 import 'theme/theme.dart';
@@ -15,7 +15,7 @@ import 'UI/chat/chatrooms.dart';
 import 'UI/chat/search.dart';
 import 'UI/faculties and departments/faculties_page.dart';
 import 'UI/home.dart';
-import 'UI/canteen/schedule.dart';
+import 'UI/canteen/meal_of_today.dart';
 import 'constants.dart';
 import 'UI/authenticate/authentication.dart';
 
@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
               '/food_menu': (context) => const Food(),
               '/courseSchedule': (context) => const CourseSchedule(),
               '/navigationBar': (context) => const CustomNavigationBar(),
+              '/tasks': (context) => const Tasks(),
             },
             theme: state ? darkTheme : lightTheme,
             home: FutureBuilder(

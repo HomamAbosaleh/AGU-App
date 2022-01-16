@@ -48,6 +48,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 16,
               ),
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
@@ -63,6 +64,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 hintText: 'Username',
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryVariant,
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -81,7 +83,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     if (userName.isNotEmpty) {
                       var output =
                           await FireAuth().resetPass(userName + domain);
-                      if (output == "0") {
+                      if (output == "true") {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text(
@@ -94,7 +96,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text(
-                            '❌ Error: Invalid username!',
+                            '❌ Error: Invalid email!',
                             style: TextStyle(fontSize: 20),
                           ),
                           duration: Duration(seconds: 8),
@@ -103,7 +105,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
-                          '❌ Error: Please enter your username!',
+                          '❌ Error: Please enter your email!',
                           style: TextStyle(fontSize: 20),
                         ),
                         duration: Duration(seconds: 8),

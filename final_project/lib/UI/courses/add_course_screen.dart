@@ -315,6 +315,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
                   fontWeight: FontWeight.w500,
+                  fontSize: 16,
                 ),
                 cursorColor: Theme.of(context).colorScheme.primary,
                 inputFormatters: [
@@ -334,6 +335,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
                     fontWeight: FontWeight.w400,
+                    fontSize: 16,
                   ),
                   suffix: const Text('eg. \'COMP101\''),
                 ),
@@ -366,6 +368,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
                   fontWeight: FontWeight.w500,
+                  fontSize: 16,
                 ),
                 cursorColor: Theme.of(context).colorScheme.primary,
                 // inputFormatters: [
@@ -385,6 +388,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
                     fontWeight: FontWeight.w400,
+                    fontSize: 16,
                   ),
                   suffix: const Text('eg. \'Art of Computing\''),
                 ),
@@ -435,6 +439,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
                   fontWeight: FontWeight.w500,
+                  fontSize: 16,
                 ),
                 cursorColor: Theme.of(context).colorScheme.primary,
                 inputFormatters: [
@@ -455,6 +460,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
                     fontWeight: FontWeight.w400,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -526,6 +532,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
                   fontWeight: FontWeight.w500,
+                  fontSize: 16,
                 ),
                 cursorColor: Theme.of(context).colorScheme.primary,
                 inputFormatters: [
@@ -545,6 +552,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
                     fontWeight: FontWeight.w400,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -609,7 +617,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   return snapshot.data[0].map<Widget>((dynamic item) {
                     return Text(
                       item.name,
-                      style: const TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
                     );
                   }).toList();
                 },
@@ -631,6 +643,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -676,6 +689,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         fontFamily: 'Roboto',
                         color: Theme.of(context).colorScheme.onSecondary,
                         fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
                       cursorColor: Theme.of(context).colorScheme.primary,
                       focusNode: _locsNodes[index],
@@ -687,6 +701,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondaryVariant,
                           fontWeight: FontWeight.w400,
+                          fontSize: 16,
                         ),
                         suffix: const Text('eg. \'Online\''),
                       ),
@@ -772,6 +787,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         fontFamily: 'Roboto',
                         color: Theme.of(context).colorScheme.onSecondary,
                         fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
                       cursorColor: Theme.of(context).colorScheme.primary,
                       focusNode: _labLocsNodes[index],
@@ -783,6 +799,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondaryVariant,
                           fontWeight: FontWeight.w400,
+                          fontSize: 16,
                         ),
                         suffix: const Text('eg. \'Comp Lab\''),
                       ),
@@ -868,6 +885,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         fontFamily: 'Roboto',
                         color: Theme.of(context).colorScheme.onSecondary,
                         fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
                       cursorColor: Theme.of(context).colorScheme.primary,
                       focusNode: _instNodes[index],
@@ -879,6 +897,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondaryVariant,
                           fontWeight: FontWeight.w400,
+                          fontSize: 16,
                         ),
                       ),
                     ),
