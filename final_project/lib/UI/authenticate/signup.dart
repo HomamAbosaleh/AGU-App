@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '/model/department.dart';
 import '/model/faculty.dart';
@@ -36,6 +37,7 @@ class _SignUpState extends State<SignUp> {
   String? status;
   List<Department> departments = [];
   final faculties = FireStore().getFaculties();
+  final TextEditingController imageController = TextEditingController();
   final List<TextEditingController> controller =
       List.generate(6, (index) => TextEditingController());
 

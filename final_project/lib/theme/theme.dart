@@ -126,6 +126,12 @@ ThemeData lightTheme = ThemeData(
       color: Color(0xffb4b4b4),
       fontSize: 14,
     ),
+    // Used in the Tasks page (Amr)
+    caption: TextStyle(
+      color: Color(0xff141414),
+      fontSize: 18,
+    ),
+
     bodyText1: TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.bold,
@@ -245,7 +251,7 @@ ThemeData darkTheme = ThemeData(
     headline4: TextStyle(
         fontWeight: FontWeight.normal,
         letterSpacing: 0.5,
-        color: Colors.white,
+        color: Colors.black,
         fontSize: 18),
     headline5:
         TextStyle(fontSize: 48, fontFamily: 'Roboto', color: Colors.white),
@@ -269,6 +275,11 @@ ThemeData darkTheme = ThemeData(
       fontSize: 28,
       fontWeight: FontWeight.bold,
       color: Color(0xFFD00001),
+    ),
+    // Used in the Tasks page (Amr)
+    caption: TextStyle(
+      color: Color(0xffe6e6e6),
+      fontSize: 18,
     ),
   ),
 );

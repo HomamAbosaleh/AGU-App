@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'meal.dart';
+import 'week_menu.dart';
 import 'payment.dart';
-import 'schedule.dart';
+import 'meal_of_today.dart';
 import '../../widgets/drawer.dart';
 
 class Food extends StatefulWidget {
@@ -52,9 +52,9 @@ class _FoodState extends State<Food> {
         ),
         body: TabBarView(
           children: [
-            Schedule(),
+            const Schedule(),
             MealOfToday(),
-            Payments(),
+            const Payments(),
           ],
         ),
       ),

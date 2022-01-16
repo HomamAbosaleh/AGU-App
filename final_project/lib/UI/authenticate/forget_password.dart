@@ -34,14 +34,17 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         children: [
           Text(
             'Forgot Password?',
-            style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 32),
+            style:
+                Theme.of(context).textTheme.headline5!.copyWith(fontSize: 32),
           ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 26),
             child: TextField(
               focusNode: focus1,
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
+              ],
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
@@ -50,9 +53,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
               decoration: InputDecoration(
-                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                icon: Icon(Icons.email, color: Theme.of(context).colorScheme.surface),
+                enabledBorder:
+                    Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder:
+                    Theme.of(context).inputDecorationTheme.focusedBorder,
+                icon: Icon(Icons.email,
+                    color: Theme.of(context).colorScheme.surface),
                 filled: true,
                 suffixText: domain,
                 hintText: 'Username',
@@ -75,9 +81,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     focus1.unfocus();
                     ScaffoldMessenger.of(context).clearSnackBars();
                     if (userName.isNotEmpty) {
-                      var output = await FireAuth().resetPass(userName + domain);
-                      if (output == "0") {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      var output =
+                          await FireAuth().resetPass(userName + domain);
+                      if (output == "true") {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           content: Text(
                             '✔ Success: A mail has been sent to your email',
                             style: TextStyle(fontSize: 20),
@@ -85,7 +93,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           duration: Duration(seconds: 8),
                         ));
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           content: Text(
                             '❌ Error: Invalid email!',
                             style: TextStyle(fontSize: 20),
@@ -109,9 +118,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             style: ElevatedButton.styleFrom(
               primary: rPrimaryRedColor,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
             ),
-            child: !isLoading ? const Text('Send email') : const CircularProgressIndicator(),
+            child: !isLoading
+                ? const Text('Send email')
+                : const CircularProgressIndicator(),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -122,7 +134,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             style: ElevatedButton.styleFrom(
               primary: rPrimaryRedColor,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
             ),
             child: const Text('Go back'),
           )

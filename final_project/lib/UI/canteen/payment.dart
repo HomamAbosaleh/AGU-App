@@ -49,16 +49,21 @@ class _PaymentsState extends State<Payments> {
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 const SizedBox(height: 5),
-                Text('${snapShot.data['wallet']} ₺', style: Theme.of(context).textTheme.headline3),
+                Text('${snapShot.data['wallet']} ₺',
+                    style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.white),
                   ),
                   onPressed: () {
-                    showBottomSheet(context: context, builder: (context) => buildSheet(snapShot));
+                    showBottomSheet(
+                        context: context,
+                        builder: (context) => buildSheet(snapShot));
                   },
-                  child: const Icon(Icons.account_balance_wallet, color: Colors.black),
+                  child: const Icon(Icons.account_balance_wallet,
+                      color: Colors.black),
                 ),
               ],
             ),
@@ -89,15 +94,17 @@ class _PaymentsState extends State<Payments> {
               ),
               controller: balanceController,
               decoration: const InputDecoration(label: Text('balance')),
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+              ],
             ),
           ),
           TextButton(
             onPressed: () {
               setState(
                 () {
-                  double newBalance =
-                      snapShot.data['wallet'] + double.parse(balanceController.text);
+                  double newBalance = snapShot.data['wallet'] +
+                      double.parse(balanceController.text);
                   FireStore().addMoney(newBalance);
                 },
               );
