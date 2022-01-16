@@ -166,21 +166,51 @@ class FireStore {
   }
 
   Future getWeekSchedule() async {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final now = DateTime.now();
+    String today = DateFormat('yyyy-MM-dd').format(now);
+    String tomorrow = DateFormat('yyyy-MM-dd')
+        .format(DateTime(now.year, now.month, now.day + 1));
+    String dayAfterTomorrow = DateFormat('yyyy-MM-dd')
+        .format(DateTime(now.year, now.month, now.day + 2));
     List weekList = [];
-    await _firebaseFirestore.collection("foodMenu").get().then((value) {
-      for (var element in value.docs) {
-        if (element.data().containsKey(date)) {
-          element.data().forEach((key, value) {
-            weekList.add({"date": key, ...value});
-          });
+    bool weekEnd = true;
+    await _firebaseFirestore.collection("foodMenu").get().then(
+      (value) {
+        for (var element in value.docs) {
+          if (element.data().containsKey(today)) {
+            element.data().forEach(
+              (key, value) {
+                weekList.add({"date": key, ...value});
+              },
+            );
+            weekEnd = false;
+          }
         }
-      }
-    });
+      },
+    );
+    if (weekEnd) {
+      await _firebaseFirestore.collection("foodMenu").get().then(
+        (value) {
+          for (var element in value.docs) {
+            if (element.data().containsKey(tomorrow) ||
+                element.data().containsKey(dayAfterTomorrow)) {
+              element.data().forEach((key, value) {
+                weekList.add({"date": key, ...value});
+              });
+            }
+          }
+        },
+      );
+    }
     weekList.sort((a, b) {
       return DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"]));
     });
-    return weekList.isEmpty ? null : weekList;
+    return weekList.isEmpty
+        ? null
+        : [
+            weekEnd,
+            weekList,
+          ];
   }
 
   Future getTodayMeal() async {

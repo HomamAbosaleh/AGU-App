@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '/services/firestore.dart';
 
 class MealOfToday extends StatelessWidget {
-  MealOfToday({Key? key}) : super(key: key);
+  const MealOfToday({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,34 +32,48 @@ class MealOfToday extends StatelessWidget {
                 ),
               ),
               SliverToBoxAdapter(
-                  child: FutureBuilder(
-                future: FireStore().getWeekSchedule(),
-                builder: (context, AsyncSnapshot snapShot) {
-                  if (snapShot.connectionState == ConnectionState.done) {
-                    if (snapShot.hasData) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        primary: false,
-                        itemCount: snapShot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return dayMenu(context, snapShot.data[index]);
-                        },
-                      );
+                child: FutureBuilder(
+                  future: FireStore().getWeekSchedule(),
+                  builder: (context, AsyncSnapshot snapShot) {
+                    if (snapShot.connectionState == ConnectionState.done) {
+                      if (snapShot.hasData) {
+                        return Column(
+                          children: [
+                            snapShot.data[0]
+                                ? Center(
+                                    child: Text("Next Week Menu",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  )
+                                : Container(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: snapShot.data[1].length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return dayMenu(
+                                    context, snapShot.data[1][index]);
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            "End of Month",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        );
+                      }
                     } else {
-                      return Center(
-                        child: Text(
-                          "Dining Hall Is Closed Today",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     }
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ))
+                  },
+                ),
+              )
             ],
           ));
         } else {
