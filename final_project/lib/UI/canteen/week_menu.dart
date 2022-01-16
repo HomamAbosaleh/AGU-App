@@ -16,6 +16,7 @@ class MealOfToday extends StatelessWidget {
               body: CustomScrollView(
             slivers: [
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 floating: true,
                 elevation: 0,
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,

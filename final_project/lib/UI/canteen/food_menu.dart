@@ -20,7 +20,7 @@ class _FoodState extends State<Food> {
   }
 
   final pages = [
-    MealOfToday(),
+    const MealOfToday(),
     const Schedule(),
     const Payments(),
   ];
@@ -37,6 +37,7 @@ class _FoodState extends State<Food> {
       child: Scaffold(
         drawer: customDrawer(context),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
           title:
               Text("Dining Hall", style: Theme.of(context).textTheme.headline3),
@@ -50,11 +51,11 @@ class _FoodState extends State<Food> {
                 Tab(icon: Icon(Icons.account_balance_wallet))
               ]),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
-            const Schedule(),
+            Schedule(),
             MealOfToday(),
-            const Payments(),
+            Payments(),
           ],
         ),
       ),

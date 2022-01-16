@@ -13,6 +13,7 @@ class Payments extends StatefulWidget {
 
 class _PaymentsState extends State<Payments> {
   final balanceController = TextEditingController();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   double balance = 0;
   void addMoney(double newBalance) {
     balance += newBalance;
@@ -40,32 +41,35 @@ class _PaymentsState extends State<Payments> {
       stream: student,
       builder: (context, AsyncSnapshot snapShot) {
         if (snapShot.data != null) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Amount of Money in Card: ',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                const SizedBox(height: 5),
-                Text('${snapShot.data['wallet']} ₺',
-                    style: Theme.of(context).textTheme.headline3),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => Colors.white),
+          return Scaffold(
+            key: _key,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Amount of Money in Card: ',
+                    style: Theme.of(context).textTheme.headline1,
                   ),
-                  onPressed: () {
-                    showBottomSheet(
-                        context: context,
-                        builder: (context) => buildSheet(snapShot));
-                  },
-                  child: const Icon(Icons.account_balance_wallet,
-                      color: Colors.black),
-                ),
-              ],
+                  const SizedBox(height: 5),
+                  Text('${snapShot.data['wallet']} ₺',
+                      style: Theme.of(context).textTheme.headline3),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.white),
+                    ),
+                    onPressed: () {
+                      _key.currentState!.showBottomSheet(
+                        (_) => buildSheet(snapShot),
+                      );
+                    },
+                    child: const Icon(Icons.account_balance_wallet,
+                        color: Colors.black),
+                  ),
+                ],
+              ),
             ),
           );
         } else {
