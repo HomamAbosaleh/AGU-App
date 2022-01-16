@@ -252,22 +252,28 @@ class _LogInState extends State<LogIn> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
+
                       focus1.unfocus();
                       focus2.unfocus();
                       String shouldNavigate = await FireAuth().signIn(
                         email: "first.laststudent@agu.edu.tr",
                         password: "123comp123s",
                       );
+                      print("testing");
                       if (shouldNavigate == "true") {
+                        print("testing first if");
                         if (rememberMe) {
+                          print("testing if");
                           await SharedPreference.saveLoggingIn(true);
                         } else {
+                          print("testing else");
                           await SharedPreference.saveLoggingIn(false);
                         }
                         await setUpDate();
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/navigationBar', (route) => false);
                       } else {
+                        print("testing error");
                         alertDialog(context, "Cannot Sign In", shouldNavigate);
                       }
                     },
