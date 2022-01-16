@@ -24,6 +24,7 @@ class _ApiPageState extends State<ApiPage> {
 
   void getPermissions() async {
     await Permission.location.request();
+    
   }
 
   @override
