@@ -252,23 +252,27 @@ class _LogInState extends State<LogIn> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      focus1.unfocus();
-                      focus2.unfocus();
-                      String shouldNavigate = await FireAuth().signIn(
-                        email: "first.laststudent@agu.edu.tr",
-                        password: "123comp123s",
-                      );
-                      if (shouldNavigate == "true") {
-                        if (rememberMe) {
-                          await SharedPreference.saveLoggingIn(true);
+                      try {
+                        focus1.unfocus();
+                        focus2.unfocus();
+                        String shouldNavigate = await FireAuth().signIn(
+                          email: "first.laststudent@agu.edu.tr",
+                          password: "123comp123s",
+                        );
+                        if (shouldNavigate == "true") {
+                          if (rememberMe) {
+                            await SharedPreference.saveLoggingIn(true);
+                          } else {
+                            await SharedPreference.saveLoggingIn(false);
+                          }
+                          await setUpDate();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/navigationBar', (route) => false);
                         } else {
-                          await SharedPreference.saveLoggingIn(false);
+                          alertDialog(context, "Cannot Sign In", shouldNavigate);
                         }
-                        await setUpDate();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/navigationBar', (route) => false);
-                      } else {
-                        alertDialog(context, "Cannot Sign In", shouldNavigate);
+                      } catch (ex) {
+                        print(ex.toString());
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -280,23 +284,27 @@ class _LogInState extends State<LogIn> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      focus1.unfocus();
-                      focus2.unfocus();
-                      String shouldNavigate = await FireAuth().signIn(
-                        email: "first.lastadmin@agu.edu.tr",
-                        password: "123comp123a",
-                      );
-                      if (shouldNavigate == "true") {
-                        if (rememberMe) {
-                          await SharedPreference.saveLoggingIn(true);
+                      try {
+                        focus1.unfocus();
+                        focus2.unfocus();
+                        String shouldNavigate = await FireAuth().signIn(
+                          email: "first.lastadmin@agu.edu.tr",
+                          password: "123comp123a",
+                        );
+                        if (shouldNavigate == "true") {
+                          if (rememberMe) {
+                            await SharedPreference.saveLoggingIn(true);
+                          } else {
+                            await SharedPreference.saveLoggingIn(false);
+                          }
+                          await setUpDate();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/navigationBar', (route) => false);
                         } else {
-                          await SharedPreference.saveLoggingIn(false);
+                          alertDialog(context, "Cannot Sign In", shouldNavigate);
                         }
-                        await setUpDate();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/navigationBar', (route) => false);
-                      } else {
-                        alertDialog(context, "Cannot Sign In", shouldNavigate);
+                      } catch (ex) {
+                        print(ex.toString());
                       }
                     },
                     style: ElevatedButton.styleFrom(

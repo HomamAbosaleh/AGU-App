@@ -19,13 +19,18 @@ class LocationState extends State<Location> {
 
   void getLocation() async {
     Position position = await Http().getLocation();
-    setState(() {
-      _kGooglePlex = CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 14.4746,
-      );
-      isData = true;
-    });
+    if (!mounted) return;
+    try {
+      setState(() {
+        _kGooglePlex = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 14.4746,
+        );
+        isData = true;
+      });
+    } catch (ex) {
+      print(ex.toString());
+    }
   }
 
   @override
@@ -73,6 +78,7 @@ class LocationState extends State<Location> {
   ];
 
   void _onMapCreated(googleMapController) {
+    if (!mounted) return;
     setState(() {
       markers.addAll(markerList);
     });

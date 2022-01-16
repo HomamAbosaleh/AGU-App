@@ -1,6 +1,6 @@
 import 'package:final_project/services/firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({Key? key}) : super(key: key);
@@ -62,8 +62,7 @@ class _ScheduleState extends State<Schedule> {
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 subtitle: Text(DateFormat.EEEE().format(DateTime.now()),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline3),
+                    textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline3),
               ),
             ),
           ),
@@ -80,8 +79,7 @@ class _ScheduleState extends State<Schedule> {
                         shrinkWrap: true,
                         itemCount: 4,
                         //physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 10,
@@ -101,15 +99,15 @@ class _ScheduleState extends State<Schedule> {
                                   margin: const EdgeInsets.only(top: 30),
                                   child: SizedBox(
                                     height: double.infinity,
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
+                                    width: MediaQuery.of(context).size.width / 2,
                                     child: Align(
                                       alignment: const Alignment(-0.9, -0.2),
                                       child: Text(
                                         Mydishes[index].toString(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4,
+                                            .headline4!
+                                            .copyWith(fontSize: 12),
                                       ),
                                     ),
                                   ),
@@ -124,7 +122,8 @@ class _ScheduleState extends State<Schedule> {
                                           myFoods[index],
                                           style: Theme.of(context)
                                               .textTheme
-                                              .subtitle1,
+                                              .subtitle1
+                                              ?.copyWith(fontSize: 16),
                                           textAlign: TextAlign.center,
                                         ),
                                       )
@@ -135,19 +134,16 @@ class _ScheduleState extends State<Schedule> {
                                     bottom: .0,
                                     left: .0,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, bottom: 8),
+                                      padding: const EdgeInsets.only(left: 5, bottom: 8),
                                       child: Row(
                                         children: [
                                           Text(
                                             myCals[index],
-                                            style: TextStyle(
-                                                color: Colors.grey[600]),
+                                            style: TextStyle(color: Colors.grey[600]),
                                           ),
                                           Text(
                                             ' kcal',
-                                            style: TextStyle(
-                                                color: Colors.grey[600]),
+                                            style: TextStyle(color: Colors.grey[600]),
                                           )
                                         ],
                                       ),

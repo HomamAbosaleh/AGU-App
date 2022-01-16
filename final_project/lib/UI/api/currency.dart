@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../services/http.dart';
 
@@ -37,6 +38,7 @@ class _CurrencyState extends State<Currency> {
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
               ),
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               decoration: const InputDecoration(
                 hintText: "To TRY",
               ),
@@ -72,8 +74,7 @@ class _CurrencyState extends State<Currency> {
             ElevatedButton(
               onPressed: () async {
                 if (currency != null && amountController.text.isNotEmpty) {
-                  var value = await Http()
-                      .exchange(currency, double.parse(amountController.text));
+                  var value = await Http().exchange(currency, double.parse(amountController.text));
                   amountController.clear();
                   amountFocusNode.unfocus();
                   setState(
