@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '/services/firestore.dart';
-import '/widgets/navigationbar.dart';
 import '../../widgets/drawer.dart';
 import '../widgets/appbar.dart';
 
@@ -79,6 +77,19 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.pushNamed(context, "/tasks");
+              },
+              label: const Text(
+                'Tasks',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
               ),
             ),

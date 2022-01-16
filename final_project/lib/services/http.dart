@@ -18,9 +18,8 @@ const String currencyApi = "779adfbc70d64a92a923fff4a52fa037";
 
 class Http {
   Future<Position> getLocation() async {
-    return await Geolocator.getLastKnownPosition() ??
-        await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best);
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
   }
 
   Future getWeatherByLocation() async {

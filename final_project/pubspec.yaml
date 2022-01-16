@@ -46,6 +46,10 @@ dependencies:
   path_provider: ^2.0.8
   font_awesome_flutter: ^9.2.0
   measured_size: ^1.0.0
+
+  # Local Database
+  sqflite: ^2.0.2
+  path: ^1.8.0
   
   #APIs
   #Premission

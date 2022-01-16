@@ -12,6 +12,7 @@ class FireStore {
   static final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
 
+  // Courses and Faculties
   Future<List<Faculty>> getFaculties() async {
     List<Faculty> f = [];
     await _firebaseFirestore.collection("faculties").get().then((e) {
@@ -28,19 +29,6 @@ class FireStore {
       }
     });
     return f;
-  }
-
-  Future getTodayMeal() async {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    Map mealDictionary = {};
-    await _firebaseFirestore.collection("foodMenu").get().then((value) {
-      for (var element in value.docs) {
-        if (element.data().containsKey(date)) {
-          mealDictionary = element.get(date);
-        }
-      }
-    });
-    return mealDictionary.isEmpty ? null : mealDictionary;
   }
 
   Future getDepartments(String departmentName) {
@@ -62,20 +50,6 @@ class FireStore {
     return deps;
   }
 
-  Future getStudent() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .get();
-  }
-
-  getStudentStream() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .snapshots();
-  }
-
   getCourses() async {
     return await _firebaseFirestore.collection('courses').get();
   }
@@ -91,31 +65,6 @@ class FireStore {
     final course =
         await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
     return course;
-  }
-
-  void addMoney(double newBalance) async {
-    await _firebaseFirestore
-        .collection('student')
-        .doc(Constants.uid)
-        .update({'wallet': newBalance});
-  }
-
-  Future<void> addStudent({required Student student}) async {
-    String uid = FireAuth().currentUserID;
-    _firebaseFirestore.collection('student').doc(uid).set({
-      'name': '${student.name}',
-      'surname': '${student.surname}',
-      'email': '${student.email}',
-      'id': '${student.id}',
-      'status': '${student.status}',
-      'gpa': student.gpa,
-      'faculty': '${student.faculty}',
-      'department': '${student.department}',
-      'semester': '${student.semester}',
-      'courses': student.courses,
-      'wallet': student.wallet,
-      'admin': student.admin,
-    });
   }
 
   Future<int> addCourseToBeApproved({required Course course}) async {
@@ -182,6 +131,79 @@ class FireStore {
     }
   }
 
+  // Sign Up
+  Future<void> addStudent({required Student student}) async {
+    String uid = FireAuth().currentUserID;
+    _firebaseFirestore.collection('student').doc(uid).set({
+      'name': '${student.name}',
+      'surname': '${student.surname}',
+      'email': '${student.email}',
+      'id': '${student.id}',
+      'status': '${student.status}',
+      'gpa': student.gpa,
+      'faculty': '${student.faculty}',
+      'department': '${student.department}',
+      'semester': '${student.semester}',
+      'courses': student.courses,
+      'wallet': student.wallet,
+      'admin': student.admin,
+    });
+  }
+
+  // Canteen
+  Future getStudent() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .get();
+  }
+
+  getStudentStream() async {
+    return await _firebaseFirestore
+        .collection("student")
+        .doc(Constants.uid)
+        .snapshots();
+  }
+
+  Future getWeekSchedule() async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    List weekList = [];
+    await _firebaseFirestore.collection("foodMenu").get().then((value) {
+      for (var element in value.docs) {
+        if (element.data().containsKey(date)) {
+          element.data().forEach((key, value) {
+            weekList.add({"date": key, ...value});
+          });
+        }
+      }
+    });
+    weekList.sort((a, b) {
+      return DateTime.parse(a["date"]).compareTo(DateTime.parse(b["date"]));
+    });
+    return weekList.isEmpty ? null : weekList;
+  }
+
+  Future getTodayMeal() async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Map mealDictionary = {};
+    await _firebaseFirestore.collection("foodMenu").get().then((value) {
+      for (var element in value.docs) {
+        if (element.data().containsKey(date)) {
+          mealDictionary = element.get(date);
+        }
+      }
+    });
+    return mealDictionary.isEmpty ? null : mealDictionary;
+  }
+
+  void addMoney(double newBalance) async {
+    await _firebaseFirestore
+        .collection('student')
+        .doc(Constants.uid)
+        .update({'wallet': newBalance});
+  }
+
+  // Chatroom
   void createChatRoom(sendToName, chatRoomMap, sendToChatRoomMap) async {
     var sendToId;
     await _firebaseFirestore.collection("student").get().then(

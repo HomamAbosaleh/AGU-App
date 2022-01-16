@@ -48,6 +48,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 16,
               ),
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
@@ -63,6 +64,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 hintText: 'Username',
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryVariant,
+                  fontSize: 16,
                 ),
               ),
             ),

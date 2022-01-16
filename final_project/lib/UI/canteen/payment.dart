@@ -58,7 +58,7 @@ class _PaymentsState extends State<Payments> {
                         (states) => Colors.white),
                   ),
                   onPressed: () {
-                    showModalBottomSheet(
+                    showBottomSheet(
                         context: context,
                         builder: (context) => buildSheet(snapShot));
                   },
@@ -86,6 +86,12 @@ class _PaymentsState extends State<Payments> {
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
               controller: balanceController,
               decoration: const InputDecoration(label: Text('balance')),
               inputFormatters: [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../constants.dart';
 import '../../services/firestore.dart';
 import 'conversation.dart';
 
@@ -86,6 +85,12 @@ class _SearchState extends State<Search> {
           children: [
             TextField(
               controller: search,
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Search',
                 border: OutlineInputBorder(
@@ -97,24 +102,37 @@ class _SearchState extends State<Search> {
               ),
             ),
             Card(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: searching == true
-                    ? filteredStudents.length
-                    : students.length,
-                itemBuilder: (context, index) {
-                  String name = searching == true
-                      ? filteredStudents[index]
-                      : students[index];
-                  return InkWell(
-                    onTap: () {
-                      createChatRoom(name);
-                    },
-                    child: ListTile(
-                      title: Text(getName(name)),
-                    ),
-                  );
-                },
+              child: SizedBox(
+                height: 420,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: searching == true ? filteredStudents.length : students.length,
+                  itemBuilder: (context, index) {
+                    String name = searching == true ? filteredStudents[index] : students[index];
+                    String trueName = getName(name);
+                    if (!trueName.contains("Adminfirstname") &&
+                        !trueName.contains("Studentfirstname") &&
+                        !trueName.contains("Test")) {
+                      return InkWell(
+                        onTap: () {
+                          createChatRoom(name);
+                        },
+                        child: ListTile(
+                          title: Text(
+                            getName(name),
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              color: Theme.of(context).colorScheme.onSecondary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ),
             ),
           ],
