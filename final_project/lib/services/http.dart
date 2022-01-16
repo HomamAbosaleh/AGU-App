@@ -86,7 +86,7 @@ class Http {
     }
   }
 
-  getCurrency() async {
+  exchange(String name, double amount) async {
     final queryParameters = {
       "app_id": currencyApi,
     };
@@ -95,18 +95,16 @@ class Http {
 
     final response = await http.get(uri);
 
-    print((jsonDecode(response.body))["rates"]["TRY"]);
-  }
+    final mapOfCurrencies = jsonDecode(response.body);
 
-  Future getCurrencies() async {
-    final queryParameters = {
-      "app_id": currencyApi,
-    };
-
-    final uri = Uri.https(openExchangeURL, currencyURL1, queryParameters);
-
-    final response = await http.get(uri);
-
-    return jsonDecode(response.body);
+    if (name == "USD") {
+      return (mapOfCurrencies)["rates"]["TRY"] * amount;
+    } else {
+      return amount /
+          (mapOfCurrencies)["rates"][name] *
+          (mapOfCurrencies)["rates"]["TRY"];
+      // print((mapOfCurrencies)["rates"][name]);
+      // print((mapOfCurrencies)["rates"]["TRY"]);
+    }
   }
 }
