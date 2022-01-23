@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+
 import '../../services/http.dart';
 
 class Location extends StatefulWidget {
@@ -13,6 +14,7 @@ class Location extends StatefulWidget {
 }
 
 class LocationState extends State<Location> {
+  MapType _currMapType = MapType.normal;
   final Completer<GoogleMapController> _controller = Completer();
   bool isData = false;
   Set<Marker> markers = {};
@@ -100,24 +102,28 @@ class LocationState extends State<Location> {
                       textAlign: TextAlign.center,
                     ),
                   )
+
                 ],
               ),
             )
           : GoogleMap(
-              mapType: MapType.hybrid,
+              mapType: _currMapType,
               initialCameraPosition: agu,
               onMapCreated: _onMapCreated,
               markers: markers,
             ),
-      /*   floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0.0,0.0,245.0,5.0),
-        child: FloatingActionButton.extended(
-          onPressed: _goToAgu,
-          label: Text('To the Uni!', style: Theme.of(context).textTheme.headline6),
-          icon:  Icon(FontAwesomeIcons.university,color: Theme.of(context).cardTheme.color),
-        ),
-      ),*/
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.view_in_ar),
+        backgroundColor: Colors.white,
+        onPressed: _toggleMapType,
+        heroTag: null,
+      ),
     );
+  }
+  void _toggleMapType(){
+    setState(() {
+      _currMapType = (_currMapType == MapType.normal) ? MapType.satellite : MapType.normal;
+    });
   }
 
   Future<void> _goToAgu() async {
