@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../services/http.dart';
 
@@ -47,7 +46,6 @@ class _CurrencyState extends State<Currency> {
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
               ),
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               decoration: const InputDecoration(
                 hintText: "Exchange X amount to TRY",
               ),
@@ -78,7 +76,9 @@ class _CurrencyState extends State<Currency> {
                 "USD",
               ].map<DropdownMenuItem<Object>>(dropDownBuilder).toList(),
               onChanged: (value) {
+
                   currency = value;
+
               },
             ),
             const SizedBox(
@@ -87,15 +87,11 @@ class _CurrencyState extends State<Currency> {
             ElevatedButton(
               onPressed: () async {
                 if (currency != null && amountController.text.isNotEmpty) {
-<<<<<<< HEAD
                   var value = await Http()
                       .exchange(currency, double.parse(amountController.text));
                   var value1 = await Http()
                       .exchange(currency, 1);
-=======
-                  var value = await Http().exchange(currency, double.parse(amountController.text));
-                  amountController.clear();
->>>>>>> origin/master
+                  //amountController.clear();
                   amountFocusNode.unfocus();
                   setState(
                     () {
