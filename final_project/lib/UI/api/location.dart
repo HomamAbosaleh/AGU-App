@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
 import '../../services/http.dart';
 
 class Location extends StatefulWidget {
@@ -26,7 +25,7 @@ class LocationState extends State<Location> {
       setState(() {
         _kGooglePlex = CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 14.4746,
+          // zoom: 14.4746,
         );
         isData = true;
       });
@@ -60,7 +59,8 @@ class LocationState extends State<Location> {
     Marker(
       markerId: MarkerId('id-2'),
       position: LatLng(38.736946996532865, 35.473508676889814),
-      infoWindow: InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
+      infoWindow:
+          InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
     ),
     Marker(
         markerId: MarkerId('id-3'),
@@ -102,7 +102,6 @@ class LocationState extends State<Location> {
                       textAlign: TextAlign.center,
                     ),
                   )
-
                 ],
               ),
             )
@@ -113,16 +112,18 @@ class LocationState extends State<Location> {
               markers: markers,
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.view_in_ar),
-        backgroundColor: Colors.white,
+        child: const Icon(Icons.view_in_ar),
+        backgroundColor: Colors.black,
         onPressed: _toggleMapType,
         heroTag: null,
       ),
     );
   }
-  void _toggleMapType(){
+
+  void _toggleMapType() {
     setState(() {
-      _currMapType = (_currMapType == MapType.normal) ? MapType.satellite : MapType.normal;
+      _currMapType =
+          (_currMapType == MapType.normal) ? MapType.satellite : MapType.normal;
     });
   }
 
@@ -134,7 +135,8 @@ class LocationState extends State<Location> {
   Future<Position> locationGet() async {
     var currentLocation;
     try {
-      currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      currentLocation = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
     } catch (e) {
       currentLocation = null;
     }

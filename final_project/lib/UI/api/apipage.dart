@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'currency.dart';
 import 'location.dart';
@@ -13,32 +12,32 @@ class ApiPage extends StatefulWidget {
   _ApiPageState createState() => _ApiPageState();
 }
 
-class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin{
-   late TabController _tcontroller;
-   late String currentTitle;
-  final List<String> _apipagenames = <String>[
-     'University Location',
-     'Currency Exchange',
-     'Weather',
+class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin {
+  late TabController tabController;
+  late String currentTitle;
+  final List<String> pageNames = <String>[
+    'University Location',
+    'Currency Exchange',
+    'Weather',
   ];
-
-  void getPermissions() async {
-    await Permission.location.request();
-  }
 
   @override
   void initState() {
-    currentTitle = _apipagenames[0];
-    _tcontroller = TabController(length: 3, vsync: this);
-    _tcontroller.addListener(changeTitle); // Registering listener
+    currentTitle = pageNames[0];
+    tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(changeTitle);
     super.initState();
   }
 
-  // This function is called, every time active tab is changed
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   void changeTitle() {
     setState(() {
-      // get index of active tab & change current appbar title
-      currentTitle = _apipagenames[_tcontroller.index];
+      currentTitle = pageNames[tabController.index];
     });
   }
 
@@ -52,7 +51,7 @@ class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin{
           title: Text(currentTitle),
           centerTitle: true,
           bottom: TabBar(
-              controller: _tcontroller,
+              controller: tabController,
               labelColor: Theme.of(context).hoverColor,
               indicatorColor: Theme.of(context).hoverColor,
               unselectedLabelColor: Theme.of(context).disabledColor,
@@ -62,9 +61,7 @@ class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin{
                 Tab(icon: Icon(Icons.cloud)),
               ]),
         ),
-        body: TabBarView(
-            controller: _tcontroller,
-            children: [
+        body: TabBarView(controller: tabController, children: [
           const Location(),
           const Currency(),
           Weather(),
