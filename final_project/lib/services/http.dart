@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+
 import '../model/weather.dart';
 
 // Weather
@@ -18,38 +20,41 @@ const String currencyApi = "779adfbc70d64a92a923fff4a52fa037";
 
 class Http {
   Future<Position> getLocation() async {
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
   Future getWeatherByLocation() async {
-    Weather weather;
-    Position position = await getLocation();
+    try {
+      Weather weather;
+      Position position = await getLocation();
 
-    final queryParameters = {
-      'lat': position.latitude.toString(),
-      'lon': position.longitude.toString(),
-      'units': 'metric',
-      'appid': weatherApi,
-    };
+      final queryParameters = {
+        'lat': position.latitude.toString(),
+        'lon': position.longitude.toString(),
+        'units': 'metric',
+        'appid': weatherApi,
+      };
 
-    final uri = Uri.https(openWeatherURL, weatherURL, queryParameters);
+      final uri = Uri.https(openWeatherURL, weatherURL, queryParameters);
 
-    final response = await http.get(uri);
+      final response = await http.get(uri);
 
-    final json = jsonDecode(response.body);
-    weather = Weather(
-        humidity: json["main"]["humidity"],
-        highTemp: (json["main"]["temp_max"]).toInt(),
-        feelsLike: (json["main"]["feels_like"]).toInt(),
-        locationName: json["name"],
-        lowTemp: (json["main"]["temp_min"]).toInt(),
-        pressure: json["main"]["pressure"],
-        temperature: (json["main"]["temp"]).toInt(),
-        visibility: (json["visibility"]).toInt(),
-        windSpeed: (json["wind"]["speed"]).toDouble(),
-        weatherID: json["weather"][0]["id"]);
-    return weather;
+      final json = jsonDecode(response.body);
+      weather = Weather(
+          humidity: json["main"]["humidity"],
+          highTemp: (json["main"]["temp_max"]).toInt(),
+          feelsLike: (json["main"]["feels_like"]).toInt(),
+          locationName: json["name"],
+          lowTemp: (json["main"]["temp_min"]).toInt(),
+          pressure: json["main"]["pressure"],
+          temperature: (json["main"]["temp"]).toInt(),
+          visibility: (json["visibility"]).toInt(),
+          windSpeed: (json["wind"]["speed"]).toDouble(),
+          weatherID: json["weather"][0]["id"]);
+      return weather;
+    } catch (ex) {
+      print(ex.toString());
+    }
   }
 
   Future getWeatherByCity(String city) async {
@@ -100,9 +105,7 @@ class Http {
     if (name == "USD") {
       return (mapOfCurrencies)["rates"]["TRY"] * amount;
     } else {
-      return amount /
-          (mapOfCurrencies)["rates"][name] *
-          (mapOfCurrencies)["rates"]["TRY"];
+      return amount / (mapOfCurrencies)["rates"][name] * (mapOfCurrencies)["rates"]["TRY"];
       // print((mapOfCurrencies)["rates"][name]);
       // print((mapOfCurrencies)["rates"]["TRY"]);
     }

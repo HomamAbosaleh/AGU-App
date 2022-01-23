@@ -12,10 +12,8 @@ class Currency extends StatefulWidget {
 class _CurrencyState extends State<Currency> {
   FocusNode amountFocusNode = FocusNode();
   dynamic currency;
-
   TextEditingController amountController = TextEditingController();
-  double? amount, amountofone;
-  String? exchangedmoney, exchangedmoneyof1;
+  double? amount;
   bool a = false;
 
   @override
@@ -30,13 +28,6 @@ class _CurrencyState extends State<Currency> {
       child: Card(
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
-            Text("Exchange from desired currency to TRY",style: TextStyle(fontSize: 18),),
-            SizedBox(
-              height: 10,
-            ),
             TextField(
               focusNode: amountFocusNode,
               controller: amountController,
@@ -47,12 +38,9 @@ class _CurrencyState extends State<Currency> {
                 fontSize: 16,
               ),
               decoration: const InputDecoration(
-                hintText: "Exchange X amount to TRY",
+                hintText: "To TRY",
               ),
               keyboardType: TextInputType.number,
-            ),
-            SizedBox(
-              height: 10,
             ),
             DropdownButtonFormField(
               hint: const Text("Desired Currency"),
@@ -76,27 +64,22 @@ class _CurrencyState extends State<Currency> {
                 "USD",
               ].map<DropdownMenuItem<Object>>(dropDownBuilder).toList(),
               onChanged: (value) {
+                setState(() {
                   currency = value;
+                });
               },
-            ),
-            const SizedBox(
-              height: 10,
             ),
             ElevatedButton(
               onPressed: () async {
                 if (currency != null && amountController.text.isNotEmpty) {
                   var value = await Http()
                       .exchange(currency, double.parse(amountController.text));
-                  var value1 = await Http()
-                      .exchange(currency, 1);
+                  amountController.clear();
                   amountFocusNode.unfocus();
                   setState(
                     () {
                       a = true;
                       amount = value;
-                      amountofone = value1;
-                      exchangedmoney = amount!.toStringAsFixed(3);
-                      exchangedmoneyof1 = amountofone!.toStringAsFixed(3);
                     },
                   );
                 } else if (currency == null) {
@@ -105,9 +88,9 @@ class _CurrencyState extends State<Currency> {
                     const SnackBar(
                       content: Text(
                         '❌ Error: Please enter the targeted currency',
-                        style: TextStyle(fontSize: 17),
+                        style: TextStyle(fontSize: 20),
                       ),
-                      duration: Duration(seconds: 5),
+                      duration: Duration(seconds: 8),
                     ),
                   );
                 } else {
@@ -116,29 +99,19 @@ class _CurrencyState extends State<Currency> {
                     const SnackBar(
                       content: Text(
                         '❌ Error: Please enter the amount',
-                        style: TextStyle(fontSize: 17),
+                        style: TextStyle(fontSize: 20),
                       ),
-                      duration: Duration(seconds: 5),
+                      duration: Duration(seconds: 8),
                     ),
                   );
                 }
               },
-
-              child: const Text('Exchange to TRY'),
+              child: const Text('Exchange'),
             ),
-            SizedBox(
-              height: 10,
-            ),
-
-          a == true
-                ?
-              Column(
-                children: [
-                  Text("1 "+currency+" is "+exchangedmoneyof1!+" ₺",style: const TextStyle(fontSize: 18)),
-
-                  Text(amountController.text+" "+currency+" is "+exchangedmoney!+" ₺",style: const TextStyle(fontSize: 20))
-                ],
-              )
+            a == true
+                ? Card(
+                    child: Text("TRY: " + amount.toString()),
+                  )
                 : Container(),
           ],
         ),
