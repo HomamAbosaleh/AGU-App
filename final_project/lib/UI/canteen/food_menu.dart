@@ -37,7 +37,6 @@ class _FoodState extends State<Food> {
       child: Scaffold(
         drawer: customDrawer(context),
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           centerTitle: true,
           title:
               Text("Dining Hall", style: Theme.of(context).textTheme.headline3),
