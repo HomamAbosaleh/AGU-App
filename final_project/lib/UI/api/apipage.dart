@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'currency.dart';
 import 'location.dart';
@@ -12,13 +13,34 @@ class ApiPage extends StatefulWidget {
   _ApiPageState createState() => _ApiPageState();
 }
 
-class _ApiPageState extends State<ApiPage> {
-  int currentInd = 0;
-  final List<Widget> _apipagenames = <Widget>[
-    const Text('University Location'),
-    const Text('Currency Exchange'),
-    const Text('Kayseri Weather'),
+class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin{
+   late TabController _tcontroller;
+   late String currentTitle;
+  final List<String> _apipagenames = <String>[
+     'University Location',
+     'Currency Exchange',
+     'Weather',
   ];
+
+  void getPermissions() async {
+    await Permission.location.request();
+  }
+
+  @override
+  void initState() {
+    currentTitle = _apipagenames[0];
+    _tcontroller = TabController(length: 3, vsync: this);
+    _tcontroller.addListener(changeTitle); // Registering listener
+    super.initState();
+  }
+
+  // This function is called, every time active tab is changed
+  void changeTitle() {
+    setState(() {
+      // get index of active tab & change current appbar title
+      currentTitle = _apipagenames[_tcontroller.index];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +49,10 @@ class _ApiPageState extends State<ApiPage> {
       child: Scaffold(
         drawer: customDrawer(context),
         appBar: AppBar(
-          title: _apipagenames.elementAt(currentInd),
+          title: Text(currentTitle),
           centerTitle: true,
           bottom: TabBar(
+              controller: _tcontroller,
               labelColor: Theme.of(context).hoverColor,
               indicatorColor: Theme.of(context).hoverColor,
               unselectedLabelColor: Theme.of(context).disabledColor,
@@ -39,7 +62,9 @@ class _ApiPageState extends State<ApiPage> {
                 Tab(icon: Icon(Icons.cloud)),
               ]),
         ),
-        body: TabBarView(children: [
+        body: TabBarView(
+            controller: _tcontroller,
+            children: [
           const Location(),
           const Currency(),
           Weather(),
