@@ -2,9 +2,10 @@ import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
 
 class DepartmentPage extends StatefulWidget {
-  String departmentName;
+  final String departmentName;
 
-  DepartmentPage({Key? key, required this.departmentName}) : super(key: key);
+  const DepartmentPage({Key? key, required this.departmentName})
+      : super(key: key);
 
   @override
   _DepartmentPageState createState() => _DepartmentPageState();
@@ -31,8 +32,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
             ),
             body: Center(
               child: Column(
-                children: [
-                ],
+                children: [],
               ),
             ),
           );

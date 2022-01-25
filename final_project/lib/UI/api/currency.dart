@@ -76,9 +76,7 @@ class _CurrencyState extends State<Currency> {
                 "USD",
               ].map<DropdownMenuItem<Object>>(dropDownBuilder).toList(),
               onChanged: (value) {
-
-                currency = value;
-
+                  currency = value;
               },
             ),
             const SizedBox(
@@ -132,16 +130,15 @@ class _CurrencyState extends State<Currency> {
             SizedBox(
               height: 10,
             ),
-
-            a == true
+          a == true
                 ?
-            Column(
-              children: [
-                Text("1 "+currency+" is "+exchangedmoneyof1!+" ₺",style: const TextStyle(fontSize: 18)),
+              Column(
+                children: [
+                  Text("1 "+currency+" is "+exchangedmoneyof1!+" ₺",style: const TextStyle(fontSize: 18)),
 
-                Text(amountController.text+" "+currency+" is "+exchangedmoney!+" ₺",style: const TextStyle(fontSize: 20))
-              ],
-            )
+                  Text(amountController.text+" "+currency+" is "+exchangedmoney!+" ₺",style: const TextStyle(fontSize: 20))
+                ],
+              )
                 : Container(),
           ],
         ),

@@ -116,7 +116,7 @@ class _LogInState extends State<LogIn> {
             style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(
-            height: 24,
+            height: 15,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 26),
