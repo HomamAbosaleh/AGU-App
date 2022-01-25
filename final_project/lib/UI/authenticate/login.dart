@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,13 +14,44 @@ import '../../constants.dart';
 
 class LogIn extends StatefulWidget {
   final Function changeLogIn;
-  const LogIn({Key? key, required this.changeLogIn}) : super(key: key);
+   const LogIn({Key? key, required this.changeLogIn}) : super(key: key);
 
   @override
   _LogInState createState() => _LogInState();
 }
 
 class _LogInState extends State<LogIn> {
+  ConnectivityResult _connectivityResult = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _streamSubscription;
+  Future <void> initConnectivity() async{
+    late ConnectivityResult result;
+    try {
+      result  = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e){
+      print(e.toString());
+      return;
+    }
+    if(!mounted){
+      return Future.value(null);
+    }
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async{
+    setState(() {
+      _connectivityResult = result;
+    });
+  }
+  @override
+  void initState(){
+    super.initState();
+    initConnectivity();
+    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+
   final _userName = TextEditingController();
   final _password = TextEditingController();
   bool eye = true;
@@ -30,6 +65,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   void dispose() {
+    _streamSubscription.cancel();
     focus1.dispose();
     focus2.dispose();
     super.dispose();
@@ -62,6 +98,19 @@ class _LogInState extends State<LogIn> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              //connectivityResult.toString() == "ConnectivityResult.wifi" ? tEX( : t
+              if(_connectivityResult.toString()=="ConnectivityResult.wifi")
+               const Icon(Icons.wifi,size: 35),
+              if(_connectivityResult.toString()=="ConnectivityResult.mobile")
+               const Icon(Icons.wifi,size: 35),
+              if(_connectivityResult.toString()=="ConnectivityResult.none")
+               const Icon(Icons.wifi_off,size: 35),
+            ],
+          ),
           Text(
             'Login',
             style: Theme.of(context).textTheme.headline5,
@@ -244,12 +293,7 @@ class _LogInState extends State<LogIn> {
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Sign in options only available in \ntesting/grading (no need to sign up)',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 16),
-                  ),
+                children: <Widget>[
                   ElevatedButton(
                     onPressed: () async {
                       focus1.unfocus();
