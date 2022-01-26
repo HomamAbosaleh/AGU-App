@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../model/task.dart';
@@ -14,6 +18,7 @@ class Tasks extends StatefulWidget {
 
 class _TasksBState extends State<Tasks> {
   final textController = TextEditingController();
+  FocusNode text = FocusNode();
   final formKey = GlobalKey<FormState>();
   Task locakTask = Task(body: "no", reminderIsSet: false);
 
@@ -24,12 +29,40 @@ class _TasksBState extends State<Tasks> {
           body: locakTask.body,
           reminderIsSet: locakTask.reminderIsSet),
     );
+    setState(() {
+      locakTask = Task(body: "no", reminderIsSet: false);
+    });
   }
 
   void insertTask() async {
     await Sqlite().insert(
       Task(body: locakTask.body, reminderIsSet: locakTask.reminderIsSet),
     );
+    setState(() {
+      locakTask = Task(body: "no", reminderIsSet: false);
+    });
+  }
+
+  void setUpTimeZone() async {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(
+      tz.getLocation(
+        await FlutterNativeTimezone.getLocalTimezone(),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    setUpTimeZone();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    text.dispose();
+    textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -41,6 +74,7 @@ class _TasksBState extends State<Tasks> {
         title: Form(
           key: formKey,
           child: TextFormField(
+            focusNode: text,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter a non-empty task';
@@ -92,15 +126,17 @@ class _TasksBState extends State<Tasks> {
                           ),
                           actions: [
                             TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                                child: const Text('No')),
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: const Text('No'),
+                            ),
                             TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                child: const Text("Yes"))
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              child: const Text("Yes"),
+                            )
                           ],
                         ),
                       );
@@ -159,20 +195,30 @@ class _TasksBState extends State<Tasks> {
                                 );
                               }
                               if (selectedTime != null && newDate != null) {
+                                DateTime finalDate = DateTime(
+                                  newDate.year,
+                                  newDate.month,
+                                  newDate.day,
+                                  selectedTime.hour,
+                                  selectedTime.minute,
+                                );
                                 setState(() {
                                   snapshot.data[index].reminderIsSet = true;
                                 });
                                 locakTask = snapshot.data[index];
                                 updateTask();
-                                setState(() {
-                                  locakTask =
-                                      Task(body: "no", reminderIsSet: false);
-                                });
+                                LocalNotification.futureNotify(
+                                  title: "Reminder",
+                                  body: locakTask.body,
+                                  date: finalDate,
+                                );
                               }
                             } else {
                               setState(() {
                                 snapshot.data[index].reminderIsSet = false;
                               });
+                              locakTask = snapshot.data[index];
+                              updateTask();
                             }
                           },
                           child: Text(
@@ -215,10 +261,8 @@ class _TasksBState extends State<Tasks> {
             });
             insertTask();
           }
-          setState(() {
-            textController.clear();
-            locakTask = Task(body: "no", reminderIsSet: false);
-          });
+          textController.clear();
+          text.unfocus();
         },
         child: const Icon(
           Icons.save,
@@ -227,56 +271,45 @@ class _TasksBState extends State<Tasks> {
       ),
     );
   }
+}
 
-  Widget buildSheet(BuildContext context) {
-    DateTime? date;
+class LocalNotification {
+  static final _notification = FlutterLocalNotificationsPlugin();
 
-    Future pickDate(BuildContext context) async {
-      final initialDate = DateTime.now();
-      final newDate = await showDatePicker(
-          context: context,
-          initialDate: initialDate,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(DateTime.now().year + 5),
-          currentDate: DateTime(DateTime.now().day + 2));
+  static Future _notificationDetails() async => const NotificationDetails(
+        android: AndroidNotificationDetails('channel id', 'channel name',
+            channelDescription: 'channel description',
+            importance: Importance.max,
+            playSound: true,
+            color: Colors.red),
+        iOS: IOSNotificationDetails(),
+      );
 
-      if (newDate == null) return;
+  static InitializationSettings initializeSettings() =>
+      const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: IOSInitializationSettings(),
+      );
+  static void init() => _notification.initialize(initializeSettings());
 
-      setState(() {
-        date = newDate;
-      });
-    }
-
-    return Container(
-      height: 200,
-      width: double.infinity,
-      color: Colors.blueAccent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          date == null ? Container() : Text(date!.day.toString()),
-          ElevatedButton(
-            onPressed: () {
-              pickDate(context);
-            },
-            child: date == null
-                ? const Text('Set date')
-                : Text(
-                    date!.month.toString(),
-                  ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (date == null) {
-                print('Date is null');
-              } else {
-                print('${date!.month} - ${date!.day}');
-              }
-            },
-            child: Text('Select time'),
-          )
-        ],
-      ),
+  static Future notify(
+      {required id, required String title, required String body}) async {
+    _notification.show(
+      id,
+      title,
+      body,
+      await _notificationDetails(),
     );
+  }
+
+  static Future futureNotify(
+      {required String title,
+      required String body,
+      required DateTime date}) async {
+    _notification.zonedSchedule(0, title, body,
+        tz.TZDateTime.from(date, tz.local), await _notificationDetails(),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 }
