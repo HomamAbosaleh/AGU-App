@@ -66,6 +66,11 @@ dependencies:
 
   #Providers
   provider: ^6.0.2
+  
+  #Notification
+  flutter_local_notifications: ^9.2.0
+  android_alarm_manager_plus: ^2.0.3
+  flutter_ringtone_player: ^3.1.1
 
   #Security
   flutter_dotenv: ^5.0.2
