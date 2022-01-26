@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 
 import '../../services/http.dart';
 
@@ -46,7 +44,7 @@ class LocationState extends State<Location> {
 
   late CameraPosition _kGooglePlex;
 
-  static final CameraPosition  agu = CameraPosition(
+  static final CameraPosition agu = CameraPosition(
       bearing: 0.0,
       target: LatLng(38.73719850955575, 35.47356217597683),
       tilt: 30.440717697143555,
@@ -63,8 +61,7 @@ class LocationState extends State<Location> {
     Marker(
       markerId: MarkerId('id-2'),
       position: LatLng(38.736946996532865, 35.473508676889814),
-      infoWindow:
-          InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
+      infoWindow: InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
     ),
     Marker(
         markerId: MarkerId('id-3'),
@@ -107,48 +104,52 @@ class LocationState extends State<Location> {
                       textAlign: TextAlign.center,
                     ),
                   )
-
                 ],
               ),
             )
           : GoogleMap(
-        zoomGesturesEnabled: true,
-        mapToolbarEnabled: false,
-        rotateGesturesEnabled: true,
-        scrollGesturesEnabled: true,
-        zoomControlsEnabled: false,
-        mapType: _currMapType,
-        initialCameraPosition: agu,
-        onMapCreated: _onMapCreated,
-        gestureRecognizers: < Factory < OneSequenceGestureRecognizer >> [
-          new Factory < OneSequenceGestureRecognizer > (
-                () => new EagerGestureRecognizer(),
-          ),
-        ].toSet(),
-        markers: markers,
+              zoomGesturesEnabled: true,
+              mapToolbarEnabled: false,
+              rotateGesturesEnabled: true,
+              scrollGesturesEnabled: true,
+              zoomControlsEnabled: false,
+              compassEnabled: true,
+              mapType: _currMapType,
+              initialCameraPosition: agu,
+              onMapCreated: _onMapCreated,
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                new Factory<OneSequenceGestureRecognizer>(
+                  () => new EagerGestureRecognizer(),
+                ),
+              ].toSet(),
+              markers: markers,
             ),
-      floatingActionButton:
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                FloatingActionButton(
-                  child: Icon(Icons.view_in_ar),
-                  backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                  foregroundColor: Colors.white,
-                  onPressed: _toggleMapType,
-                  heroTag: null,),
-                SizedBox(height: 10,),
-                FloatingActionButton(
-                  child: Icon(Icons.school),
-                  backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                  foregroundColor: Colors.white,
-                  onPressed: _goToAgu,
-                  heroTag: null,),
-              ],),
-
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            child: Icon(Icons.view_in_ar),
+            backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+            foregroundColor: Colors.white,
+            onPressed: _toggleMapType,
+            heroTag: null,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            child: Icon(Icons.school),
+            backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+            foregroundColor: Colors.white,
+            onPressed: _goToAgu,
+            heroTag: null,
+          ),
+        ],
+      ),
     );
   }
-  void _toggleMapType(){
+
+  void _toggleMapType() {
     setState(() {
       _currMapType = (_currMapType == MapType.normal) ? MapType.satellite : MapType.normal;
     });
@@ -162,8 +163,7 @@ class LocationState extends State<Location> {
   Future<Position> locationGet() async {
     var currentLocation;
     try {
-      currentLocation = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
+      currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     } catch (e) {
       currentLocation = null;
     }

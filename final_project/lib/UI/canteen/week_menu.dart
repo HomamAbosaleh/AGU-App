@@ -62,71 +62,26 @@ class MealOfToday extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) {
                                 return dayMenu(context, snapShot.data[1][index]);
                               },
-              body: Padding(
-            padding: const EdgeInsets.all(8),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  floating: true,
-                  elevation: 0,
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  title: ListTile(
-                    title: Text(
-                      "Current Balance",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle: Text('₺${snapShot.data['wallet']}',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline3),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: FutureBuilder(
-                    future: FireStore().getWeekSchedule(),
-                    builder: (context, AsyncSnapshot snapShot) {
-                      if (snapShot.connectionState == ConnectionState.done) {
-                        if (snapShot.hasData) {
-                          return Column(
-                            children: [
-                              snapShot.data[0]
-                                  ? Center(
-                                      child: Text("Next Week Menu",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1),
-                                    )
-                                  : Container(),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: snapShot.data[1].length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return dayMenu(
-                                      context, snapShot.data[1][index]);
-                                },
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Center(
-                            child: Text(
-                              "End of Month",
-                              style: Theme.of(context).textTheme.bodyText1,
                             ),
-                          );
-                        }
+                          ],
+                        );
                       } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return Center(
+                          child: Text(
+                            "End of Month",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
                         );
                       }
-                    },
-                  ),
-                )
-              ],
-            ),
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              )
+            ],
           ));
         } else {
           return const Center(

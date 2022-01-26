@@ -149,7 +149,7 @@ class AuthenticationState extends State<Authentication> {
               duration: const Duration(milliseconds: 1500),
               curve: Curves.easeInOutCirc,
               right: _screenState == screenState.login ? 0 : width * 2,
-              top: 180,
+              top: 130,
             ),
             AnimatedPositioned(
               child: SignUp(
