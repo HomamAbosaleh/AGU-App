@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/drawer.dart';
 import 'currency.dart';
 import 'location.dart';
 import 'weather.dart';
-import '../../widgets/drawer.dart';
 
 class ApiPage extends StatefulWidget {
   const ApiPage({Key? key}) : super(key: key);

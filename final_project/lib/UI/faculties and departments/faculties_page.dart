@@ -66,6 +66,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   List<DropDownItem> dropdownItems = [];
   Map icons = {
+    "Nanotechnology Engineering": Icons.stream,
     "Computer Engineering": Icons.computer,
     "Electrical and Electronics Engineering": Icons.electrical_services_sharp,
     "Architecture": Icons.architecture,
