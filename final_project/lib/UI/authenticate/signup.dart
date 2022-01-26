@@ -1,21 +1,21 @@
+import 'package:final_project/theme/theme_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '/model/department.dart';
 import '/model/faculty.dart';
 import '/model/student.dart';
-import '/services/fireauth.dart';
 import '/services/firestore.dart';
-import '/theme/theme.dart';
 import '/widgets/dialogbox.dart';
-import '../../constants.dart';
 
 class SignUp extends StatefulWidget {
   final ScrollController sController;
   final Function changeLogIn;
-  const SignUp({Key? key, required this.changeLogIn, required this.sController}) : super(key: key);
+  final Function submit;
+  const SignUp(
+      {Key? key, required this.changeLogIn, required this.sController, required this.submit})
+      : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -69,30 +69,21 @@ class _SignUpState extends State<SignUp> {
             controller[_confPasswordControllerNumber].text) {
           alertDialog(context, "Password Incorrect", "Please check your password");
         } else {
-          String signed = await FireAuth().signUp(
-            email: controller[_emailControllerNumber].text + domain,
-            password: controller[_passwordControllerNumber].text,
+          Student student = Student(
+            name: controller[_nameControllerNumber].text.toLowerCase(),
+            surname: controller[_surnameControllerNumber].text.toLowerCase(),
+            gpa: 0.00,
+            id: controller[_idControllerNumber].text,
+            email: controller[_emailControllerNumber].text.toLowerCase() + domain,
+            faculty: faculty!.name,
+            department: department!.name,
+            semester: semester,
+            status: status,
+            wallet: 0.00,
+            admin: false,
           );
-          if (signed == "true") {
-            Student s = Student(
-              name: controller[_nameControllerNumber].text.toLowerCase(),
-              surname: controller[_surnameControllerNumber].text.toLowerCase(),
-              gpa: 0.00,
-              id: controller[_idControllerNumber].text,
-              email: controller[_emailControllerNumber].text.toLowerCase() + domain,
-              faculty: faculty!.name,
-              department: department!.name,
-              semester: semester,
-              status: status,
-              wallet: 0.00,
-              admin: false,
-            );
-            FireStore().addStudent(student: s);
-            await setUpDate();
-            Navigator.pushNamedAndRemoveUntil(context, '/navigationBar', (route) => false);
-          } else {
-            alertDialog(context, "Cannot Sign Up", signed);
-          }
+          widget.submit(controller[_emailControllerNumber].text + domain,
+              controller[_passwordControllerNumber].text, false, student);
         }
       } else {
         alertDialog(context, "Incomplete Information", "Student number must be 10 digits");
@@ -345,7 +336,7 @@ class _SignUpState extends State<SignUp> {
           iconDisabledColor: Theme.of(context).iconTheme.color,
           dropdownColor: Theme.of(context).colorScheme.onSurface,
           onChanged: (value) {
-            FocusScope.of(context).requestFocus(fNodes[7]);
+            FocusScope.of(context).requestFocus(fNodes[8]);
             setState(() {
               status = value;
             });
@@ -358,14 +349,6 @@ class _SignUpState extends State<SignUp> {
         ),
       ],
     );
-  }
-
-  Future<void> setUpDate() async {
-    await Constants.setUpConstants(
-        controller[_emailControllerNumber].text.replaceAll(".", " ").toLowerCase(),
-        controller[_emailControllerNumber].text + domain,
-        FireAuth().currentUserID,
-        rememberMe);
   }
 
   DropdownMenuItem<dynamic> dropDownBuilder(item) {

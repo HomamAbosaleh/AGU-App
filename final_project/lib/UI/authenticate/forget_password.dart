@@ -1,8 +1,10 @@
+import 'package:final_project/model/http_exception.dart';
+import 'package:final_project/services/new_fireauth.dart';
+import 'package:final_project/theme/theme_manager.dart';
+import 'package:final_project/widgets/new_dialogbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '/services/fireauth.dart';
-import '/theme/theme.dart';
+import 'package:provider/provider.dart';
 
 class ForgetPassword extends StatefulWidget {
   final Function changeLogIn;
@@ -34,17 +36,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         children: [
           Text(
             'Forgot Password?',
-            style:
-                Theme.of(context).textTheme.headline5!.copyWith(fontSize: 32),
+            style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 32),
           ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 26),
             child: TextField(
               focusNode: focus1,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
-              ],
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
@@ -53,12 +52,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
               decoration: InputDecoration(
-                enabledBorder:
-                    Theme.of(context).inputDecorationTheme.enabledBorder,
-                focusedBorder:
-                    Theme.of(context).inputDecorationTheme.focusedBorder,
-                icon: Icon(Icons.email,
-                    color: Theme.of(context).colorScheme.surface),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                icon: Icon(Icons.email, color: Theme.of(context).colorScheme.surface),
                 filled: true,
                 suffixText: domain,
                 hintText: 'Username',
@@ -79,51 +75,43 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     });
                     String userName = _userName.text.toLowerCase();
                     focus1.unfocus();
-                    ScaffoldMessenger.of(context).clearSnackBars();
                     if (userName.isNotEmpty) {
-                      var output =
-                          await FireAuth().resetPass(userName + domain);
-                      if (output == "true") {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text(
-                            '✔ Success: A mail has been sent to your email',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          duration: Duration(seconds: 8),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text(
-                            '❌ Error: Invalid email!',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          duration: Duration(seconds: 8),
-                        ));
+                      try {
+                        await Provider.of<Auth>(context, listen: false)
+                            .resetPass(userName + domain);
+                        newAlertDialog(
+                            context,
+                            'Success!',
+                            'A mail has been sent to your email!',
+                            const Icon(
+                              Icons.check,
+                              size: 32,
+                              color: Colors.white,
+                            ),
+                            Colors.green);
+                      } on HttpException catch (error) {
+                        var errorMessage = 'Authentication failed';
+                        if (error.toString().contains('EMAIL_NOT_FOUND')) {
+                          errorMessage = 'Could not find a user with that email.';
+                        }
+                        newAlertDialog(
+                            context, 'An error occurred while authenticating', errorMessage);
+                      } catch (error) {
+                        const errorMessage = 'Could not authenticate you. Please try again later.';
+                        newAlertDialog(
+                            context, 'An error occurred while authenticating', errorMessage);
                       }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                          '❌ Error: Please enter your email!',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        duration: Duration(seconds: 8),
-                      ));
+                      setState(() {
+                        isLoading = false;
+                      });
                     }
-                    setState(() {
-                      isLoading = false;
-                    });
                   },
             style: ElevatedButton.styleFrom(
               primary: rPrimaryRedColor,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             ),
-            child: !isLoading
-                ? const Text('Send email')
-                : const CircularProgressIndicator(),
+            child: !isLoading ? const Text('Send email') : const CircularProgressIndicator(),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -134,8 +122,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             style: ElevatedButton.styleFrom(
               primary: rPrimaryRedColor,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             ),
             child: const Text('Go back'),
           )

@@ -1,16 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-import '../model/course.dart';
 import '../constants.dart';
+import '../model/course.dart';
 import '../model/department.dart';
 import '../model/faculty.dart';
 import '../model/student.dart';
-import 'fireauth.dart';
 
 class FireStore {
-  static final FirebaseFirestore _firebaseFirestore =
-      FirebaseFirestore.instance;
+  Future<String> getStudentName(String uid) async {
+    var student = await _firebaseFirestore.collection("student").doc(uid).snapshots();
+    String studentName = '';
+    await student.first.then((value) {
+      studentName += value.data()!['name'];
+      studentName += ' ' + value.data()!['surname'];
+    });
+    return studentName;
+  }
+
+  static final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   // Courses and Faculties
   Future<List<Faculty>> getFaculties() async {
@@ -32,10 +40,7 @@ class FireStore {
   }
 
   Future getDepartments(String departmentName) {
-    return _firebaseFirestore
-        .collection('departments')
-        .doc(departmentName)
-        .get();
+    return _firebaseFirestore.collection('departments').doc(departmentName).get();
   }
 
   Future getAllDepartments() async {
@@ -62,8 +67,7 @@ class FireStore {
     if (uid.isEmpty) {
       return 0;
     }
-    final course =
-        await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
+    final course = await _firebaseFirestore.collection('coursesToBeAdded').doc(uid).get();
     return course;
   }
 
@@ -82,10 +86,7 @@ class FireStore {
         'time': DateTime.now().toString(),
       };
       String uid = Constants.myName + course.code + courseToBeAdd['time'];
-      _firebaseFirestore
-          .collection('coursesToBeAdded')
-          .doc(uid)
-          .set(courseToBeAdd);
+      _firebaseFirestore.collection('coursesToBeAdded').doc(uid).set(courseToBeAdd);
       return 1;
     } catch (e) {
       return 0;
@@ -121,10 +122,7 @@ class FireStore {
         'labLocations': course.labLocations,
         'instructors': course.instructors,
       };
-      _firebaseFirestore
-          .collection('courses')
-          .doc(course.code)
-          .set(courseToBeAdd);
+      _firebaseFirestore.collection('courses').doc(course.code).set(courseToBeAdd);
       return 1;
     } else {
       return 0;
@@ -132,8 +130,7 @@ class FireStore {
   }
 
   // Sign Up
-  Future<void> addStudent({required Student student}) async {
-    String uid = FireAuth().currentUserID;
+  Future<void> addStudent({required Student student, required String uid}) async {
     _firebaseFirestore.collection('student').doc(uid).set({
       'name': '${student.name}',
       'surname': '${student.surname}',
@@ -152,26 +149,19 @@ class FireStore {
 
   // Canteen
   Future getStudent() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .get();
+    return await _firebaseFirestore.collection("student").doc(Constants.uid).get();
   }
 
   getStudentStream() async {
-    return await _firebaseFirestore
-        .collection("student")
-        .doc(Constants.uid)
-        .snapshots();
+    return await _firebaseFirestore.collection("student").doc(Constants.uid).snapshots();
   }
 
   Future getWeekSchedule() async {
     final now = DateTime.now();
     String today = DateFormat('yyyy-MM-dd').format(now);
-    String tomorrow = DateFormat('yyyy-MM-dd')
-        .format(DateTime(now.year, now.month, now.day + 1));
-    String dayAfterTomorrow = DateFormat('yyyy-MM-dd')
-        .format(DateTime(now.year, now.month, now.day + 2));
+    String tomorrow = DateFormat('yyyy-MM-dd').format(DateTime(now.year, now.month, now.day + 1));
+    String dayAfterTomorrow =
+        DateFormat('yyyy-MM-dd').format(DateTime(now.year, now.month, now.day + 2));
     List weekList = [];
     bool weekEnd = true;
     await _firebaseFirestore.collection("foodMenu").get().then(

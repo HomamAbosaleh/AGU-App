@@ -15,6 +15,20 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   Stream? chatRoomsStream;
 
+  getUserInfo() async {
+    await FireStore().getChatRooms().then((value) {
+      setState(() {
+        chatRoomsStream = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
   Widget chatRoomList() {
     return StreamBuilder(
       stream: chatRoomsStream,
@@ -36,20 +50,6 @@ class _ChatState extends State<Chat> {
         }
       },
     );
-  }
-
-  getUserInfo() async {
-    await FireStore().getChatRooms().then((value) {
-      setState(() {
-        chatRoomsStream = value;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    getUserInfo();
-    super.initState();
   }
 
   @override
@@ -154,9 +154,8 @@ class ChatRoomTile extends StatelessWidget {
                 height: 40,
                 width: 40,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(40)),
+                decoration:
+                    BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(40)),
                 child: Text(getAbbreviation()),
               ),
               const SizedBox(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -10,13 +11,13 @@ import '../model/weather.dart';
 // Weather
 const String openWeatherURL = 'api.openweathermap.org';
 const String weatherURL = '/data/2.5/weather';
-const String weatherApi = "5a5fb541a4bd5913526ebccef75718ab";
+String? weatherApi = dotenv.env['WEATHER_API_KEY'];
 
 //Currency
 const String openExchangeURL = 'openexchangerates.org';
 const String currencyURL = '/api/latest.json';
 const String currencyURL1 = '/api/currencies.json';
-const String currencyApi = "779adfbc70d64a92a923fff4a52fa037";
+String? currencyApi = dotenv.env['CURRENCY_API_KEY'];
 
 class Http {
   Future<Position> getLocation() async {

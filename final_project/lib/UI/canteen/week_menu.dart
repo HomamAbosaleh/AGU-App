@@ -10,9 +10,58 @@ class MealOfToday extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: FireStore().getStudent(),
-      builder: (context, AsyncSnapshot snapShot) {
-        if (snapShot.hasData) {
+      builder: (context, AsyncSnapshot snapShot1) {
+        if (snapShot1.hasData) {
           return Scaffold(
+              body: CustomScrollView(
+            slivers: [
+              // SliverAppBar(
+              //   floating: true,
+              //   elevation: 0,
+              //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              //   title: ListTile(
+              //     contentPadding: const EdgeInsets.all(8),
+              //     title: Text(
+              //       "Current Balance",
+              //       textAlign: TextAlign.center,
+              //       style: Theme.of(context).textTheme.headline6,
+              //     ),
+              //     subtitle: Text('₺${snapShot1.data['wallet']}',
+              //         textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline3),
+              //   ),
+              // ),
+              SliverToBoxAdapter(
+                child: FutureBuilder(
+                  future: FireStore().getWeekSchedule(),
+                  builder: (context, AsyncSnapshot snapShot) {
+                    if (snapShot.connectionState == ConnectionState.done) {
+                      if (snapShot.hasData) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              contentPadding: const EdgeInsets.all(8),
+                              title: Text(
+                                "Current Balance",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                              subtitle: Text('₺${snapShot1.data['wallet']}',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.headline3),
+                            ),
+                            snapShot.data[0]
+                                ? Center(
+                                    child: Text("Next Week Menu",
+                                        style: Theme.of(context).textTheme.bodyText1),
+                                  )
+                                : Container(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: snapShot.data[1].length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return dayMenu(context, snapShot.data[1][index]);
+                              },
               body: Padding(
             padding: const EdgeInsets.all(8),
             child: CustomScrollView(
