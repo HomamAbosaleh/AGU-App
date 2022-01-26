@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'week_menu.dart';
-import 'payment.dart';
-import 'meal_of_today.dart';
+
 import '../../widgets/drawer.dart';
+import 'meal_of_today.dart';
+import 'payment.dart';
+import 'week_menu.dart';
 
 class Food extends StatefulWidget {
   const Food({Key? key}) : super(key: key);
@@ -59,8 +60,7 @@ class _FoodState extends State<Food> with SingleTickerProviderStateMixin {
         drawer: customDrawer(context),
         appBar: AppBar(
           centerTitle: true,
-          title:
-              Text(currentTitle, style: Theme.of(context).textTheme.headline3),
+          title: Text(currentTitle, style: Theme.of(context).textTheme.headline3),
           bottom: TabBar(
               controller: tabController,
               labelColor: Theme.of(context).hoverColor,

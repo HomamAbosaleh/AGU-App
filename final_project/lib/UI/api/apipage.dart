@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import '../../widgets/drawer.dart';
 import 'currency.dart';
 import 'location.dart';
 import 'weather.dart';
-import '../../widgets/drawer.dart';
 
 class ApiPage extends StatefulWidget {
   const ApiPage({Key? key}) : super(key: key);
@@ -12,6 +11,7 @@ class ApiPage extends StatefulWidget {
   @override
   _ApiPageState createState() => _ApiPageState();
 }
+
 class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late String currentTitle;

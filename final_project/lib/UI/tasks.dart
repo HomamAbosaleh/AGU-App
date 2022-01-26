@@ -1,16 +1,15 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-
-import '../widgets/dialogbox.dart';
 import '../model/task.dart';
 import '../services/sqllite.dart';
+import '../widgets/dialogbox.dart';
 
 class Tasks extends StatefulWidget {
   const Tasks({Key? key}) : super(key: key);
@@ -165,8 +164,7 @@ class _TasksBState extends State<Tasks> {
                             child: ListTile(
                               onLongPress: () {
                                 setState(() {
-                                  textController.text =
-                                      snapshot.data[index].body;
+                                  textController.text = snapshot.data[index].body;
                                   locakTask = snapshot.data[index];
                                 });
                               },
@@ -182,9 +180,8 @@ class _TasksBState extends State<Tasks> {
                               ),
                               subtitle: Text(
                                 snapshot.data[index].reminderDate != null
-                                    ? DateFormat('yyyy-MM-dd – kk:mm').format(
-                                        DateTime.parse(
-                                            snapshot.data[index].reminderDate))
+                                    ? DateFormat('yyyy-MM-dd – kk:mm')
+                                        .format(DateTime.parse(snapshot.data[index].reminderDate))
                                     : "",
                                 style: const TextStyle(color: Colors.grey),
                               ),
@@ -202,15 +199,13 @@ class _TasksBState extends State<Tasks> {
                                     initialDate: initialDate,
                                     firstDate: DateTime.now(),
                                     lastDate: DateTime(DateTime.now().year + 5),
-                                    currentDate:
-                                        DateTime(DateTime.now().day + 2),
+                                    currentDate: DateTime(DateTime.now().day + 2),
                                   );
                                   if (newDate != null) {
                                     selectedTime = await showTimePicker(
                                       context: context,
                                       initialTime: TimeOfDay(
-                                          hour: initialDate.hour,
-                                          minute: initialDate.minute + 1),
+                                          hour: initialDate.hour, minute: initialDate.minute + 1),
                                     );
                                   }
                                   if (selectedTime != null && newDate != null) {
@@ -222,15 +217,12 @@ class _TasksBState extends State<Tasks> {
                                       selectedTime.minute,
                                     );
                                     if (finalDate.isBefore(DateTime.now())) {
-                                      return alertDialog(
-                                          context,
-                                          "Invalid Time",
+                                      return alertDialog(context, "Invalid Time",
                                           "You cannot set a reminder in the past");
                                     }
                                     setState(() {
                                       snapshot.data[index].reminderIsSet = true;
-                                      snapshot.data[index].reminderDate =
-                                          finalDate.toString();
+                                      snapshot.data[index].reminderDate = finalDate.toString();
                                     });
                                     locakTask = snapshot.data[index];
                                     updateTask();
@@ -249,13 +241,11 @@ class _TasksBState extends State<Tasks> {
                                 onPressed: () async {
                                   if (snapshot.data[index].reminderIsSet) {
                                     setState(() {
-                                      snapshot.data[index].reminderIsSet =
-                                          false;
+                                      snapshot.data[index].reminderIsSet = false;
                                       snapshot.data[index].reminderDate = null;
                                     });
                                     locakTask = snapshot.data[index];
-                                    LocalNotification.cancelNotification(
-                                        locakTask.id!);
+                                    LocalNotification.cancelNotification(locakTask.id!);
                                     Alarm.cancelAlarm(locakTask.id!);
                                     updateTask();
                                   } else {
@@ -290,6 +280,7 @@ class _TasksBState extends State<Tasks> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          Alarm.stopSound();
           if (locakTask.id != null) {
             if (formKey.currentState!.validate()) {
               setState(() {
@@ -327,8 +318,7 @@ class LocalNotification {
         iOS: IOSNotificationDetails(),
       );
 
-  static InitializationSettings initializeSettings() =>
-      const InitializationSettings(
+  static InitializationSettings initializeSettings() => const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: IOSInitializationSettings(),
       );
@@ -353,11 +343,10 @@ class LocalNotification {
       required String title,
       required String body,
       required DateTime date}) async {
-    _notification.zonedSchedule(id, title, body,
-        tz.TZDateTime.from(date, tz.local), await _notificationDetails(),
+    _notification.zonedSchedule(
+        id, title, body, tz.TZDateTime.from(date, tz.local), await _notificationDetails(),
         androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
   }
 }
 
@@ -365,8 +354,10 @@ class Alarm {
   static void init() async => await AndroidAlarmManager.initialize();
 
   static Future setAlarm(int id, BuildContext context) async {
+    print('1');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        backgroundColor: Colors.green,
         content: Text("Hooray! You setup a reminder"),
       ),
     );
@@ -379,13 +370,16 @@ class Alarm {
   }
 
   static void startSound() async {
-    FlutterRingtonePlayer.playAlarm(
+    FlutterRingtonePlayer.play(
+      android: AndroidSounds.alarm,
+      ios: IosSounds.alarm,
       looping: true,
       volume: 0.9,
     );
   }
 
-  static void stopSound() async {
+  static void stopSound() {
+    print('3');
     FlutterRingtonePlayer.stop();
   }
 }

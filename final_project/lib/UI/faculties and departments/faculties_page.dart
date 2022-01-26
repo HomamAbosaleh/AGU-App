@@ -65,6 +65,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   List<DropDownItem> dropdownItems = [];
   Map icons = {
+    "Nanotechnology Engineering": Icons.stream,
     "Computer Engineering": Icons.computer,
     "Electrical and Electronics Engineering": Icons.electrical_services_sharp,
     "Architecture": Icons.architecture,
@@ -87,20 +88,20 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   void initlizeList() {
     if (widget.dropdowns.length == 1) {
-      dropdownItems
-          .add(DropDownItem.only(text: widget.dropdowns[0], iconData: icons[widget.dropdowns[0]]));
+      dropdownItems.add(DropDownItem.only(
+          text: widget.dropdowns[0], iconData: icons[widget.dropdowns[0]] ?? Icons.category));
       return;
     }
     for (int i = 0; i < widget.dropdowns.length; i++) {
       if (i == 0) {
-        dropdownItems.add(
-            DropDownItem.first(text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+        dropdownItems.add(DropDownItem.first(
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]] ?? Icons.category));
       } else if (i == widget.dropdowns.length - 1) {
-        dropdownItems.add(
-            DropDownItem.last(text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+        dropdownItems.add(DropDownItem.last(
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]] ?? Icons.category));
       } else {
-        dropdownItems
-            .add(DropDownItem(text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+        dropdownItems.add(DropDownItem(
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]] ?? Icons.category));
       }
     }
   }
