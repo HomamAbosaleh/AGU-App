@@ -10,7 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class AddCourseScreen extends StatefulWidget {
   bool admin = false;
   String courseUID = '';
-  AddCourseScreen({Key? key, this.admin = false, this.courseUID = ''}) : super(key: key);
+  AddCourseScreen({Key? key, this.admin = false, this.courseUID = ''})
+      : super(key: key);
 
   @override
   _AddCourseScreenState createState() => _AddCourseScreenState();
@@ -31,9 +32,15 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
   final List<FocusNode> fNodes = List.generate(5, (index) => FocusNode());
 
-  final List<TextEditingController> _locsTxtControllers = [TextEditingController()];
-  final List<TextEditingController> _labLocsTxtControllers = [TextEditingController()];
-  final List<TextEditingController> _instTxtControllers = [TextEditingController()];
+  final List<TextEditingController> _locsTxtControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _labLocsTxtControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _instTxtControllers = [
+    TextEditingController()
+  ];
 
   final List<FocusNode> _locsNodes = [FocusNode()];
   final List<FocusNode> _labLocsNodes = [FocusNode()];
@@ -134,7 +141,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
           _creditTxtController.text.isEmpty ||
           _ectsTxtController.text.isEmpty ||
           department == null) {
-        alertDialog(context, "Incomplete Information", "Please fill in all the fields");
+        alertDialog(
+            context, "Incomplete Information", "Please fill in all the fields");
       } else {
         try {
           List<String> locStrings = [];
@@ -188,16 +196,18 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             if (result == 1) {
               alertDialog(context, "Course added successfully!", "Noice");
             } else {
-              alertDialog(context, "Course already exists", "Please check database");
+              alertDialog(
+                  context, "Course already exists", "Please check database");
             }
           } else {
-            int result = await FireStore().addCourseToBeApproved(course: course);
+            int result =
+                await FireStore().addCourseToBeApproved(course: course);
             if (result == 1) {
-              alertDialog(
-                  context, "Course send for approval successfully!", "Thank you for your help!");
+              alertDialog(context, "Course send for approval successfully!",
+                  "Thank you for your help!");
             } else {
-              alertDialog(
-                  context, "Error", "An error occurred while sending the course for approval.");
+              alertDialog(context, "Error",
+                  "An error occurred while sending the course for approval.");
             }
           }
         } catch (e) {
@@ -277,7 +287,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
           children: [
             Text(
               'Required',
-              style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 26),
+              style:
+                  Theme.of(context).textTheme.headline5!.copyWith(fontSize: 26),
             ),
             const Spacer(),
             widget.admin
@@ -329,8 +340,10 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 },
                 controller: _codeTxtController,
                 decoration: InputDecoration(
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                  enabledBorder:
+                      Theme.of(context).inputDecorationTheme.enabledBorder,
+                  focusedBorder:
+                      Theme.of(context).inputDecorationTheme.focusedBorder,
                   hintText: 'Code',
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
@@ -371,9 +384,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   fontSize: 16,
                 ),
                 cursorColor: Theme.of(context).colorScheme.primary,
-                // inputFormatters: [
-                //   FilteringTextInputFormatter.allow(RegExp("[A-Za-z0-9 ]")),
-                // ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Enter the name';
@@ -382,8 +392,10 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 },
                 controller: _nameTxtController,
                 decoration: InputDecoration(
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                  enabledBorder:
+                      Theme.of(context).inputDecorationTheme.enabledBorder,
+                  focusedBorder:
+                      Theme.of(context).inputDecorationTheme.focusedBorder,
                   hintText: 'Name',
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
@@ -423,7 +435,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   primary: rPrimaryRedColor,
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   padding: EdgeInsets.zero,
                 ),
               ),
@@ -454,8 +466,10 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 },
                 controller: _creditTxtController,
                 decoration: InputDecoration(
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                  enabledBorder:
+                      Theme.of(context).inputDecorationTheme.enabledBorder,
+                  focusedBorder:
+                      Theme.of(context).inputDecorationTheme.focusedBorder,
                   hintText: 'Credit',
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
@@ -546,8 +560,10 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 },
                 controller: _ectsTxtController,
                 decoration: InputDecoration(
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                  enabledBorder:
+                      Theme.of(context).inputDecorationTheme.enabledBorder,
+                  focusedBorder:
+                      Theme.of(context).inputDecorationTheme.focusedBorder,
                   hintText: 'ECTS',
                   hintStyle: TextStyle(
                     color: Theme.of(context).colorScheme.secondaryVariant,
@@ -606,7 +622,9 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 focusNode: fNodes[4],
                 isExpanded: true,
                 value: department,
-                items: snapshot.data[0].map<DropdownMenuItem<dynamic>>(dropDownBuilder).toList(),
+                items: snapshot.data[0]
+                    .map<DropdownMenuItem<dynamic>>(dropDownBuilder)
+                    .toList(),
                 hint: Text(
                   "Department",
                   style: TextStyle(
@@ -673,7 +691,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                   width: 30,
                   child: FittedBox(
                       child: Padding(
-                    padding: EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: FaIcon(
                       FontAwesomeIcons.mapMarkerAlt,
                       color: Theme.of(context).colorScheme.surface,
@@ -695,8 +713,12 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                       focusNode: _locsNodes[index],
                       controller: _locsTxtControllers[index],
                       decoration: InputDecoration(
-                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                        enabledBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .enabledBorder,
+                        focusedBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .focusedBorder,
                         hintText: 'Location',
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondaryVariant,
@@ -711,7 +733,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 const SizedBox(width: 7),
                 index != 0
                     ? ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 40, height: 40),
                         child: ElevatedButton(
                           child: const Icon(
                             Icons.remove,
@@ -734,7 +757,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         ),
                       )
                     : ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 40, height: 40),
                         child: ElevatedButton(
                           child: const Icon(
                             Icons.add,
@@ -744,7 +768,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                             setState(() {
                               if (numOfLocs < 6) {
                                 numOfLocs++;
-                                _locsTxtControllers.add(TextEditingController());
+                                _locsTxtControllers
+                                    .add(TextEditingController());
                                 _locsNodes.add(FocusNode());
                               }
                             });
@@ -793,8 +818,12 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                       focusNode: _labLocsNodes[index],
                       controller: _labLocsTxtControllers[index],
                       decoration: InputDecoration(
-                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                        enabledBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .enabledBorder,
+                        focusedBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .focusedBorder,
                         hintText: 'Lab Location',
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondaryVariant,
@@ -809,7 +838,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 const SizedBox(width: 7),
                 index != 0
                     ? ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 40, height: 40),
                         child: ElevatedButton(
                           child: const Icon(
                             Icons.remove,
@@ -832,7 +862,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         ),
                       )
                     : ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 40, height: 40),
                         child: ElevatedButton(
                           child: const Icon(
                             Icons.add,
@@ -842,7 +873,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                             setState(() {
                               if (numOfLabLocs < 6) {
                                 numOfLabLocs++;
-                                _labLocsTxtControllers.add(TextEditingController());
+                                _labLocsTxtControllers
+                                    .add(TextEditingController());
                                 _labLocsNodes.add(FocusNode());
                               }
                             });
@@ -891,8 +923,12 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                       focusNode: _instNodes[index],
                       controller: _instTxtControllers[index],
                       decoration: InputDecoration(
-                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                        enabledBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .enabledBorder,
+                        focusedBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .focusedBorder,
                         hintText: 'Instructor',
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondaryVariant,
@@ -906,7 +942,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 const SizedBox(width: 7),
                 index != 0
                     ? ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 40, height: 40),
                         child: ElevatedButton(
                           child: const Icon(
                             Icons.remove,
@@ -929,7 +966,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         ),
                       )
                     : ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        constraints: const BoxConstraints.tightFor(
+                            width: 40, height: 40),
                         child: ElevatedButton(
                           child: const Icon(
                             Icons.add,
@@ -939,7 +977,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                             setState(() {
                               if (numOfInst < 10) {
                                 numOfInst++;
-                                _instTxtControllers.add(TextEditingController());
+                                _instTxtControllers
+                                    .add(TextEditingController());
                                 _instNodes.add(FocusNode());
                               }
                             });

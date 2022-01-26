@@ -31,13 +31,6 @@ class FireStore {
     return f;
   }
 
-  Future getDepartments(String departmentName) {
-    return _firebaseFirestore
-        .collection('departments')
-        .doc(departmentName)
-        .get();
-  }
-
   Future getAllDepartments() async {
     List<Department> deps = [];
     await _firebaseFirestore.collection("departments").get().then((e) {
@@ -148,6 +141,13 @@ class FireStore {
       'wallet': student.wallet,
       'admin': student.admin,
     });
+  }
+
+  Future getDepartments(String departmentName) {
+    return _firebaseFirestore
+        .collection('departments')
+        .doc(departmentName)
+        .get();
   }
 
   // Canteen
