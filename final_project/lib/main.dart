@@ -18,9 +18,21 @@ import 'constants.dart';
 import 'services/new_fireauth.dart';
 import 'theme/theme_manager.dart';
 import 'widgets/dialogbox.dart';
+import 'widgets/jailbreak_screen.dart';
 
 void main() async {
   dotenv.load();
+
+  bool jailbroken = false;
+  bool developerMode = false;
+  // try {
+  //   jailbroken = await FlutterJailbreakDetection.jailbroken;
+  //   developerMode = await FlutterJailbreakDetection.developerMode;
+  // } on PlatformException {
+  //   jailbroken = true;
+  //   developerMode = true;
+  // }
+
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
     providers: [
@@ -45,7 +57,7 @@ void main() async {
           '/navigationBar': (context) => const CustomNavigationBar(),
           '/tasks': (context) => const Tasks(),
         },
-        home: MyApp(auth: auth),
+        home: jailbroken ? JailbreakScreen() : MyApp(auth: auth),
       ),
     ),
   ));
