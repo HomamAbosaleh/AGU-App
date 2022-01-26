@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../model/task.dart';
 import '../services/sqllite.dart';
@@ -12,9 +13,24 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksBState extends State<Tasks> {
-  int? selectedID;
   final textController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  Task locakTask = Task(body: "no", reminderIsSet: false);
+
+  void updateTask() async {
+    await Sqlite().update(
+      Task(
+          id: locakTask.id,
+          body: locakTask.body,
+          reminderIsSet: locakTask.reminderIsSet),
+    );
+  }
+
+  void insertTask() async {
+    await Sqlite().insert(
+      Task(body: locakTask.body, reminderIsSet: locakTask.reminderIsSet),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,81 +71,119 @@ class _TasksBState extends State<Tasks> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              return ListView(
-                children: snapshot.data!.map<Widget>(
-                  (task) {
-                    return Dismissible(
-                      key: UniqueKey(),
-                      confirmDismiss: (direction) {
-                        return showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: Text(
-                              'Delete',
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                            content: const Text(
-                              'are you sure?',
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  child: const Text('No')),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  child: const Text("Yes"))
-                            ],
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                    key: UniqueKey(),
+                    confirmDismiss: (direction) {
+                      return showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text(
+                            'Delete',
+                            style: TextStyle(color: Colors.grey[600]),
                           ),
-                        );
-                      },
-                      onDismissed: (direction) {
-                        Sqlite().delete(task.id!);
-                        const snackBar = SnackBar(
-                          content: Text('You just deleted the task'),
-                          duration: Duration(milliseconds: 700),
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      },
-                      child: Card(
-                        color: selectedID == task.id
-                            ? Colors.grey[600]
-                            : Colors.black87,
-                        child: ListTile(
-                          onTap: () {
-                            setState(() {
-                              textController.text = task.body;
-                              selectedID = task.id;
-                            });
-                          },
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              task.body,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
+                          content: const Text(
+                            'are you sure?',
+                            style: TextStyle(
+                              color: Colors.black,
                             ),
                           ),
-                          trailing: Text(
-                            DateFormat.MMMMEEEEd()
-                                .format(DateTime.now())
-                                .toString(),
-                            style: const TextStyle(color: Colors.grey),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                                child: const Text('No')),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                                child: const Text("Yes"))
+                          ],
+                        ),
+                      );
+                    },
+                    onDismissed: (direction) {
+                      Sqlite().delete(snapshot.data[index].id);
+                      const snackBar = SnackBar(
+                        content: Text('You just deleted the task'),
+                        duration: Duration(milliseconds: 700),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: Card(
+                      color: locakTask.id == snapshot.data[index].id
+                          ? Colors.grey[600]
+                          : Colors.black87,
+                      child: ListTile(
+                        onLongPress: () {
+                          setState(() {
+                            textController.text = snapshot.data[index].body;
+                            locakTask = snapshot.data[index];
+                          });
+                        },
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            snapshot.data[index].body,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
+                        subtitle: Text(
+                          DateFormat.MMMMEEEEd()
+                              .format(DateTime.now())
+                              .toString(),
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                        trailing: TextButton(
+                          onPressed: () async {
+                            if (!snapshot.data[index].reminderIsSet) {
+                              TimeOfDay? selectedTime;
+                              final initialDate = DateTime.now();
+                              final newDate = await showDatePicker(
+                                context: context,
+                                initialDate: initialDate,
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(DateTime.now().year + 5),
+                                currentDate: DateTime(DateTime.now().day + 2),
+                              );
+                              if (newDate != null) {
+                                selectedTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now(),
+                                );
+                              }
+                              if (selectedTime != null && newDate != null) {
+                                setState(() {
+                                  snapshot.data[index].reminderIsSet = true;
+                                });
+                                locakTask = snapshot.data[index];
+                                updateTask();
+                                setState(() {
+                                  locakTask =
+                                      Task(body: "no", reminderIsSet: false);
+                                });
+                              }
+                            } else {
+                              setState(() {
+                                snapshot.data[index].reminderIsSet = false;
+                              });
+                            }
+                          },
+                          child: Text(
+                              snapshot.data[index].reminderIsSet == false
+                                  ? 'Set reminder'
+                                  : 'Cancel reminder'),
+                        ),
                       ),
-                    );
-                  },
-                ).toList(),
+                    ),
+                  );
+                },
               );
             } else {
               return Center(
@@ -148,25 +202,80 @@ class _TasksBState extends State<Tasks> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (selectedID != null) {
+          if (locakTask.id != null) {
             if (formKey.currentState!.validate()) {
-              await Sqlite()
-                  .update(Task(id: selectedID!, body: textController.text));
+              setState(() {
+                locakTask.body = textController.text;
+              });
+              updateTask();
             }
           } else if (formKey.currentState!.validate()) {
-            await Sqlite().insert(
-              Task(body: textController.text),
-            );
+            setState(() {
+              locakTask.body = textController.text;
+            });
+            insertTask();
           }
           setState(() {
             textController.clear();
-            selectedID = null;
+            locakTask = Task(body: "no", reminderIsSet: false);
           });
         },
         child: const Icon(
           Icons.save,
           color: Colors.white,
         ),
+      ),
+    );
+  }
+
+  Widget buildSheet(BuildContext context) {
+    DateTime? date;
+
+    Future pickDate(BuildContext context) async {
+      final initialDate = DateTime.now();
+      final newDate = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: DateTime.now(),
+          lastDate: DateTime(DateTime.now().year + 5),
+          currentDate: DateTime(DateTime.now().day + 2));
+
+      if (newDate == null) return;
+
+      setState(() {
+        date = newDate;
+      });
+    }
+
+    return Container(
+      height: 200,
+      width: double.infinity,
+      color: Colors.blueAccent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          date == null ? Container() : Text(date!.day.toString()),
+          ElevatedButton(
+            onPressed: () {
+              pickDate(context);
+            },
+            child: date == null
+                ? const Text('Set date')
+                : Text(
+                    date!.month.toString(),
+                  ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (date == null) {
+                print('Date is null');
+              } else {
+                print('${date!.month} - ${date!.day}');
+              }
+            },
+            child: Text('Select time'),
+          )
+        ],
       ),
     );
   }
