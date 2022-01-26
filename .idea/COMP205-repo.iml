@@ -6,6 +6,9 @@
       <excludeFolder url="file://$MODULE_DIR$/final_project/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/final_project/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/final_project/build" />
+      <excludeFolder url="file://$MODULE_DIR$/agu_app/build" />
+      <excludeFolder url="file://$MODULE_DIR$/agu_app/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/agu_app/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
