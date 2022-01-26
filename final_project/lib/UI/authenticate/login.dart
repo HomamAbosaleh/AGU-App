@@ -1,4 +1,10 @@
+
 import 'package:final_project/theme/theme_manager.dart';
+
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +15,7 @@ class LogIn extends StatefulWidget {
   final Function changeLogIn;
   final Function submit;
   const LogIn({Key? key, required this.changeLogIn, required this.submit}) : super(key: key);
+   const LogIn({Key? key, required this.changeLogIn}) : super(key: key);
 
   @override
   _LogInState createState() => _LogInState();
@@ -16,6 +23,36 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  ConnectivityResult _connectivityResult = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _streamSubscription;
+  Future <void> initConnectivity() async{
+    late ConnectivityResult result;
+    try {
+      result  = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e){
+      print(e.toString());
+      return;
+    }
+    if(!mounted){
+      return Future.value(null);
+    }
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async{
+    setState(() {
+      _connectivityResult = result;
+    });
+  }
+  @override
+  void initState(){
+    super.initState();
+    initConnectivity();
+    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
 
   final _userName = TextEditingController();
   final _password = TextEditingController();
@@ -33,6 +70,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   void dispose() {
+    _streamSubscription.cancel();
     focus1.dispose();
     focus2.dispose();
     super.dispose();
@@ -87,6 +125,50 @@ class _LogInState extends State<LogIn> {
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              //connectivityResult.toString() == "ConnectivityResult.wifi" ? tEX( : t
+              if(_connectivityResult.toString()=="ConnectivityResult.wifi")
+               const Icon(Icons.wifi,size: 35),
+              if(_connectivityResult.toString()=="ConnectivityResult.mobile")
+               const Icon(Icons.wifi,size: 35),
+              if(_connectivityResult.toString()=="ConnectivityResult.none")
+               const Icon(Icons.wifi_off,size: 35),
+            ],
+          ),
+          Text(
+            'Login',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 26),
+            child: TextField(
+              focusNode: focus1,
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 16,
+              ),
+              cursorColor: gPrimaryGreyColor,
+              controller: _userName,
+              decoration: InputDecoration(
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                icon: Icon(Icons.email, color: Theme.of(context).colorScheme.surface),
+                filled: true,
+                suffixText: domain,
+                hintText: 'Username',
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondaryVariant,
                   fontSize: 16,
                 ),
                 cursorColor: gPrimaryGreyColor,
@@ -295,6 +377,86 @@ class _LogInState extends State<LogIn> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),
                       child: const Text("Sign In as an admin"),
+                child: const Text("Sign Up"),
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () async {
+                      focus1.unfocus();
+                      focus2.unfocus();
+                      String shouldNavigate = await FireAuth().signIn(
+                        email: "first.laststudent@agu.edu.tr",
+                        password: "123comp123s",
+                      );
+                      if (shouldNavigate == "true") {
+                        if (rememberMe) {
+                          await SharedPreference.saveLoggingIn(true);
+                        } else {
+                          await SharedPreference.saveLoggingIn(false);
+                        }
+                        await setUpDate();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/navigationBar', (route) => false);
+                      } else {
+                        alertDialog(context, "Cannot Sign In", shouldNavigate);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: rPrimaryRedColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+                    child: const Text("Sign In as a student"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      focus1.unfocus();
+                      focus2.unfocus();
+                      String shouldNavigate = await FireAuth().signIn(
+                        email: "first.lastadmin@agu.edu.tr",
+                        password: "123comp123a",
+                      );
+                      if (shouldNavigate == "true") {
+                        if (rememberMe) {
+                          await SharedPreference.saveLoggingIn(true);
+                        } else {
+                          await SharedPreference.saveLoggingIn(false);
+                        }
+                        await setUpDate();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/navigationBar', (route) => false);
+                      } else {
+                        alertDialog(context, "Cannot Sign In", shouldNavigate);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: rPrimaryRedColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+                    child: const Text("Sign In as an admin"),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 30),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/faculties_page');
+                },
+                child: Column(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.book,
+                      size: 76,
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ],
                 ),

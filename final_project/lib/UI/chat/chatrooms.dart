@@ -62,7 +62,10 @@ class _ChatState extends State<Chat> {
       ),
       body: chatRoomList(),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
         onPressed: () {
           Navigator.pushNamed(context, "/search");
         },
@@ -95,7 +98,6 @@ class ChatRoomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool? answer;
     return Dismissible(
       key: ValueKey(userName),
       background: Container(

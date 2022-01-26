@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 import '../../services/http.dart';
 
@@ -13,6 +17,7 @@ class Location extends StatefulWidget {
 }
 
 class LocationState extends State<Location> {
+  MapType _currMapType = MapType.normal;
   final Completer<GoogleMapController> _controller = Completer();
   bool isData = false;
   Set<Marker> markers = {};
@@ -24,7 +29,7 @@ class LocationState extends State<Location> {
       setState(() {
         _kGooglePlex = CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 14.4746,
+          // zoom: 14.4746,
         );
         isData = true;
       });
@@ -41,8 +46,8 @@ class LocationState extends State<Location> {
 
   late CameraPosition _kGooglePlex;
 
-  static const CameraPosition agu = CameraPosition(
-      bearing: 192.8334901395799,
+  static final CameraPosition  agu = CameraPosition(
+      bearing: 0.0,
       target: LatLng(38.73719850955575, 35.47356217597683),
       tilt: 30.440717697143555,
       zoom: 16.151926040649414);
@@ -58,7 +63,8 @@ class LocationState extends State<Location> {
     Marker(
       markerId: MarkerId('id-2'),
       position: LatLng(38.736946996532865, 35.473508676889814),
-      infoWindow: InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
+      infoWindow:
+          InfoWindow(title: 'Steel Building', snippet: 'A and B building'),
     ),
     Marker(
         markerId: MarkerId('id-3'),
@@ -77,8 +83,9 @@ class LocationState extends State<Location> {
     ),
   ];
 
-  void _onMapCreated(googleMapController) {
+  void _onMapCreated(GoogleMapController controller) {
     if (!mounted) return;
+    _controller.complete(controller);
     setState(() {
       markers.addAll(markerList);
     });
@@ -100,24 +107,51 @@ class LocationState extends State<Location> {
                       textAlign: TextAlign.center,
                     ),
                   )
+
                 ],
               ),
             )
           : GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: agu,
-              onMapCreated: _onMapCreated,
-              markers: markers,
+        zoomGesturesEnabled: true,
+        mapToolbarEnabled: false,
+        rotateGesturesEnabled: true,
+        scrollGesturesEnabled: true,
+        zoomControlsEnabled: false,
+        mapType: _currMapType,
+        initialCameraPosition: agu,
+        onMapCreated: _onMapCreated,
+        gestureRecognizers: < Factory < OneSequenceGestureRecognizer >> [
+          new Factory < OneSequenceGestureRecognizer > (
+                () => new EagerGestureRecognizer(),
+          ),
+        ].toSet(),
+        markers: markers,
             ),
-      /*   floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0.0,0.0,245.0,5.0),
-        child: FloatingActionButton.extended(
-          onPressed: _goToAgu,
-          label: Text('To the Uni!', style: Theme.of(context).textTheme.headline6),
-          icon:  Icon(FontAwesomeIcons.university,color: Theme.of(context).cardTheme.color),
-        ),
-      ),*/
+      floatingActionButton:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                FloatingActionButton(
+                  child: Icon(Icons.view_in_ar),
+                  backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                  foregroundColor: Colors.white,
+                  onPressed: _toggleMapType,
+                  heroTag: null,),
+                SizedBox(height: 10,),
+                FloatingActionButton(
+                  child: Icon(Icons.school),
+                  backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                  foregroundColor: Colors.white,
+                  onPressed: _goToAgu,
+                  heroTag: null,),
+              ],),
+
     );
+  }
+  void _toggleMapType(){
+    setState(() {
+      _currMapType = (_currMapType == MapType.normal) ? MapType.satellite : MapType.normal;
+    });
   }
 
   Future<void> _goToAgu() async {
@@ -128,7 +162,8 @@ class LocationState extends State<Location> {
   Future<Position> locationGet() async {
     var currentLocation;
     try {
-      currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      currentLocation = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
     } catch (e) {
       currentLocation = null;
     }
