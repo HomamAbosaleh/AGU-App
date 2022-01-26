@@ -11,24 +11,45 @@ class Food extends StatefulWidget {
   _FoodState createState() => _FoodState();
 }
 
-class _FoodState extends State<Food> {
+class _FoodState extends State<Food> with SingleTickerProviderStateMixin {
+  late TabController tabController;
   int currentIndex = 0;
+  late String currentTitle;
   void onItemTapped(int index) {
     setState(() {
       currentIndex = index;
     });
   }
 
+  void changeTitle() {
+    setState(() {
+      currentTitle = titles[tabController.index];
+    });
+  }
+
   final pages = [
-    MealOfToday(),
+    const MealOfToday(),
     const Schedule(),
     const Payments(),
   ];
   final titles = [
-    'Today\'s meal',
-    'Scedule',
+    'Today\'s Meal',
+    'Week\'s Menu',
     'My Wallet',
   ];
+  @override
+  void initState() {
+    currentTitle = titles[0];
+    tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(changeTitle);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +60,9 @@ class _FoodState extends State<Food> {
         appBar: AppBar(
           centerTitle: true,
           title:
-              Text("Dining Hall", style: Theme.of(context).textTheme.headline3),
+              Text(currentTitle, style: Theme.of(context).textTheme.headline3),
           bottom: TabBar(
+              controller: tabController,
               labelColor: Theme.of(context).hoverColor,
               indicatorColor: Theme.of(context).hoverColor,
               unselectedLabelColor: Theme.of(context).disabledColor,
@@ -51,10 +73,11 @@ class _FoodState extends State<Food> {
               ]),
         ),
         body: TabBarView(
-          children: [
-            const Schedule(),
+          controller: tabController,
+          children: const [
+            Schedule(),
             MealOfToday(),
-            const Payments(),
+            Payments(),
           ],
         ),
       ),

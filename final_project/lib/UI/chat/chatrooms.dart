@@ -15,6 +15,20 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   Stream? chatRoomsStream;
 
+  getUserInfo() async {
+    await FireStore().getChatRooms().then((value) {
+      setState(() {
+        chatRoomsStream = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
   Widget chatRoomList() {
     return StreamBuilder(
       stream: chatRoomsStream,
@@ -38,20 +52,6 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  getUserInfo() async {
-    await FireStore().getChatRooms().then((value) {
-      setState(() {
-        chatRoomsStream = value;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    getUserInfo();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +62,10 @@ class _ChatState extends State<Chat> {
       ),
       body: chatRoomList(),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
         onPressed: () {
           Navigator.pushNamed(context, "/search");
         },
@@ -95,7 +98,6 @@ class ChatRoomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool? answer;
     return Dismissible(
       key: ValueKey(userName),
       background: Container(
@@ -152,9 +154,8 @@ class ChatRoomTile extends StatelessWidget {
                 height: 40,
                 width: 40,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(40)),
+                decoration:
+                    BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(40)),
                 child: Text(getAbbreviation()),
               ),
               const SizedBox(
