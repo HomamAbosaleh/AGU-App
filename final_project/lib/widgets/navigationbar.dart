@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../widgets/drawer.dart';
 import '/UI/api/apipage.dart';
 import '/UI/canteen/food_menu.dart';
 import '/UI/chat/chatrooms.dart';
 import '/UI/courses/courses.dart';
 import '/UI/home.dart';
+import '../../widgets/drawer.dart';
 
 class CustomNavigationBar extends StatefulWidget {
   const CustomNavigationBar({Key? key}) : super(key: key);
@@ -54,8 +54,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         currentIndex: currentIndex,
         iconSize: 30,
         selectedFontSize: 15,
-        selectedIconTheme:
-            const IconThemeData(color: Color(0xFFD00501), size: 40),
+        selectedIconTheme: const IconThemeData(color: Color(0xFFD00501), size: 40),
         selectedItemColor: const Color(0xFFD00001),
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedIconTheme: const IconThemeData(

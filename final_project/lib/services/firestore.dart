@@ -1,14 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-import '../model/course.dart';
 import '../constants.dart';
+import '../model/course.dart';
 import '../model/department.dart';
 import '../model/faculty.dart';
 import '../model/student.dart';
-import 'fireauth.dart';
 
 class FireStore {
+  Future<String> getStudentName(String uid) async {
+    var student =
+        await _firebaseFirestore.collection("student").doc(uid).snapshots();
+    String studentName = '';
+    await student.first.then((value) {
+      studentName += value.data()!['name'];
+      studentName += ' ' + value.data()!['surname'];
+    });
+    return studentName;
+  }
+
   static final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
 
@@ -125,8 +135,8 @@ class FireStore {
   }
 
   // Sign Up
-  Future<void> addStudent({required Student student}) async {
-    String uid = FireAuth().currentUserID;
+  Future<void> addStudent(
+      {required Student student, required String uid}) async {
     _firebaseFirestore.collection('student').doc(uid).set({
       'name': '${student.name}',
       'surname': '${student.surname}',

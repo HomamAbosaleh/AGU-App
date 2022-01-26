@@ -1,10 +1,16 @@
+import 'package:final_project/model/http_exception.dart';
+import 'package:final_project/model/student.dart';
+import 'package:final_project/services/new_fireauth.dart';
+import 'package:final_project/theme/theme_manager.dart';
+import 'package:final_project/widgets/new_dialogbox.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
-import '../../theme/theme_cubit.dart';
 import 'forget_password.dart';
 import 'login.dart';
 import 'signup.dart';
+
+enum screenState { login, signup, forgPass }
 
 class Authentication extends StatefulWidget {
   const Authentication({Key? key}) : super(key: key);
@@ -14,9 +20,79 @@ class Authentication extends StatefulWidget {
 }
 
 class AuthenticationState extends State<Authentication> {
-  bool isSigningIn = true;
-  bool isSigningUp = false;
-  bool isForgPass = false;
+  screenState _screenState = screenState.login;
+
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+  }
+
+  void toggleLogIn(String screen) {
+    if (screen == 'signIn') {
+      setState(() {
+        _screenState = screenState.login;
+        _scrollToTop();
+      });
+    } else if (screen == 'forgPass') {
+      setState(() {
+        _screenState = screenState.forgPass;
+        _scrollToTop();
+      });
+    } else {
+      setState(() {
+        _screenState = screenState.signup;
+      });
+    }
+  }
+
+  Future<void> submit(String email, String password, bool rememberMe, [Student? student]) async {
+    try {
+      if (_screenState == screenState.login) {
+        await Provider.of<Auth>(context, listen: false).login(
+          email,
+          password,
+          rememberMe,
+        );
+      } else {
+        await Provider.of<Auth>(context, listen: false).signup(
+          email,
+          password,
+          student!,
+        );
+      }
+      Navigator.pushNamed(context, '/navigationBar');
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication failed';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is too weak.';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid password.';
+      }
+      newAlertDialog(context, 'An error occurred while authenticating', errorMessage);
+    } catch (error) {
+      const errorMessage = 'Could not authenticate you. Please try again later.';
+      newAlertDialog(context, 'An error occurred while authenticating', errorMessage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +101,7 @@ class AuthenticationState extends State<Authentication> {
     return Scaffold(
       body: SingleChildScrollView(
         controller: _scrollController,
-        physics: isSigningIn || isForgPass
+        physics: _screenState == screenState.login || _screenState == screenState.forgPass
             ? const NeverScrollableScrollPhysics()
             : const AlwaysScrollableScrollPhysics(),
         child: Stack(
@@ -54,35 +130,36 @@ class AuthenticationState extends State<Authentication> {
               left: 20,
               child: IconButton(
                 onPressed: () {
-                  BlocProvider.of<ThemeCubit>(context).toggleTheme(
-                      val: !BlocProvider.of<ThemeCubit>(context).state);
+                  //setState(() {
+                  currentTheme.toggleTheme();
+                  //});
                 },
-                icon: BlocBuilder<ThemeCubit, bool>(
-                  builder: (context, state) {
-                    return Icon(
-                      state ? Icons.wb_sunny_sharp : Icons.dark_mode_sharp,
-                      size: 40,
-                      color: state ? Colors.orangeAccent : Colors.grey,
-                    );
-                  },
+                icon: Icon(
+                  currentTheme.isDarkTheme ? Icons.wb_sunny_sharp : Icons.dark_mode_sharp,
+                  size: 40,
+                  color: currentTheme.isDarkTheme ? Colors.orangeAccent : Colors.grey,
                 ),
               ),
             ),
             AnimatedPositioned(
-              child: LogIn(changeLogIn: toggleLogIn),
+              child: LogIn(
+                changeLogIn: toggleLogIn,
+                submit: submit,
+              ),
               duration: const Duration(milliseconds: 1500),
               curve: Curves.easeInOutCirc,
-              right: isSigningIn ? 0 : width * 2,
-              top: 180,
+              right: _screenState == screenState.login ? 0 : width * 2,
+              top: 130,
             ),
             AnimatedPositioned(
               child: SignUp(
                 changeLogIn: toggleLogIn,
                 sController: _scrollController,
+                submit: submit,
               ),
               duration: const Duration(milliseconds: 1500),
               curve: Curves.easeInOutCirc,
-              right: isSigningUp ? 0 : width * 2,
+              right: _screenState == screenState.signup ? 0 : width * 2,
               top: 200,
             ),
             AnimatedPositioned(
@@ -91,55 +168,12 @@ class AuthenticationState extends State<Authentication> {
               ),
               duration: const Duration(milliseconds: 1500),
               curve: Curves.easeInOutCirc,
-              right: isForgPass ? 0 : width * 2,
+              right: _screenState == screenState.forgPass ? 0 : width * 2,
               top: 220,
             ),
           ],
         ),
       ),
     );
-  }
-
-  void toggleLogIn(String screen) {
-    if (screen == 'signIn') {
-      setState(() {
-        isSigningIn = true;
-        isForgPass = false;
-        isSigningUp = false;
-        _scrollToTop();
-      });
-    } else if (screen == 'forgPass') {
-      setState(() {
-        isForgPass = true;
-        isSigningIn = false;
-        isSigningUp = false;
-        _scrollToTop();
-      });
-    } else {
-      setState(() {
-        isSigningUp = true;
-        isForgPass = false;
-        isSigningIn = false;
-      });
-    }
-  }
-
-  late ScrollController _scrollController;
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: const Duration(seconds: 1), curve: Curves.linear);
   }
 }

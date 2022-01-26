@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pushNamed(context, "/tasks");
               },
               label: const Text(

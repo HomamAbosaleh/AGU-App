@@ -1,22 +1,16 @@
-import '../../services/sharedpreference.dart';
-
 class Constants {
-  static String myName = "";
-  static String email = "";
-  static String? uid = "";
-  static bool? rememberMe = false;
+  static String myName = '';
+  static String? uid = '';
+  static bool loggedout = false;
 
-  static getUpConstants() async {
-    Constants.myName = await SharedPreference.getUserName();
-    Constants.email = await SharedPreference.getUserName();
-    Constants.uid = await SharedPreference.getUserId();
-    Constants.rememberMe = await SharedPreference.getUserLoggedIn();
+  static setUpConstants(name, uid) async {
+    Constants.myName = name;
+    Constants.uid = uid;
   }
 
-  static setUpConstants(name, email, uid, rememberMe) async {
-    Constants.myName = name;
-    Constants.email = email;
-    Constants.uid = uid;
-    Constants.rememberMe = rememberMe;
+  static void clear() {
+    Constants.myName = '';
+    Constants.uid = '';
+    loggedout = false;
   }
 }
