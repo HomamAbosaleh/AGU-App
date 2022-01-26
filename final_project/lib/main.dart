@@ -1,8 +1,12 @@
+import 'package:final_project/theme/theme_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '/widgets/navigationbar.dart';
 import 'UI/authenticate/authentication.dart';
@@ -18,39 +22,65 @@ import 'constants.dart';
 import 'services/new_fireauth.dart';
 import 'theme/theme_manager.dart';
 import 'widgets/dialogbox.dart';
+import 'widgets/jailbreak_screen.dart';
 
 void main() async {
   dotenv.load();
+  bool jailbroken = false;
+  bool developerMode = false;
+  // try {
+  //   jailbroken = await FlutterJailbreakDetection.jailbroken;
+  //   developerMode = await FlutterJailbreakDetection.developerMode;
+  // } on PlatformException {
+  //   jailbroken = true;
+  //   developerMode = true;
+  // }
+
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: Auth(),
-        ),
-      ],
-      child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-          theme: CustomTheme.lightTheme,
-          darkTheme: CustomTheme.darkTheme,
-          themeMode: currentTheme.currentTheme,
-          debugShowCheckedModeBanner: false,
-          routes: {
-            '/home': (context) => const HomePage(),
-            '/faculties_page': (context) => const FacultiesPage(),
-            '/chat': (context) => const Chat(),
-            '/search': (context) => const Search(),
-            '/food_menu/schedule': (context) => const Schedule(),
-            '/food_menu': (context) => const Food(),
-            '/courseSchedule': (context) => const CourseSchedule(),
-            '/navigationBar': (context) => const CustomNavigationBar(),
-            '/tasks': (context) => const Tasks(),
-          },
-          home: MyApp(auth: auth),
-        ),
-      ),
-    ),
-  );
+  final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+  HydratedBlocOverrides.runZoned(
+      () => runApp(
+            BlocProvider<ThemeCubit>(
+              create: (ctx) => ThemeCubit(),
+              child: BlocBuilder<ThemeCubit, bool>(
+                builder: (context, state) {
+                  return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider.value(
+                        value: Auth(),
+                      ),
+                    ],
+                    child: Consumer<Auth>(
+                      builder: (ctx, auth, _) => MaterialApp(
+                        // theme: CustomTheme.lightTheme,
+                        // darkTheme: CustomTheme.darkTheme,
+                        // themeMode: currentTheme.currentTheme,
+                        theme: state ? darkTheme : lightTheme,
+                        debugShowCheckedModeBanner: false,
+                        routes: {
+                          '/home': (context) => const HomePage(),
+                          '/faculties_page': (context) => const FacultiesPage(),
+                          '/chat': (context) => const Chat(),
+                          '/search': (context) => const Search(),
+                          '/food_menu/schedule': (context) => const Schedule(),
+                          '/food_menu': (context) => const Food(),
+                          '/courseSchedule': (context) =>
+                              const CourseSchedule(),
+                          '/navigationBar': (context) =>
+                              const CustomNavigationBar(),
+                          '/tasks': (context) => const Tasks(),
+                        },
+                        home:
+                            jailbroken ? JailbreakScreen() : MyApp(auth: auth),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+      storage: storage);
 }
 
 class MyApp extends StatefulWidget {
@@ -82,9 +112,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     WidgetsBinding.instance!.addObserver(this);
     super.initState();
-    currentTheme.addListener(() {
-      setState(() {});
-    });
   }
 
   @override

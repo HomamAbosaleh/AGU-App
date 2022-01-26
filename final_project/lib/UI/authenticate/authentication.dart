@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../theme/theme_cubit.dart';
 import '/model/http_exception.dart';
 import '/model/student.dart';
 import '/services/new_fireauth.dart';
@@ -136,16 +138,17 @@ class AuthenticationState extends State<Authentication> {
               left: 20,
               child: IconButton(
                 onPressed: () {
-                  currentTheme.toggleTheme();
+                  BlocProvider.of<ThemeCubit>(context).toggleTheme(
+                      val: !BlocProvider.of<ThemeCubit>(context).state);
                 },
-                icon: Icon(
-                  currentTheme.isDarkTheme
-                      ? Icons.wb_sunny_sharp
-                      : Icons.dark_mode_sharp,
-                  size: 40,
-                  color: currentTheme.isDarkTheme
-                      ? Colors.orangeAccent
-                      : Colors.grey,
+                icon: BlocBuilder<ThemeCubit, bool>(
+                  builder: (context, state) {
+                    return Icon(
+                      state ? Icons.wb_sunny_sharp : Icons.dark_mode_sharp,
+                      size: 40,
+                      color: state ? Colors.orangeAccent : Colors.grey,
+                    );
+                  },
                 ),
               ),
             ),

@@ -53,7 +53,8 @@ class CustomDropdown extends StatefulWidget {
   List<String> dropdowns;
   String text;
 
-  CustomDropdown({Key? key, required this.text, required this.dropdowns}) : super(key: key);
+  CustomDropdown({Key? key, required this.text, required this.dropdowns})
+      : super(key: key);
 
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
@@ -77,6 +78,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
     "Bioengineering": Icons.accessibility_new,
     "Business Administration": Icons.business_center_sharp,
     "Economy": Icons.monetization_on,
+    "Nanotechnology Engineering": Icons.stream,
   };
 
   @override
@@ -87,20 +89,20 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   void initlizeList() {
     if (widget.dropdowns.length == 1) {
-      dropdownItems
-          .add(DropDownItem.only(text: widget.dropdowns[0], iconData: icons[widget.dropdowns[0]]));
+      dropdownItems.add(DropDownItem.only(
+          text: widget.dropdowns[0], iconData: icons[widget.dropdowns[0]]));
       return;
     }
     for (int i = 0; i < widget.dropdowns.length; i++) {
       if (i == 0) {
-        dropdownItems.add(
-            DropDownItem.first(text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+        dropdownItems.add(DropDownItem.first(
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
       } else if (i == widget.dropdowns.length - 1) {
-        dropdownItems.add(
-            DropDownItem.last(text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+        dropdownItems.add(DropDownItem.last(
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
       } else {
-        dropdownItems
-            .add(DropDownItem(text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+        dropdownItems.add(DropDownItem(
+            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
       }
     }
   }
@@ -133,7 +135,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   child: Text(
                     widget.text.toUpperCase(),
                     style: const TextStyle(
-                        color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 //Spacer(),
@@ -144,7 +148,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
               ],
             ),
           ),
-          isDropdownOpened ? DropDown(dropdownItems: dropdownItems) : const SizedBox(),
+          isDropdownOpened
+              ? DropDown(dropdownItems: dropdownItems)
+              : const SizedBox(),
         ],
       ),
     );
@@ -191,7 +197,8 @@ class DropDownItem extends StatelessWidget {
       this.isOnlyItem = false})
       : super(key: key);
 
-  factory DropDownItem.first({required String text, required IconData iconData}) {
+  factory DropDownItem.first(
+      {required String text, required IconData iconData}) {
     return DropDownItem(
       text: text,
       iconData: iconData,
@@ -199,7 +206,8 @@ class DropDownItem extends StatelessWidget {
     );
   }
 
-  factory DropDownItem.last({required String text, required IconData iconData}) {
+  factory DropDownItem.last(
+      {required String text, required IconData iconData}) {
     return DropDownItem(
       text: text,
       iconData: iconData,
@@ -207,7 +215,8 @@ class DropDownItem extends StatelessWidget {
     );
   }
 
-  factory DropDownItem.only({required String text, required IconData iconData}) {
+  factory DropDownItem.only(
+      {required String text, required IconData iconData}) {
     return DropDownItem(
       text: text,
       iconData: iconData,
@@ -224,14 +233,20 @@ class DropDownItem extends StatelessWidget {
         primary: Colors.red[400],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: isFirstItem || isOnlyItem ? const Radius.circular(15) : Radius.zero,
-            bottom: isLastItem || isOnlyItem ? const Radius.circular(15) : Radius.zero,
+            top: isFirstItem || isOnlyItem
+                ? const Radius.circular(15)
+                : Radius.zero,
+            bottom: isLastItem || isOnlyItem
+                ? const Radius.circular(15)
+                : Radius.zero,
           ),
         ),
       ),
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DepartmentPage(departmentName: text)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => DepartmentPage(departmentName: text)));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,8 +254,10 @@ class DropDownItem extends StatelessWidget {
           Flexible(
             child: Text(
               text.toUpperCase(),
-              style:
-                  const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600),
             ),
           ),
           //Spacer(),
