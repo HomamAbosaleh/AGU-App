@@ -12,17 +12,27 @@ class Sqlite {
       return db
           .execute('''CREATE TABLE tasks (id INTEGER PRIMARY KEY AUTOINCREMENT,
           uid TEXT NOT NULL, 
-        body TEXT NOT NULL)''');
+        body TEXT NOT NULL,
+        reminderIsSet TEXT NOT NULL, 
+        reminderDate TEXT)''');
     }, version: 1);
   }
 
   Future<List<Task>> getTasks() async {
     final db = await Sqlite._initDatabase();
-    var listOFTasks =
+    List<Map<String, dynamic>> listOFTasks =
         await db.query("tasks", where: 'uid = ?', whereArgs: [Constants.uid]);
-    List<Task> tasks = listOFTasks.isNotEmpty
-        ? listOFTasks.map<Task>((e) => Task.fromMap(e)).toList()
-        : [];
+    List<Task> tasks = [];
+    for (var element in listOFTasks) {
+      tasks.add(
+        Task(
+          id: element["id"],
+          body: element["body"],
+          reminderIsSet: element["reminderIsSet"] == "true" ? true : false,
+          reminderDate: element["reminderDate"],
+        ),
+      );
+    }
     return tasks;
   }
 
@@ -33,6 +43,8 @@ class Sqlite {
       {
         "uid": Constants.uid,
         "body": task.body,
+        "reminderIsSet": task.reminderIsSet.toString(),
+        "reminderDate": task.reminderDate,
       },
     );
   }
@@ -50,6 +62,8 @@ class Sqlite {
         {
           "uid": Constants.uid,
           "body": task.body,
+          "reminderIsSet": task.reminderIsSet.toString(),
+          "reminderDate": task.reminderDate,
         },
         where: 'id = ? AND uid = ?',
         whereArgs: [task.id, Constants.uid]);
