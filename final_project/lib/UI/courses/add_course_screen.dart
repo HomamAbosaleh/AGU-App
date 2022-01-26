@@ -1,7 +1,7 @@
 import 'package:final_project/model/course.dart';
 import 'package:final_project/model/department.dart';
 import 'package:final_project/services/firestore.dart';
-import 'package:final_project/theme/theme.dart';
+import 'package:final_project/theme/theme_manager.dart';
 import 'package:final_project/widgets/dialogbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
