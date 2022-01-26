@@ -1,11 +1,11 @@
-import 'package:final_project/model/http_exception.dart';
-import 'package:final_project/model/student.dart';
-import 'package:final_project/services/new_fireauth.dart';
-import 'package:final_project/theme/theme_manager.dart';
-import 'package:final_project/widgets/new_dialogbox.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '/model/http_exception.dart';
+import '/model/student.dart';
+import '/services/new_fireauth.dart';
+import '/theme/theme_manager.dart';
+import '/widgets/new_dialogbox.dart';
 import 'forget_password.dart';
 import 'login.dart';
 import 'signup.dart';
@@ -37,7 +37,8 @@ class AuthenticationState extends State<Authentication> {
   }
 
   void _scrollToTop() {
-    _scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+    _scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.linear);
   }
 
   void toggleLogIn(String screen) {
@@ -58,7 +59,8 @@ class AuthenticationState extends State<Authentication> {
     }
   }
 
-  Future<void> submit(String email, String password, bool rememberMe, [Student? student]) async {
+  Future<void> submit(String email, String password, bool rememberMe,
+      [Student? student]) async {
     try {
       if (_screenState == screenState.login) {
         await Provider.of<Auth>(context, listen: false).login(
@@ -87,10 +89,13 @@ class AuthenticationState extends State<Authentication> {
       } else if (error.toString().contains('INVALID_PASSWORD')) {
         errorMessage = 'Invalid password.';
       }
-      newAlertDialog(context, 'An error occurred while authenticating', errorMessage);
+      newAlertDialog(
+          context, 'An error occurred while authenticating', errorMessage);
     } catch (error) {
-      const errorMessage = 'Could not authenticate you. Please try again later.';
-      newAlertDialog(context, 'An error occurred while authenticating', errorMessage);
+      const errorMessage =
+          'Could not authenticate you. Please try again later.';
+      newAlertDialog(
+          context, 'An error occurred while authenticating', errorMessage);
     }
   }
 
@@ -101,7 +106,8 @@ class AuthenticationState extends State<Authentication> {
     return Scaffold(
       body: SingleChildScrollView(
         controller: _scrollController,
-        physics: _screenState == screenState.login || _screenState == screenState.forgPass
+        physics: _screenState == screenState.login ||
+                _screenState == screenState.forgPass
             ? const NeverScrollableScrollPhysics()
             : const AlwaysScrollableScrollPhysics(),
         child: Stack(
@@ -130,14 +136,16 @@ class AuthenticationState extends State<Authentication> {
               left: 20,
               child: IconButton(
                 onPressed: () {
-                  //setState(() {
                   currentTheme.toggleTheme();
-                  //});
                 },
                 icon: Icon(
-                  currentTheme.isDarkTheme ? Icons.wb_sunny_sharp : Icons.dark_mode_sharp,
+                  currentTheme.isDarkTheme
+                      ? Icons.wb_sunny_sharp
+                      : Icons.dark_mode_sharp,
                   size: 40,
-                  color: currentTheme.isDarkTheme ? Colors.orangeAccent : Colors.grey,
+                  color: currentTheme.isDarkTheme
+                      ? Colors.orangeAccent
+                      : Colors.grey,
                 ),
               ),
             ),

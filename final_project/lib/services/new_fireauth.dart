@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:final_project/model/http_exception.dart';
-import 'package:final_project/model/student.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '/model/http_exception.dart';
+import '/model/student.dart';
 import '../constants.dart';
 import 'firestore.dart';
 
@@ -32,7 +32,8 @@ class Auth with ChangeNotifier {
     return null;
   }
 
-  Future<void> _authenticate(String email, String password, String urlSegment, bool rememberMe,
+  Future<void> _authenticate(
+      String email, String password, String urlSegment, bool rememberMe,
       [Student? student]) async {
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC1iM_wrE9Q7SjYulC8_Ulv5nYQYnNRw6s';
@@ -67,8 +68,8 @@ class Auth with ChangeNotifier {
       String name = await FireStore().getStudentName(_userId!);
       Constants.setUpConstants(name, _userId);
       if (rememberMe) {
-        saveUserData(
-            _token!, _userId!, _expiryDate!.toIso8601String(), name, rememberMe.toString());
+        saveUserData(_token!, _userId!, _expiryDate!.toIso8601String(), name,
+            rememberMe.toString());
       } else {
         _storage.deleteAll();
         _autoLogout();
@@ -93,7 +94,8 @@ class Auth with ChangeNotifier {
     if (!extractedUserData2.containsKey('token')) {
       return false;
     }
-    final expiryDate = DateTime.parse(extractedUserData2['expiryDate'] as String);
+    final expiryDate =
+        DateTime.parse(extractedUserData2['expiryDate'] as String);
 
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
@@ -153,8 +155,8 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> saveUserData(
-      String token, String uid, String expiryDate, String name, String rememberMe) async {
+  Future<void> saveUserData(String token, String uid, String expiryDate,
+      String name, String rememberMe) async {
     await _storage.write(
       key: 'token',
       value: token,

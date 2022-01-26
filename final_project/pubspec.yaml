@@ -29,9 +29,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  getwidget: ^2.0.4
-  connectivity_plus: ^2.2.0
-
 
   #Firebase dependencies
   firebase_core: ^1.8.0
@@ -45,10 +42,14 @@ dependencies:
   #Theme
   font_awesome_flutter: ^9.2.0
   measured_size: ^1.0.0
+  getwidget: ^2.0.4
 
   # Local Database
   sqflite: ^2.0.2
   path: ^1.8.0
+
+  #community packages
+  connectivity_plus: ^2.2.0
   
   #APIs
   #Premission

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'currency.dart';
 import 'location.dart';
@@ -12,6 +11,7 @@ class ApiPage extends StatefulWidget {
   @override
   _ApiPageState createState() => _ApiPageState();
 }
+
 class _ApiPageState extends State<ApiPage> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late String currentTitle;
