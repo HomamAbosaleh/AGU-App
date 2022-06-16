@@ -30,6 +30,7 @@ https://user-images.githubusercontent.com/78610531/174104971-996f5b5f-f4a4-4812-
 https://user-images.githubusercontent.com/78610531/174105497-68a02e00-8030-4757-b4a2-64b1e97fd671.mp4
 
 In faculity page, the App displays professors' possitions, photoes, and titles.
+
 https://user-images.githubusercontent.com/78610531/174105137-642ee923-bd59-455e-a67c-2276efed8d40.mp4
 
 Finally, because we know people have different tastes, the app includes the feature of changing the theme.
