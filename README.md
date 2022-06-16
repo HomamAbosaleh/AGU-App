@@ -4,27 +4,52 @@ The idea of this app is to build a mobile platform that brings the features of U
 
 
 
-https://user-images.githubusercontent.com/78610531/174100585-693fc986-8cbd-44bb-9b04-680c5253caef.mp4
-
-https://user-images.githubusercontent.com/78610531/174100798-f39e1d1a-4536-4c66-aa82-b3c4093a945c.mp4
-
-
-https://user-images.githubusercontent.com/78610531/174100808-75b56aa7-4bf1-4295-868a-4cd5c35d696a.mp4
-
-
-https://user-images.githubusercontent.com/78610531/174100817-d67a494b-b1a9-441f-bf87-622bcfc0fa09.mp4
-
-
-https://user-images.githubusercontent.com/78610531/174100827-32de9b72-8bf5-44ba-a199-836d011b13e5.mp4
-
-
-https://user-images.githubusercontent.com/78610531/174101715-a64f945b-e859-400d-b021-71d500214d1c.mp4
 
 
 
-https://user-images.githubusercontent.com/78610531/174100838-9a38ba10-3958-42cf-9e30-68722e9122e8.mp4
+https://user-images.githubusercontent.com/78610531/174103962-e3b183bc-720b-4a47-836b-530225eacf99.mp4
 
-https://user-images.githubusercontent.com/78610531/174100845-9c410eb7-28d6-4dc1-b4d7-11930d8b3d03.mp4
+
+
+
+
+https://user-images.githubusercontent.com/78610531/174104630-7a13cfd4-9367-42b0-bfdc-ab0b7b6b77ab.mp4
+
+
+
+
+https://user-images.githubusercontent.com/78610531/174104838-8b426c33-1e52-40a0-a338-1210ea155f9b.mp4
+
+
+
+
+https://user-images.githubusercontent.com/78610531/174104971-996f5b5f-f4a4-4812-a504-778c05e700bb.mp4
+
+
+
+
+https://user-images.githubusercontent.com/78610531/174105137-642ee923-bd59-455e-a67c-2276efed8d40.mp4
+
+
+
+https://user-images.githubusercontent.com/78610531/174105302-8e3f3843-0ca8-4d6a-b3b8-3a92c00ef929.mp4
+
+
+
+
+https://user-images.githubusercontent.com/78610531/174105497-68a02e00-8030-4757-b4a2-64b1e97fd671.mp4
+
+
+
+
+https://user-images.githubusercontent.com/78610531/174105670-a0d9dbcc-f7a3-4dd7-ab06-0e959c1af383.mp4
+
+
+
+https://user-images.githubusercontent.com/78610531/174105910-8deb29f2-7267-40ac-aefd-66e5a66ee761.mp4
+
+
+
 
 
 
