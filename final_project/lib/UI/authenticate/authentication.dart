@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../theme/theme_cubit.dart';
 import '/model/http_exception.dart';
 import '/model/student.dart';
-import '/services/new_fireauth.dart';
+import '/services/fireauth.dart';
 import '/theme/theme_manager.dart';
 import '/widgets/new_dialogbox.dart';
 import 'forget_password.dart';

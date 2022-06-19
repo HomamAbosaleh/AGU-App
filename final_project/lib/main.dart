@@ -19,7 +19,7 @@ import 'UI/faculties and departments/faculties_page.dart';
 import 'UI/home.dart';
 import 'UI/tasks.dart';
 import 'constants.dart';
-import 'services/new_fireauth.dart';
+import 'services/fireauth.dart';
 import 'theme/theme_manager.dart';
 import 'widgets/dialogbox.dart';
 import 'widgets/jailbreak_screen.dart';

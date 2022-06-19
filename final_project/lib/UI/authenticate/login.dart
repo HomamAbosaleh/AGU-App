@@ -11,7 +11,8 @@ enum authMode { signup, login }
 class LogIn extends StatefulWidget {
   final Function changeLogIn;
   final Function submit;
-  const LogIn({Key? key, required this.changeLogIn, required this.submit}) : super(key: key);
+  const LogIn({Key? key, required this.changeLogIn, required this.submit})
+      : super(key: key);
 
   @override
   _LogInState createState() => _LogInState();
@@ -61,7 +62,8 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     initConnectivity();
-    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _streamSubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   @override
@@ -122,7 +124,9 @@ class _LogInState extends State<LogIn> {
                   }
                 },
                 focusNode: focus1,
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
+                ],
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   color: Theme.of(context).colorScheme.onSecondary,
@@ -131,9 +135,12 @@ class _LogInState extends State<LogIn> {
                 cursorColor: gPrimaryGreyColor,
                 controller: _userName,
                 decoration: InputDecoration(
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                  icon: Icon(Icons.email, color: Theme.of(context).colorScheme.surface),
+                  enabledBorder:
+                      Theme.of(context).inputDecorationTheme.enabledBorder,
+                  focusedBorder:
+                      Theme.of(context).inputDecorationTheme.focusedBorder,
+                  icon: Icon(Icons.email,
+                      color: Theme.of(context).colorScheme.surface),
                   filled: true,
                   suffixText: domain,
                   hintText: 'Username',
@@ -165,9 +172,12 @@ class _LogInState extends State<LogIn> {
                 obscureText: eye,
                 controller: _password,
                 decoration: InputDecoration(
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                  icon: Icon(Icons.vpn_key_sharp, color: Theme.of(context).colorScheme.surface),
+                  enabledBorder:
+                      Theme.of(context).inputDecorationTheme.enabledBorder,
+                  focusedBorder:
+                      Theme.of(context).inputDecorationTheme.focusedBorder,
+                  icon: Icon(Icons.vpn_key_sharp,
+                      color: Theme.of(context).colorScheme.surface),
                   suffixIcon: IconButton(
                     onPressed: () {
                       eye = !eye;
@@ -223,15 +233,16 @@ class _LogInState extends State<LogIn> {
                     ),
                     const Spacer(),
                     TextButton(
-                        onPressed: () {
-                          focus1.unfocus();
-                          focus2.unfocus();
-                          widget.changeLogIn('forgPass');
-                        },
-                        child: const Text(
-                          'Forget password?',
-                          style: TextStyle(fontSize: 16),
-                        )),
+                      onPressed: () {
+                        focus1.unfocus();
+                        focus2.unfocus();
+                        widget.changeLogIn('forgPass');
+                      },
+                      child: const Text(
+                        'Forget password?',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -250,7 +261,8 @@ class _LogInState extends State<LogIn> {
                     focus1.unfocus();
                     focus2.unfocus();
                     if (_formKey.currentState!.validate()) {
-                      widget.submit(_userName.text + domain, _password.text, rememberMe);
+                      widget.submit(
+                          _userName.text + domain, _password.text, rememberMe);
                       setState(() {
                         isLoading = false;
                       });
@@ -262,10 +274,14 @@ class _LogInState extends State<LogIn> {
                   },
                   style: ElevatedButton.styleFrom(
                     primary: rPrimaryRedColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                   ),
-                  child: isLoading ? const CircularProgressIndicator() : const Text("Sign In"),
+                  child: isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text("Sign In"),
                 ),
                 const SizedBox(
                   width: 20,
@@ -278,89 +294,39 @@ class _LogInState extends State<LogIn> {
                   },
                   style: ElevatedButton.styleFrom(
                     primary: rPrimaryRedColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                   ),
                   child: const Text("Sign Up"),
                 ),
               ],
             ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Sign in options only available in \ntesting/grading (no need to sign up)',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 16),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        focus1.unfocus();
-                        focus2.unfocus();
-                        widget.submit("first.laststudent@agu.edu.tr", "123comp123s", rememberMe);
-                        setState(() {
-                          isLoading = false;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: rPrimaryRedColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      ),
-                      child: const Text("Sign In as a student"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        focus1.unfocus();
-                        focus2.unfocus();
-                        widget.submit("first.lastadmin@agu.edu.tr", "123comp123a", rememberMe);
-                        setState(() {
-                          isLoading = false;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: rPrimaryRedColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      ),
-                      child: const Text("Sign In as an admin"),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 30),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/faculties_page');
-                  },
-                  child: Column(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.book,
-                        size: 76,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Faculties',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                      )
-                    ],
+            const SizedBox(
+              height: 45,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/faculties_page');
+              },
+              child: Column(
+                children: [
+                  Icon(
+                    FontAwesomeIcons.book,
+                    size: 76,
+                    color: Theme.of(context).colorScheme.onSecondary,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  Text(
+                    'Faculties',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),

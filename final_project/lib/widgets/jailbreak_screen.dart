@@ -24,7 +24,10 @@ class JailbreakScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Error',
-                          style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 16),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5!
+                              .copyWith(fontSize: 16),
                         ),
                         const SizedBox(
                           height: 5,
@@ -32,7 +35,10 @@ class JailbreakScreen extends StatelessWidget {
                         Text(
                           "Jailbroken or rooted devices are not allowed to access this app",
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 20),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontSize: 20),
                         ),
                         const SizedBox(
                           height: 20,
@@ -43,8 +49,10 @@ class JailbreakScreen extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             primary: rPrimaryRedColor,
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
                           ),
                           child: const Text(
                             'Okay',

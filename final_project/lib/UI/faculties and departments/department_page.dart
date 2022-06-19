@@ -1,10 +1,12 @@
-import 'package:final_project/services/firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'professors.dart';
 
 class DepartmentPage extends StatefulWidget {
   final String departmentName;
-
-  const DepartmentPage({Key? key, required this.departmentName})
+  final String facultyName;
+  const DepartmentPage(
+      {Key? key, required this.facultyName, required this.departmentName})
       : super(key: key);
 
   @override
@@ -12,36 +14,17 @@ class DepartmentPage extends StatefulWidget {
 }
 
 class _DepartmentPageState extends State<DepartmentPage> {
-  late Future department;
-
-  @override
-  void initState() {
-    department = FireStore().getDepartments(widget.departmentName);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: department,
-      builder: (context, AsyncSnapshot snapShot) {
-        if (snapShot.hasData) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(snapShot.data.id),
-            ),
-            body: Center(
-              child: Column(
-                children: [],
-              ),
-            ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.departmentName),
+        centerTitle: true,
+      ),
+      body: Professors(
+        facultyName: widget.facultyName,
+        departmentName: widget.departmentName,
+      ),
     );
   }
 }

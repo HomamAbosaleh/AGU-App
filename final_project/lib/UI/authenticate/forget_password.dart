@@ -1,5 +1,5 @@
 import 'package:final_project/model/http_exception.dart';
-import 'package:final_project/services/new_fireauth.dart';
+import 'package:final_project/services/fireauth.dart';
 import 'package:final_project/theme/theme_manager.dart';
 import 'package:final_project/widgets/new_dialogbox.dart';
 import 'package:flutter/material.dart';
@@ -36,14 +36,17 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         children: [
           Text(
             'Forgot Password?',
-            style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 32),
+            style:
+                Theme.of(context).textTheme.headline5!.copyWith(fontSize: 32),
           ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 26),
             child: TextField(
               focusNode: focus1,
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[A-Za-z.]"))
+              ],
               style: TextStyle(
                 fontFamily: 'Roboto',
                 color: Theme.of(context).colorScheme.onSecondary,
@@ -52,9 +55,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               cursorColor: gPrimaryGreyColor,
               controller: _userName,
               decoration: InputDecoration(
-                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                icon: Icon(Icons.email, color: Theme.of(context).colorScheme.surface),
+                enabledBorder:
+                    Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder:
+                    Theme.of(context).inputDecorationTheme.focusedBorder,
+                icon: Icon(Icons.email,
+                    color: Theme.of(context).colorScheme.surface),
                 filled: true,
                 suffixText: domain,
                 hintText: 'Username',
@@ -92,14 +98,20 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       } on HttpException catch (error) {
                         var errorMessage = 'Authentication failed';
                         if (error.toString().contains('EMAIL_NOT_FOUND')) {
-                          errorMessage = 'Could not find a user with that email.';
+                          errorMessage =
+                              'Could not find a user with that email.';
                         }
                         newAlertDialog(
-                            context, 'An error occurred while authenticating', errorMessage);
+                            context,
+                            'An error occurred while authenticating',
+                            errorMessage);
                       } catch (error) {
-                        const errorMessage = 'Could not authenticate you. Please try again later.';
+                        const errorMessage =
+                            'Could not authenticate you. Please try again later.';
                         newAlertDialog(
-                            context, 'An error occurred while authenticating', errorMessage);
+                            context,
+                            'An error occurred while authenticating',
+                            errorMessage);
                       }
                       setState(() {
                         isLoading = false;
@@ -109,9 +121,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             style: ElevatedButton.styleFrom(
               primary: rPrimaryRedColor,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
             ),
-            child: !isLoading ? const Text('Send email') : const CircularProgressIndicator(),
+            child: !isLoading
+                ? const Text('Send email')
+                : const CircularProgressIndicator(),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -122,7 +137,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             style: ElevatedButton.styleFrom(
               primary: rPrimaryRedColor,
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
             ),
             child: const Text('Go back'),
           )

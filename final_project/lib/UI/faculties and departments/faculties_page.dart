@@ -91,19 +91,27 @@ class _CustomDropdownState extends State<CustomDropdown> {
   void initlizeList() {
     if (widget.dropdowns.length == 1) {
       dropdownItems.add(DropDownItem.only(
-          text: widget.dropdowns[0], iconData: icons[widget.dropdowns[0]]));
+          facultyName: widget.text,
+          departmentName: widget.dropdowns[0],
+          iconData: icons[widget.dropdowns[0]]));
       return;
     }
     for (int i = 0; i < widget.dropdowns.length; i++) {
       if (i == 0) {
         dropdownItems.add(DropDownItem.first(
-            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+            facultyName: widget.text,
+            departmentName: widget.dropdowns[i],
+            iconData: icons[widget.dropdowns[i]]));
       } else if (i == widget.dropdowns.length - 1) {
         dropdownItems.add(DropDownItem.last(
-            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+            facultyName: widget.text,
+            departmentName: widget.dropdowns[i],
+            iconData: icons[widget.dropdowns[i]]));
       } else {
         dropdownItems.add(DropDownItem(
-            text: widget.dropdowns[i], iconData: icons[widget.dropdowns[i]]));
+            facultyName: widget.text,
+            departmentName: widget.dropdowns[i],
+            iconData: icons[widget.dropdowns[i]]));
       }
     }
   }
@@ -181,7 +189,8 @@ class DropDown extends StatelessWidget {
 }
 
 class DropDownItem extends StatelessWidget {
-  final String text;
+  final String facultyName;
+  final String departmentName;
   final IconData iconData;
   final bool isSelected;
   final bool isFirstItem;
@@ -190,7 +199,8 @@ class DropDownItem extends StatelessWidget {
 
   const DropDownItem(
       {Key? key,
-      required this.text,
+      required this.facultyName,
+      required this.departmentName,
       required this.iconData,
       this.isSelected = false,
       this.isFirstItem = false,
@@ -199,27 +209,36 @@ class DropDownItem extends StatelessWidget {
       : super(key: key);
 
   factory DropDownItem.first(
-      {required String text, required IconData iconData}) {
+      {required facultyName,
+      required String departmentName,
+      required IconData iconData}) {
     return DropDownItem(
-      text: text,
+      facultyName: facultyName,
+      departmentName: departmentName,
       iconData: iconData,
       isFirstItem: true,
     );
   }
 
   factory DropDownItem.last(
-      {required String text, required IconData iconData}) {
+      {required facultyName,
+      required String departmentName,
+      required IconData iconData}) {
     return DropDownItem(
-      text: text,
+      facultyName: facultyName,
+      departmentName: departmentName,
       iconData: iconData,
       isLastItem: true,
     );
   }
 
   factory DropDownItem.only(
-      {required String text, required IconData iconData}) {
+      {required facultyName,
+      required String departmentName,
+      required IconData iconData}) {
     return DropDownItem(
-      text: text,
+      facultyName: facultyName,
+      departmentName: departmentName,
       iconData: iconData,
       isOnlyItem: true,
     );
@@ -247,14 +266,15 @@ class DropDownItem extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DepartmentPage(departmentName: text)));
+                builder: (context) => DepartmentPage(
+                    facultyName: facultyName, departmentName: departmentName)));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Flexible(
             child: Text(
-              text.toUpperCase(),
+              departmentName.toUpperCase(),
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22,

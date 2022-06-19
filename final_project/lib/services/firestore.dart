@@ -153,12 +153,12 @@ class FireStore {
     });
   }
 
-  Future getDepartments(String departmentName) {
-    return _firebaseFirestore
-        .collection('departments')
-        .doc(departmentName)
-        .get();
-  }
+  // Future getDepartments(String departmentName) {
+  //   return _firebaseFirestore
+  //       .collection('departments')
+  //       .doc(departmentName)
+  //       .get();
+  // }
 
   // Canteen
   Future getStudent() async {
@@ -348,5 +348,15 @@ class FireStore {
       return a.compareTo(b);
     });
     return l;
+  }
+
+  getProfessors(String department, String faculty) async {
+    return (await _firebaseFirestore
+            .collection("faculties")
+            .doc(faculty)
+            .collection(department)
+            .doc("professors")
+            .get())
+        .get("professors");
   }
 }
